@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public interface IGameLogger
+namespace Config
 {
+    public class ConfigBase
+    {
 
-}
-public class GameLogger : IGameLogger
-{
+    }
 
 }
