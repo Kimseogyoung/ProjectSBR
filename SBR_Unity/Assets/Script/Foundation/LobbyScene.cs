@@ -12,7 +12,7 @@ public class LobbyScene : SceneBase
 
     protected override void Enter()
     {
-        APP.UI.ShowSceneUI<UI_Scene>("Canvas");
+        APP.UI.ShowSceneUI<UI_LobbyScene>("UI_LobbyScene");
 
     }
 

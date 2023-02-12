@@ -13,24 +13,12 @@ public class UI_LobbyScene : UI_Scene
     //[SerializeField] private Image itemIcon; // "ItemIcon" UI 오브젝트 연결
 
     //GameObject 이름들을 enum으로 저장
-    enum Buttons
+    enum UIName
     {
-        PointButton
-    }
-
-    enum Texts
-    {
-        PointText,
-        ScoreText,
-    }
-
-    enum GameObjects
-    {
+        TitleText,
         TestObject,
+        TestText,
+        SettingButton
     }
 
-    enum Images
-    {
-        ItemIcon,
-    }
 }

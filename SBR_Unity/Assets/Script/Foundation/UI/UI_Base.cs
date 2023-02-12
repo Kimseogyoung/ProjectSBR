@@ -1,51 +1,70 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-abstract public class UI_Base : MonoBehaviour
 {
+	protected Dictionary<string, UnityEngine.Object> _objects = new Dictionary<string, UnityEngine.Object>();
+	protected Dictionary<string, UnityEngine.Object[]> _listObjects = new Dictionary<string, UnityEngine.Object[]>();
+	
 	//Bind UI 오브젝트 이름으로 찾아 바인딩해주기
-	protected void Bind<T>(Type type) where T : UnityEngine.Object
+	protected void Bind<T>(string name) where T : UnityEngine.Object
 	{
-		string[] names = Enum.GetNames(type);
-		UnityEngine.Object[] objects = new UnityEngine.Object[names.Length];
-		_objects.Add(typeof(T), objects); // Dictionary 에 추가
+		UnityEngine.Object obj = null;
 
-		// T 에 속하는 오브젝트들을 Dictionary의 Value인 objects 배열의 원소들에 하나하나 추가
-		for (int i = 0; i < names.Length; i++)
-		{
-			if (typeof(T) == typeof(GameObject))
-				objects[i] = Util.FindChild(gameObject, names[i], true);
-			else
-				objects[i] = Util.FindChild<T>(gameObject, names[i], true);
+		obj = Util.GameObj.FindChild<T>(gameObject, name, true);
+		if(obj == null)
+			GameLogger.Error($"Failed to bind({name})");
 
-			if (objects[i] == null)
-				Debug.Log($"Failed to bind({names[i]})");
-		}
+		_objects.Add(name, obj);
 	}
-	//Get UI 오브젝트 가져오기
-	protected T Get<T>(int idx) where T : UnityEngine.Object
+
+	protected void BindMany<T>(string name, GameObject parentObject) where T : UnityEngine.Object
 	{
-		UnityEngine.Object[] objects = null;
-		if (_objects.TryGetValue(typeof(T), out objects) == false)
+		T[] objects = Util.GameObj.FindChildren<T>(parentObject);
+		if (objects == null)
+			GameLogger.Error($"Failed to bind({name})");
+
+		_listObjects.Add(name, objects);
+	}
+
+	//Get UI 오브젝트 가져오기
+	protected T Get<T>(string name) where T : UnityEngine.Object
+	{
+		UnityEngine.Object obj = null;
+		if (_objects.TryGetValue(name, out obj) == false)
 			return null;
 
-		return objects[idx] as T;
+		return obj as T;
+	}
+
+	protected T[] GetMany<T>(string name) where T : UnityEngine.Object
+	{
+		UnityEngine.Object[] objects = null;
+		if (_listObjects.TryGetValue(name, out objects) == false)
+			return null;
+
+		T[] ts = new T[objects.Length];
+		for (int i = 0; i < objects.Length; i++)
+			ts[i] = objects[i] as T;
+
+		return ts;
 	}
 
 	//BindEvent UI 오브젝트에 이벤트 등록하기
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
-		UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+		UI_EventHandler evt = Util.GameObj.GetOrAddComponent<UI_EventHandler>(go);
 
 		switch (type)
 		{
 			case Define.UIEvent.Click:
-				evt.OnClickHandler -= action; // 혹시나 이미 있을까봐 빼줌
+				evt.OnClickHandler -= action; 
 				evt.OnClickHandler += action;
 				break;
 			case Define.UIEvent.Drag:
-				evt.OnDragHandler -= action; // 혹시나 이미 있을까봐 빼줌
+				evt.OnDragHandler -= action; 
 				evt.OnDragHandler += action;
 				break;
 		}
