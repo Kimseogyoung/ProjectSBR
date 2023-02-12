@@ -6,8 +6,10 @@ public class LobbyScene : SceneBase
 {
     public override void Enter()
     {
+        GameLogger.Info("Enter");
         _sceneName = "LobbyScene";
-        
+        APP.UI.ShowSceneUI<UIScene>("Canvas");
+
     }
 
     public override void Exit()

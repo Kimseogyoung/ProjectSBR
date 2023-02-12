@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
-public class SceneManager : IManager, IManagerUpdatable
+public class SceneManager : MonoBehaviour, IManager, IManagerUpdatable
 {
     private SceneBase _currentScene;
     public void FinishManager()
@@ -23,19 +23,31 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void StartManager()
     {
-        LoadNewScene(APP.GameConf.StartScene);
+        CoroutineHelper.StartCoroutine(CLoadScene("LobbyScene"));
     }
 
     public void ChangeScene(string nextSceneName)
     {
         _currentScene.Exit();
-        LoadNewScene(nextSceneName);
+        CoroutineHelper.StartCoroutine(CLoadScene(nextSceneName));
     }
 
-    private void LoadNewScene(string nextSceneName)
+    public void UpdateManager()
     {
-        UnitySceneManager.LoadScene(nextSceneName);
+        if (_currentScene == null) return;
+        _currentScene.Update();
+    }
 
+    private IEnumerator CLoadScene(string nextSceneName)
+    {
+        AsyncOperation async = UnitySceneManager.LoadSceneAsync(nextSceneName);
+
+        while (!async.isDone)
+        {
+            yield return null;
+        }
+
+        GameLogger.Info("Load");
         switch (nextSceneName)
         {
             case "LobbyScene":
@@ -49,12 +61,6 @@ public class SceneManager : IManager, IManagerUpdatable
         }
         _currentScene.Enter();
         _currentScene.Start();
-    }
-
-    public void UpdateManager()
-    {
-        if (_currentScene == null) return;
-        _currentScene.Update();
     }
 }
 

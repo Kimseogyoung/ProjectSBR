@@ -9,10 +9,17 @@ public class GameManager: MonoBehaviour
 
     private DataManager _dataManager;
     private SceneManager _sceneManager;
-    // Start is called before the first frame update
+
+
 
     private void Awake()
     {
+        if (FindObjectsOfType(typeof(GameManager)).Length >= 2) 
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         GameLogger.Info("GameManager Awake");
 
         DontDestroyOnLoad(gameObject);
@@ -22,6 +29,8 @@ public class GameManager: MonoBehaviour
 
         _sceneManager = new SceneManager();
         AddManager(_sceneManager, true);
+
+        APP.UI = new UIManager();
 
         foreach (IManager manager in _managers)
         {
@@ -41,9 +50,9 @@ public class GameManager: MonoBehaviour
         {
             manager.StartManager();
         }
+        APP.UI.StartManager();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
