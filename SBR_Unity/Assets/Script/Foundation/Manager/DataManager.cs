@@ -15,18 +15,18 @@ public class DataManager :IManager
         APP.GameConf = _yamlParser.GetConfig<Config.Game>(_fileReader.ReadFile(Path.ConfigDirPath + Path.GameConfigPath));
     }
 
-    public void Prepare()
+    public void PrepareManager()
     {
-        throw new System.NotImplementedException();
+
     }
 
-    public void Start()
+    public void StartManager()
     {
-        throw new System.NotImplementedException();
+
     }
 
-    public void Finished()
+    public void FinishManager()
     {
-        throw new System.NotImplementedException();
+
     }
 }

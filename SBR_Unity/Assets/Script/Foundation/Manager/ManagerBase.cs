@@ -5,44 +5,12 @@ using UnityEngine;
 public interface IManager
 {
     public void Init();
-    public void Prepare();
-    public void Start();
-    public void Finished();
+    public void PrepareManager();
+    public void StartManager();
+    public void FinishManager();
 }
-/*
-abstract public class ManagerBase : IManager
+public interface IManagerUpdatable
 {
-    public void Init()
-    {
-      
-    }
-    public void Prepare()
-    {
-       
-    }
-    public void Start()
-    {
-       
-    }
-    public void Finished()
-    {
-
-    }
-
-
-    private void Pause()
-    {
-
-    }
-    private void Play()
-    {
-
-    }
-    private void Restart()
-    {
-
-    }
-
-
+    public void UpdateManager();
 }
-*/
+

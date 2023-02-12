@@ -5,6 +5,6 @@ namespace Config
 {
     public class Game : ConfigBase
     {
-        public string StartScene;
+        public string StartScene = "LobbyScene";
     }
 }
