@@ -29,8 +29,8 @@ public class UIManager : IManager, IManagerUpdatable
 
     int _order = 10; // 현재까지 최근에 사용한 오더
 
-    Stack<UIPopup> _popupStack = new Stack<UIPopup>(); // 오브젝트 말고 컴포넌트를 담음. 팝업 캔버스 UI 들을 담는다.
-    UIScene _sceneUI = null; // 현재의 고정 캔버스 UI
+    Stack<UI_Popup> _popupStack = new Stack<UI_Popup>(); // 오브젝트 말고 컴포넌트를 담음. 팝업 캔버스 UI 들을 담는다.
+    UI_Scene _sceneUI = null; // 현재의 고정 캔버스 UI
     public GameObject Root
     {
         get
@@ -59,7 +59,7 @@ public class UIManager : IManager, IManagerUpdatable
         }
     }
 
-    public T ShowSceneUI<T>(string name = null) where T : UIScene
+    public T ShowSceneUI<T>(string name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
@@ -75,7 +75,7 @@ public class UIManager : IManager, IManagerUpdatable
         return sceneUI;
     }
 
-    public T ShowPopupUI<T>(string name = null) where T : UIPopup
+    public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name)) // 이름을 안받았다면 T로 ㄱㄱ
             name = typeof(T).Name;
@@ -89,7 +89,7 @@ public class UIManager : IManager, IManagerUpdatable
         return popup;
     }
 
-    public void ClosePopupUI(UIPopup popup) // 안전 차원
+    public void ClosePopupUI(UI_Popup popup) // 안전 차원
     {
         if (_popupStack.Count == 0) // 비어있는 스택이라면 삭제 불가
             return;
@@ -108,7 +108,7 @@ public class UIManager : IManager, IManagerUpdatable
         if (_popupStack.Count == 0)
             return;
 
-        UIPopup popup = _popupStack.Pop();
+        UI_Popup popup = _popupStack.Pop();
         Util.GameObj.Destroy(popup.gameObject);
         popup = null;
         _order--; // order 줄이기

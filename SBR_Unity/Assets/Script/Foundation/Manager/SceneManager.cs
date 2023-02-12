@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
-public class SceneManager : MonoBehaviour, IManager, IManagerUpdatable
+public class SceneManager : IManager, IManagerUpdatable
 {
     private SceneBase _currentScene;
     public void FinishManager()
@@ -23,22 +23,22 @@ public class SceneManager : MonoBehaviour, IManager, IManagerUpdatable
 
     public void StartManager()
     {
-        CoroutineHelper.StartCoroutine(CLoadScene("LobbyScene"));
+        Util.CoroutineHelper.StartCoroutine(CoLoadScene(APP.GameConf.StartScene));
     }
 
     public void ChangeScene(string nextSceneName)
     {
-        _currentScene.Exit();
-        CoroutineHelper.StartCoroutine(CLoadScene(nextSceneName));
+        _currentScene.ExitBase();
+        Util.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
     }
 
     public void UpdateManager()
     {
         if (_currentScene == null) return;
-        _currentScene.Update();
+        _currentScene.UpdateBase();
     }
 
-    private IEnumerator CLoadScene(string nextSceneName)
+    private IEnumerator CoLoadScene(string nextSceneName)
     {
         AsyncOperation async = UnitySceneManager.LoadSceneAsync(nextSceneName);
 
@@ -47,20 +47,19 @@ public class SceneManager : MonoBehaviour, IManager, IManagerUpdatable
             yield return null;
         }
 
-        GameLogger.Info("Load");
         switch (nextSceneName)
         {
             case "LobbyScene":
-                _currentScene = new LobbyScene();
+                _currentScene = new LobbyScene(nextSceneName);
                 break;
             case "InGameScene":
-                _currentScene = new InGameScene();
+                _currentScene = new InGameScene(nextSceneName);
                 break;
             default:
                 break;
         }
-        _currentScene.Enter();
-        _currentScene.Start();
+        _currentScene.EnterBase();
+        _currentScene.StartBase();
     }
 }
 

@@ -4,22 +4,26 @@ using UnityEngine;
 
 public class InGameScene : SceneBase
 {
-    public override void Enter()
+    public InGameScene(string sceneName)
     {
-        _sceneName = "InGameScene";
+        _sceneName = sceneName;
     }
 
-    public override void Exit()
+    protected override void Enter()
+    {
+    }
+
+    protected override void Exit()
     {
         
     }
 
-    public override void Start()
+    protected override void Start()
     {
        
     }
 
-    public override void Update()
+    protected override void Update()
     {
        
     }

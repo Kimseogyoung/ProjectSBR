@@ -1,25 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CoroutineHelper : MonoBehaviour
-{
-    private static MonoBehaviour monoInstance;
-
-    [RuntimeInitializeOnLoadMethod]
-    private static void Initializer()
+namespace Util{
+    public class CoroutineHelper : MonoBehaviour
     {
-        monoInstance = new GameObject($"[{nameof(CoroutineHelper)}]").AddComponent<CoroutineHelper>();
-        DontDestroyOnLoad(monoInstance.gameObject);
+        private static MonoBehaviour monoInstance;
+
+        [RuntimeInitializeOnLoadMethod]
+        private static void Initializer()
+        {
+            monoInstance = new GameObject($"[{nameof(CoroutineHelper)}]").AddComponent<CoroutineHelper>();
+            DontDestroyOnLoad(monoInstance.gameObject);
+        }
+
+        public new static Coroutine StartCoroutine(IEnumerator coroutine)
+        {
+            return monoInstance.StartCoroutine(coroutine);
+        }
+
+        public new static void StopCoroutine(Coroutine coroutine)
+        {
+            monoInstance.StopCoroutine(coroutine);
+        }
     }
 
-    public new static Coroutine StartCoroutine(IEnumerator coroutine)
-    {
-        return monoInstance.StartCoroutine(coroutine);
-    }
-
-    public new static void StopCoroutine(Coroutine coroutine)
-    {
-        monoInstance.StopCoroutine(coroutine);
-    }
 }

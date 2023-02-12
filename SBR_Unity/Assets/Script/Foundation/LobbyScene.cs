@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class LobbyScene : SceneBase
 {
-    public override void Enter()
+
+    public LobbyScene(string sceneName)
     {
-        GameLogger.Info("Enter");
-        _sceneName = "LobbyScene";
-        APP.UI.ShowSceneUI<UIScene>("Canvas");
+        _sceneName = sceneName;
+    }
+
+    protected override void Enter()
+    {
+        APP.UI.ShowSceneUI<UI_Scene>("Canvas");
 
     }
 
-    public override void Exit()
+    protected override void Exit()
     {
        
     }
 
-    public override void Start()
+    protected override void Start()
     {
        
     }
 
-    public override void Update()
+    protected override void Update()
     {
         
     }

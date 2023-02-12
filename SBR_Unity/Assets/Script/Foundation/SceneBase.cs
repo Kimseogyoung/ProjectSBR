@@ -5,12 +5,36 @@ using UnityEngine;
 abstract public class SceneBase 
 {
     public string _sceneName { get; protected set; } = string.Empty;
-    abstract public void Enter();
+    
 
-    abstract public void Start();
+    public void EnterBase()
+    {
+        GameLogger.Info($"{_sceneName} Enter!");
+        Enter();
+    }
 
-    abstract public void Update();
+    public void StartBase()
+    {
+        GameLogger.Info($"{_sceneName} Start!");
+        Start();
+    }
 
-    abstract public void Exit();
+    public void UpdateBase()
+    {
+        Update();
+    }
+    public void ExitBase()
+    {
+        GameLogger.Info($"{_sceneName} Exit!");
+        Enter();
+    }
+
+    abstract protected void Enter();
+
+    abstract protected void Start();
+
+    abstract protected void Update();
+
+    abstract protected void Exit();
 
 }
