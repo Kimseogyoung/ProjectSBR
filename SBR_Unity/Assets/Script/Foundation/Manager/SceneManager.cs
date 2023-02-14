@@ -5,6 +5,7 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : IManager, IManagerUpdatable
 {
+
     private SceneBase _currentScene;
     public void FinishManager()
     {
@@ -13,7 +14,6 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void Init()
     {
-        
     }
 
     public void PrepareManager()
@@ -40,11 +40,16 @@ public class SceneManager : IManager, IManagerUpdatable
 
     private IEnumerator CoLoadScene(string nextSceneName)
     {
-        AsyncOperation async = UnitySceneManager.LoadSceneAsync(nextSceneName);
-
-        while (!async.isDone)
+        AsyncOperation async;
+        if (UnitySceneManager.GetActiveScene().name != nextSceneName)
         {
-            yield return null;
+            async = UnitySceneManager.LoadSceneAsync(nextSceneName);
+
+            while (!async.isDone)
+            {
+                yield return null;
+            }
+
         }
 
         switch (nextSceneName)

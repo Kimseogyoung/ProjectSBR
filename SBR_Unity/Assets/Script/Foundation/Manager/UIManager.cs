@@ -64,13 +64,21 @@ public class UIManager : IManager, IManagerUpdatable
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-       // GameObject go = Util.Resource.Instantiate($"UI/Scene/{name}");
-        GameObject goj =Resources.Load<GameObject>($"UI/Scene/{name}");
-        GameObject go = GameObject.Instantiate(goj);
-        T sceneUI = Util.GameObj.GetOrAddComponent<T>(go);
+        T sceneUI = null;
+        GameObject go = null;
+        if (!Util.GameObj.TryFind<T>(out sceneUI, name))
+        {
+            go = Util.Resource.Instantiate($"UI/Scene/{name}");
+            sceneUI = Util.GameObj.GetOrAddComponent<T>(go);
+        }
+        else
+            go = sceneUI.gameObject;
+
         _sceneUI = sceneUI;
 
+
         go.transform.SetParent(Root.transform);
+        _sceneUI.Init();
 
         return sceneUI;
     }
@@ -80,11 +88,20 @@ public class UIManager : IManager, IManagerUpdatable
         if (string.IsNullOrEmpty(name)) // 이름을 안받았다면 T로 ㄱㄱ
             name = typeof(T).Name;
 
-        GameObject go = Util.Resource.Instantiate($"UI/Popup/{name}");
-        T popup = Util.GameObj.GetOrAddComponent<T>(go);
+        T popup = null;
+        GameObject go = null;
+        if (!Util.GameObj.TryFind<T>(out popup, name))
+        {
+            go = Util.Resource.Instantiate($"UI/Popup/{name}");
+            popup = Util.GameObj.GetOrAddComponent<T>(go);
+        }
+        else
+            go = popup.gameObject;
+
         _popupStack.Push(popup);
 
         go.transform.SetParent(Root.transform);
+        popup.Init();
 
         return popup;
     }

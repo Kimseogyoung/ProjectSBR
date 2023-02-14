@@ -1,6 +1,9 @@
 
 namespace Util
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using UnityEngine;
     using UnityGameObject = UnityEngine.GameObject;
     static public class GameObj 
     {
@@ -14,60 +17,87 @@ namespace Util
             return gameObject.GetComponent<T>();
         }
 
-        static public T GetOrAddComponent<T>(UnityGameObject gameObject) where T : UnityEngine.Component
+        static public T GetOrAddComponent<T>(UnityGameObject gameObject)
         {
             T result;
 
             if(!gameObject.TryGetComponent<T>(out result))
-                result = gameObject.AddComponent<T>();
+            {
+                gameObject.AddComponent(typeof(T));
+                result = gameObject.GetComponent<T>();
+            }
 
             return result;
         }
 
-        public static T FindChild<T>(UnityGameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
+        static public T FindChild<T>(UnityGameObject gameObject, string name = null, bool recursive = false) where T : UnityEngine.Object
         {
-            if (go == null)
-                return null;
-
-            if (recursive == false)
+            if (recursive)
             {
-                for (int i = 0; i < go.transform.childCount; i++)
+                foreach(T value in gameObject.GetComponentsInChildren<T>())
                 {
-                    UnityEngine.Transform transform = go.transform.GetChild(i);
-                    if (string.IsNullOrEmpty(name) || transform.name == name)
-                    {
-                        T component = transform.GetComponent<T>();
-                        if (component != null)
-                            return component;
-                    }
-                }
+                    if (value.name == name)
+                        return value;
+                }  
             }
             else
             {
-                foreach (T component in go.GetComponentsInChildren<T>())
+                for(int i=0; i<gameObject.transform.childCount; i++)
                 {
-                    if (string.IsNullOrEmpty(name) || component.name == name)
-                        return component;
+                    T value = GetComponent<T>(gameObject.transform.GetChild(i).gameObject);
+                    if (value != null && value.name == name)
+                        return value;
                 }
             }
-
             return null;
         }
 
-        public static UnityGameObject FindChild(UnityGameObject go, string name = null, bool recursive = false)
+        static public UnityGameObject FindChild(UnityGameObject gameObject, string name = null, bool recursive = false)
         {
-            UnityEngine.Transform result = FindChild<UnityEngine.Transform>(go, name, recursive);
-            if (result == null)
+            UnityEngine.Transform transform = FindChild<Transform>(gameObject, name, recursive);
+            if(transform == null)
+                return null;
+            
+            return transform.gameObject;
+        }
+
+        static public T[] FindChildAll<T>(UnityGameObject gameObject, string name = null) where T : UnityEngine.Object
+        {
+            List<T> objects= new List<T>();
+            foreach (T value in gameObject.GetComponentsInChildren<T>())
+            {
+                if (value.name.StartsWith(name))
+                    objects.Add(value);
+            }
+            return objects.ToArray();
+        }
+
+        static public UnityGameObject[] FindChildAll(UnityGameObject gameObject, string name = null)
+        { 
+            Transform[] transforms = FindChildAll<Transform>(gameObject, name);
+            if (transforms == null || transforms.Length == 0)
                 return null;
 
-            return result.gameObject;
+            UnityGameObject[] objects = new UnityGameObject[transforms.Length];
+            for(int i=0; i < transforms.Length; i++)
+                objects[i] = transforms[i].gameObject;
+
+            return objects;
         }
 
-
-        public static T[] FindChildren<T>(UnityGameObject gameObject)
+        static public bool TryFind<T>(out T result, string name) where T : UnityEngine.Object
         {
-            return gameObject.GetComponentsInChildren<T>();
+            result = Find<T>(name);
+
+            if (result == null)
+                return false;
+            return true;
         }
+        static public T Find<T>(string name) where T : UnityEngine.Object
+        {
+            return UnityGameObject.FindObjectsOfType<T>().Where(e => e.name == name).FirstOrDefault();
+        }
+
     }
 
 }

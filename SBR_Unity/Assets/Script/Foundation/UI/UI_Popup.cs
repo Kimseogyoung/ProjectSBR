@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Popup : UI_Base
 {
@@ -8,6 +9,8 @@ public class UI_Popup : UI_Base
     public override void Init()
     {
         APP.UI.SetCanvas(gameObject, true);
+        Bind<Button>(_exitButton);
+        Get<Button>(_exitButton).onClick.AddListener(() => { ClosePopupUI(); });
     }
 
     public virtual void ClosePopupUI()  // 팝업이니까 고정 캔버스(Scene)과 다르게 닫는게 필요

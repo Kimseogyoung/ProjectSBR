@@ -1,33 +1,53 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
+abstract public class UI_Base : MonoBehaviour
 {
-	protected Dictionary<string, UnityEngine.Object> _objects = new Dictionary<string, UnityEngine.Object>();
-	protected Dictionary<string, UnityEngine.Object[]> _listObjects = new Dictionary<string, UnityEngine.Object[]>();
-	
-	//Bind UI 오브젝트 이름으로 찾아 바인딩해주기
-	protected void Bind<T>(string name) where T : UnityEngine.Object
-	{
-		UnityEngine.Object obj = null;
+	protected string _exitButton = "ExitButton";
+	private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
+    private Dictionary<string, Object[]> _objectLists = new Dictionary<string, Object[]>();
 
-		obj = Util.GameObj.FindChild<T>(gameObject, name, true);
-		if(obj == null)
-			GameLogger.Error($"Failed to bind({name})");
+    //Bind UI 오브젝트 이름으로 찾아 바인딩해주기
+    protected T Bind<T>(string name) where T : UnityEngine.Object
+	{
+		Object obj = null;
+        if (typeof(T) == typeof(GameObject))
+            obj = Util.GameObj.FindChild(gameObject, name, true);
+        else
+            obj = Util.GameObj.FindChild<T>(gameObject, name, true);
+
+		if (obj == null)
+		{
+            GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
+			return null;
+        }
 
 		_objects.Add(name, obj);
-	}
+		return Get<T>(name);
 
-	protected void BindMany<T>(string name, GameObject parentObject) where T : UnityEngine.Object
+    }
+
+	protected List<T> BindMany<T>(string name) where T : UnityEngine.Object
 	{
-		T[] objects = Util.GameObj.FindChildren<T>(parentObject);
-		if (objects == null)
-			GameLogger.Error($"Failed to bind({name})");
+		Object[] objs;
+        if (typeof(T) == typeof(GameObject))
+            objs = Util.GameObj.FindChildAll(gameObject, name);
+        else
+            objs = Util.GameObj.FindChildAll<T>(gameObject, name);
 
-		_listObjects.Add(name, objects);
-	}
+        if (objs == null)
+        {
+            GameLogger.Error($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            return null;
+        }
+
+        _objectLists.Add(name, objs);
+		return GetMany<T>(name);
+
+    }
 
 	//Get UI 오브젝트 가져오기
 	protected T Get<T>(string name) where T : UnityEngine.Object
@@ -39,36 +59,43 @@ using UnityEngine.EventSystems;
 		return obj as T;
 	}
 
-	protected T[] GetMany<T>(string name) where T : UnityEngine.Object
+    protected List<T> GetMany<T>(string name) where T : UnityEngine.Object
+    {
+        Object[] objs;
+        if (_objectLists.TryGetValue(name, out objs) == false)
+            return null;
+
+		List<T> list = new List<T>();
+		for(int i=0; i<objs.Length; i++)
+			list.Add(objs[i] as T);
+
+        return list;
+    }
+
+    public void AddEvent(Button button, UnityAction unityAction)
 	{
-		UnityEngine.Object[] objects = null;
-		if (_listObjects.TryGetValue(name, out objects) == false)
-			return null;
-
-		T[] ts = new T[objects.Length];
-		for (int i = 0; i < objects.Length; i++)
-			ts[i] = objects[i] as T;
-
-		return ts;
+		button.onClick.AddListener(unityAction);
 	}
 
+	/*
 	//BindEvent UI 오브젝트에 이벤트 등록하기
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
-		UI_EventHandler evt = Util.GameObj.GetOrAddComponent<UI_EventHandler>(go);
+		UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
 
 		switch (type)
 		{
 			case Define.UIEvent.Click:
-				evt.OnClickHandler -= action; 
+				evt.OnClickHandler -= action; // 혹시나 이미 있을까봐 빼줌
 				evt.OnClickHandler += action;
 				break;
 			case Define.UIEvent.Drag:
-				evt.OnDragHandler -= action; 
+				evt.OnDragHandler -= action; // 혹시나 이미 있을까봐 빼줌
 				evt.OnDragHandler += action;
 				break;
 		}
 	}
+	*/
 
     public abstract void Init();
 }

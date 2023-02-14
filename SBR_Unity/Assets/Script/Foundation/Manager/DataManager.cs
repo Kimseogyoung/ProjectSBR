@@ -11,8 +11,8 @@ public class DataManager :IManager
 
     public void Init()
     {
-        APP.DebugConf = _yamlParser.GetConfig<Config.Debug>(_fileReader.ReadFile(Path.ConfigDirPath + Path.DebugConfigPath));
-        APP.GameConf = _yamlParser.GetConfig<Config.Game>(_fileReader.ReadFile(Path.ConfigDirPath + Path.GameConfigPath));
+        APP.DebugConf = _yamlParser.GetConfig<Config.Debug>(_fileReader.ReadFile(Path.ConfigDir + Path.DebugConfig));
+        APP.GameConf = _yamlParser.GetConfig<Config.Game>(_fileReader.ReadFile(Path.ConfigDir + Path.GameConfig));
     }
 
     public void PrepareManager()
