@@ -1,6 +1,7 @@
 
 namespace Util
 {
+    using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
     using UnityGameObject = UnityEngine.GameObject;
@@ -44,7 +45,7 @@ namespace Util
                 for(int i=0; i<gameObject.transform.childCount; i++)
                 {
                     T value = GetComponent<T>(gameObject.transform.GetChild(i).gameObject);
-                    if (value != null)
+                    if (value != null && value.name == name)
                         return value;
                 }
             }
@@ -58,6 +59,30 @@ namespace Util
                 return null;
             
             return transform.gameObject;
+        }
+
+        static public T[] FindChildAll<T>(UnityGameObject gameObject, string name = null) where T : UnityEngine.Object
+        {
+            List<T> objects= new List<T>();
+            foreach (T value in gameObject.GetComponentsInChildren<T>())
+            {
+                if (value.name.StartsWith(name))
+                    objects.Add(value);
+            }
+            return objects.ToArray();
+        }
+
+        static public UnityGameObject[] FindChildAll(UnityGameObject gameObject, string name = null)
+        { 
+            Transform[] transforms = FindChildAll<Transform>(gameObject, name);
+            if (transforms == null || transforms.Length == 0)
+                return null;
+
+            UnityGameObject[] objects = new UnityGameObject[transforms.Length];
+            for(int i=0; i < transforms.Length; i++)
+                objects[i] = transforms[i].gameObject;
+
+            return objects;
         }
 
         static public bool TryFind<T>(out T result, string name) where T : UnityEngine.Object

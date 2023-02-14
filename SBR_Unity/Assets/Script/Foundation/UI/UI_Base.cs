@@ -8,9 +8,10 @@ abstract public class UI_Base : MonoBehaviour
 {
 	protected string _exitButton = "ExitButton";
 	private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
+    private Dictionary<string, Object[]> _objectLists = new Dictionary<string, Object[]>();
 
-	//Bind UI 오브젝트 이름으로 찾아 바인딩해주기
-	protected void Bind<T>(string name) where T : UnityEngine.Object
+    //Bind UI 오브젝트 이름으로 찾아 바인딩해주기
+    protected T Bind<T>(string name) where T : UnityEngine.Object
 	{
 		Object obj = null;
         if (typeof(T) == typeof(GameObject))
@@ -21,10 +22,30 @@ abstract public class UI_Base : MonoBehaviour
 		if (obj == null)
 		{
             GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
-			return;
+			return null;
         }
 
 		_objects.Add(name, obj);
+		return Get<T>(name);
+
+    }
+
+	protected List<T> BindMany<T>(string name) where T : UnityEngine.Object
+	{
+		Object[] objs;
+        if (typeof(T) == typeof(GameObject))
+            objs = Util.GameObj.FindChildAll(gameObject, name);
+        else
+            objs = Util.GameObj.FindChildAll<T>(gameObject, name);
+
+        if (objs == null)
+        {
+            GameLogger.Error($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            return null;
+        }
+
+        _objectLists.Add(name, objs);
+		return GetMany<T>(name);
 
     }
 
@@ -38,7 +59,20 @@ abstract public class UI_Base : MonoBehaviour
 		return obj as T;
 	}
 
-	public void AddEvent(Button button, UnityAction unityAction)
+    protected List<T> GetMany<T>(string name) where T : UnityEngine.Object
+    {
+        Object[] objs;
+        if (_objectLists.TryGetValue(name, out objs) == false)
+            return null;
+
+		List<T> list = new List<T>();
+		for(int i=0; i<objs.Length; i++)
+			list.Add(objs[i] as T);
+
+        return list;
+    }
+
+    public void AddEvent(Button button, UnityAction unityAction)
 	{
 		button.onClick.AddListener(unityAction);
 	}

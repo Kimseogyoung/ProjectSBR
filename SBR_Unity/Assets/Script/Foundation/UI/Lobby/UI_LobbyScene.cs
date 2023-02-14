@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 public class UI_LobbyScene : UI_Scene
 {
+    private List<GameObject> _stageButtonPoints;
+    private List<TMP_Text> _stageButtonTexts;
+    private List<UI_Star> _stageButtonStars;
+    private List<Button> _stageButtons;
+    private List<Image> _stageButtonImages;
     private void Awake()
     {
         Bind<Button>(UI.TmpButton.ToString());
@@ -21,6 +26,20 @@ public class UI_LobbyScene : UI_Scene
         Bind<TMP_Text>(UI.CashText.ToString());
         Bind<TMP_Text>(UI.GoldText.ToString());
 
+        _stageButtonPoints = BindMany<GameObject>(UIs.Point.ToString());
+
+        foreach(GameObject point in _stageButtonPoints)
+        {
+            GameObject stageButton = Util.Resource.Instantiate(Path.StageButton);
+            stageButton.transform.SetParent(point.transform,false);
+        }
+
+        _stageButtonTexts = BindMany<TMP_Text>(UIs.StageButtonText.ToString());
+        _stageButtonStars = BindMany<UI_Star>(UIs.StageStars.ToString());
+        _stageButtons = BindMany<Button>(UIs.StageButton.ToString());
+        _stageButtonImages = BindMany<Image>(UIs.StageButtonImage.ToString());
+        RefreshStageButton();
+
         //확인용 텍스트
         Get<TMP_Text>(UI.EnergyText.ToString()).text = "Energy";
         Get<TMP_Text>(UI.CashText.ToString()).text = "Cash";
@@ -34,6 +53,24 @@ public class UI_LobbyScene : UI_Scene
         Get<Button>(UI.ShopButton.ToString()).
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_ShopPopup>(); });
 
+    }
+
+    private void RefreshStageButton()
+    {
+        int[] stageNum = new int[_stageButtons.Count];
+        for(int i=0; i< _stageButtons.Count; i++)
+        {
+            stageNum[i] = i;
+            _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum[i]); });
+            _stageButtonStars[i].SetStarLevel(2);
+            _stageButtonTexts[i].text = $"Stage {stageNum[i]}";
+            
+        }
+    }
+
+    private void OnClickStageButton(int stageNum)
+    {
+        GameLogger.Info("Click Stage {0} Button.", stageNum);
     }
 
     enum UI
@@ -52,6 +89,14 @@ public class UI_LobbyScene : UI_Scene
         GoldText,
 
         StageButtonLine,
+    }
+    enum UIs
+    {
+        Point,
+        StageButton,
+        StageButtonImage,
+        StageButtonText,
+        StageStars
     }
     
 }

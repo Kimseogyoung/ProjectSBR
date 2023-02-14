@@ -24,13 +24,10 @@ namespace Util
         static public Sprite Load(string imageName, string spriteName)
         {
             Sprite[] all = Resources.LoadAll<Sprite>(imageName);
-            GameLogger.NotImp("{0}",all.Length);
             foreach (var s in all)
             {
-                if (s.name == spriteName)
-                {
-                    return s;
-                }
+                if (s.name == spriteName) return s;
+
             }
             return null;
         }
