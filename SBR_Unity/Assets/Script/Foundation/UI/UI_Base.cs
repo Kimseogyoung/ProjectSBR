@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 abstract public class UI_Base : MonoBehaviour
 {
+	protected string _exitButton = "ExitButton";
 	private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
 
 	//Bind UI 오브젝트 이름으로 찾아 바인딩해주기
@@ -19,7 +20,7 @@ abstract public class UI_Base : MonoBehaviour
 
 		if (obj == null)
 		{
-            GameLogger.Error($"Failed to bind({name})");
+            GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
 			return;
         }
 

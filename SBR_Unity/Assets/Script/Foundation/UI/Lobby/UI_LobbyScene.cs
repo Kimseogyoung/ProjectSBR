@@ -21,11 +21,12 @@ public class UI_LobbyScene : UI_Scene
         Bind<TMP_Text>(UI.CashText.ToString());
         Bind<TMP_Text>(UI.GoldText.ToString());
 
-
+        //È®ÀÎ¿ë ÅØ½ºÆ®
         Get<TMP_Text>(UI.EnergyText.ToString()).text = "Energy";
         Get<TMP_Text>(UI.CashText.ToString()).text = "Cash";
         Get<TMP_Text>(UI.GoldText.ToString()).text = "Gold";
 
+        //ÆË¾÷ ¿ÀÇÂ
         Get<Button>(UI.SettingButton.ToString()).
             onClick.AddListener(()=>{APP.UI.ShowPopupUI<UI_SettingPopup>();});
         Get<Button>(UI.InvenButton.ToString()).
@@ -34,6 +35,7 @@ public class UI_LobbyScene : UI_Scene
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_ShopPopup>(); });
 
     }
+
     enum UI
     {
         TmpButton,
@@ -47,7 +49,9 @@ public class UI_LobbyScene : UI_Scene
 
         EnergyText,
         CashText,
-        GoldText
+        GoldText,
+
+        StageButtonLine,
     }
     
 }
