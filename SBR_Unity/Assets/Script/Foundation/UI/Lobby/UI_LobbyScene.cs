@@ -57,19 +57,20 @@ public class UI_LobbyScene : UI_Scene
 
     private void RefreshStageButton()
     {
-        int[] stageNum = new int[_stageButtons.Count];
         for(int i=0; i< _stageButtons.Count; i++)
         {
-            stageNum[i] = i;
-            _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum[i]); });
+            int stageNum = i;
+            _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
             _stageButtonStars[i].SetStarLevel(2);
-            _stageButtonTexts[i].text = $"Stage {stageNum[i]}";
+            _stageButtonTexts[i].text = $"Stage {stageNum}";
             
         }
     }
 
     private void OnClickStageButton(int stageNum)
     {
+        UI_StageConfirmPopup popup =  APP.UI.ShowPopupUI<UI_StageConfirmPopup>();
+        popup.SetStageData(stageNum);
         GameLogger.Info("Click Stage {0} Button.", stageNum);
     }
 
