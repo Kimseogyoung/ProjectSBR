@@ -38,6 +38,18 @@ public class SceneManager : IManager, IManagerUpdatable
         _currentScene.UpdateBase();
     }
 
+    public T GetCurrentScene<T>() where T : SceneBase
+    {
+        if(_currentScene == null) return null;
+
+        if(!(_currentScene is T))
+        {
+            GameLogger.Error("{0} is Not {1}", _currentScene._sceneName, typeof(T));
+            return null;
+        }
+        return (T)_currentScene;
+    }
+
     private IEnumerator CoLoadScene(string nextSceneName)
     {
         AsyncOperation async;
@@ -54,6 +66,9 @@ public class SceneManager : IManager, IManagerUpdatable
 
         switch (nextSceneName)
         {
+            case "IntroScene":
+                _currentScene = new IntroScene(nextSceneName);
+                break;
             case "LobbyScene":
                 _currentScene = new LobbyScene(nextSceneName);
                 break;

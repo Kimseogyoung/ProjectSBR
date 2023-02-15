@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 8050465556071061685}
   - component: {fileID: 8640512118660099796}
   - component: {fileID: 4494589129791286734}
-  - component: {fileID: 3585403042622305840}
+  - component: {fileID: 6964877679349386270}
   m_Layer: 0
   m_Name: UI_SettingPopup
   m_TagString: Untagged
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3585403042622305840
+--- !u!114 &6964877679349386270
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5469410869827796266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b7df2d3c3c62b249894db3a24f995e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 381b29d641e6a254fbea326574bc3f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7182649731921144498

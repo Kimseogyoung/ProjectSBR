@@ -30,6 +30,7 @@ public class GameManager: MonoBehaviour
         _sceneManager = new SceneManager();
         AddManager(_sceneManager, true);
 
+        APP.SceneManager = _sceneManager; 
         APP.UI = new UIManager();
 
         foreach (IManager manager in _managers)
