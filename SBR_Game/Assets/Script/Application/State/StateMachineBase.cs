@@ -36,6 +36,7 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
     public void SetCharacter(T character)
     {
         _character = character;
+        _transform.position = _character.CurPos;
     }
 
     public void SetState(CharacterState<CharacterBase> nextState)
@@ -59,16 +60,24 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
     public void MoveCharacter(Vector2 dir)
     {
         dir = dir * _character.SPEED * Time.deltaTime;
-        _transform.Translate( new Vector3(dir.x, 0, dir.y));
+        _character.CurPos += new Vector3(dir.x, 0, dir.y);
+        SetCharacterPos();
+
+        GizmoHelper.PushDrawQueue(TestDrawCircle);
     }
 
-    public void SetCharacterPos(Vector3 pos)
+    public void SetCharacterPos()
     {
-        _transform.position = pos;
+        _transform.position = _character.CurPos;
+
     }
 
     virtual protected void Init()
     {
 
+    }
+    private void TestDrawCircle()
+    {
+        Gizmos.DrawLine(transform.position, transform.forward + transform.position);
     }
 }
