@@ -5,7 +5,6 @@ using UnityEngine;
 public interface IManager
 {
     public void Init();
-    public void PrepareManager();
     public void StartManager();
     public void FinishManager();
 }

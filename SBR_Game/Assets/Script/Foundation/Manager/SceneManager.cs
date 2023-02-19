@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
@@ -14,11 +15,6 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void Init()
     {
-    }
-
-    public void PrepareManager()
-    {
-
     }
 
     public void StartManager()

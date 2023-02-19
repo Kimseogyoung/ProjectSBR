@@ -11,21 +11,25 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
+        APP.CharacterManager = new CharacterManager();
+        APP.CharacterManager.Init();
     }
 
     protected override void Exit()
     {
-        
+        APP.CharacterManager.FinishManager();
+        APP.CharacterManager = null;
     }
 
     protected override void Start()
     {
-       
+        APP.CharacterManager.StartManager();
+
     }
 
     protected override void Update()
     {
-       
+        APP.CharacterManager.UpdateManager();
     }
 
     

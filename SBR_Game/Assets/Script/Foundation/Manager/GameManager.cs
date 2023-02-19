@@ -49,10 +49,6 @@ public class GameManager: MonoBehaviour
 
     void Start()
     {
-        foreach(IManager manager in _managers)
-        {
-            manager.PrepareManager();
-        }
 
         foreach (IManager manager in _managers)
         {

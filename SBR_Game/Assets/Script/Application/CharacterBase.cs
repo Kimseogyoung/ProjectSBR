@@ -11,6 +11,8 @@ public class CharacterBase
     
     public string _name;
 
+    public Vector2 CurPos;
+
     public int HP;
     public int MP;
     public float SPEED;

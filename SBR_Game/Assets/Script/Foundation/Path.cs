@@ -11,6 +11,10 @@ public class Path
     static public string StageStar { get; private set; } = "UI/Scene/Lobby/StageStars";
 
 
+    //Character
+    static public string CharacterDir { get; private set; } = "Character/Prefab/";
+
+
 
     //Image
     static public string CasualUI { get; private set; } = "Image/UI/GUI";

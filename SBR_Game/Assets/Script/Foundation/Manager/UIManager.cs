@@ -9,10 +9,6 @@ public class UIManager : IManager, IManagerUpdatable
     {
     }
 
-    public void PrepareManager()
-    {
-    }
-
     public void StartManager()
     {
     }

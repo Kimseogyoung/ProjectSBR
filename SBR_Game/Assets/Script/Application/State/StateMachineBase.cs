@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
 {
-    [SerializeField] private T _character;
+    [SerializeField] protected T _character;
     private CharacterState<CharacterBase> currentState;
 
     private Transform _transform;//현재 캐릭터 위치
@@ -24,14 +24,19 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
 
     private void Start()
     {
-        SetState(new IdleState());
+
     }
 
     private void Update()
     {
+        if (currentState == null) return;
         currentState.UpdateBase();
     }
 
+    public void SetCharacter(T character)
+    {
+        _character = character;
+    }
 
     public void SetState(CharacterState<CharacterBase> nextState)
     {
@@ -53,10 +58,11 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
     //Character
     public void MoveCharacter(Vector2 dir)
     {
-        _transform.Translate( dir * _character.SPEED * Time.deltaTime);
+        dir = dir * _character.SPEED * Time.deltaTime;
+        _transform.Translate( new Vector3(dir.x, 0, dir.y));
     }
 
-    public void SetCharacterPos(Vector2 pos)
+    public void SetCharacterPos(Vector3 pos)
     {
         _transform.position = pos;
     }

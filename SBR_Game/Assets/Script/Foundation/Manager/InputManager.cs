@@ -65,11 +65,6 @@ public class InputManager : IManager, IManagerUpdatable
 
     }
 
-    public void PrepareManager()
-    {
-
-    }
-
     public void StartManager()
     {
 

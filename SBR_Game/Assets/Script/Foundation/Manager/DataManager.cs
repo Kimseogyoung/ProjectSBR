@@ -15,10 +15,6 @@ public class DataManager :IManager
         APP.GameConf = _yamlParser.GetConfig<Config.Game>(_fileReader.ReadFile(Path.ConfigDir + Path.GameConfig));
     }
 
-    public void PrepareManager()
-    {
-
-    }
 
     public void StartManager()
     {
