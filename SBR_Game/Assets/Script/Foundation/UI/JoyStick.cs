@@ -63,7 +63,7 @@ public class JoyStick : UI_Panel, IBeginDragHandler, IEndDragHandler, IDragHandl
         _isDragging = isDraging;
         if (!_isDragging)
         {
-            SetJoyStickPos(Get<RectTransform>(UI.Pad.ToString()).position);
+            _joyStickTransfrom.position = Get<RectTransform>(UI.Pad.ToString()).position;
         }
     }
     enum UI

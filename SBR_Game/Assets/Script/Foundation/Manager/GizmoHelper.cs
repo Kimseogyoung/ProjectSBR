@@ -4,10 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Util;
 
+public class DrawAction
+{
+    public Action Action;
+    public float startTime = 0;
+    public float playTime = 0;
+
+    public DrawAction(Action action, float startTime, float showTime)
+    {
+        Action = action;
+        this.startTime = startTime;
+        this.playTime = showTime;
+    }
+}
+
 public class GizmoHelper : MonoBehaviour
 {
-    private static Queue<Action> drawQueue = new Queue<Action>();
+    private static Queue<DrawAction> _drawQueue = new Queue<DrawAction>();
+    private static List<DrawAction> _playingActions = new List<DrawAction>();
 
+    private static float _time = 0;
     private static MonoBehaviour monoInstance;
 
     [RuntimeInitializeOnLoadMethod]
@@ -17,14 +33,24 @@ public class GizmoHelper : MonoBehaviour
         DontDestroyOnLoad(monoInstance.gameObject);
     }
 
-    static public void PushDrawQueue(Action action) { drawQueue.Enqueue(action); }
+
+    static public void PushDrawQueue(Action action, float time = 0f) 
+    { 
+        _drawQueue.Enqueue(new DrawAction(action, _time, time)); 
+    }
 
     private void OnDrawGizmos()
     {
-        while(drawQueue.Count > 0)
+        _time += Time.deltaTime;
+
+        for(int i=0; i<_drawQueue.Count; i++)
         {
-            Action action = drawQueue.Dequeue();
-            action.Invoke();
+            DrawAction action = _drawQueue.Dequeue();
+            action.Action.Invoke();
+
+            if (_time < action.startTime + action.playTime)
+                _drawQueue.Enqueue(action);
+
         }
     }
 

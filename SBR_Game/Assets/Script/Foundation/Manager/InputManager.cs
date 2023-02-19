@@ -12,6 +12,7 @@ public enum EInputAction
     ESC,
     TAB,
     FASTMODE,
+    ATTACK,
     SKILL1,
     SKILL2,
     SKILL3,
@@ -47,10 +48,11 @@ public class InputManager : IManager, IManagerUpdatable
         _action2keyMappings.Add(EInputAction.PAUSE, new List<KeyCode>() { KeyCode.P });
         _action2keyMappings.Add(EInputAction.PLAY, new List<KeyCode>() { KeyCode.P });
         _action2keyMappings.Add(EInputAction.FASTMODE, new List<KeyCode>() { KeyCode.LeftControl, KeyCode.RightControl });
-        _action2keyMappings.Add(EInputAction.SKILL1, new List<KeyCode>() { KeyCode.Q });
-        _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.W });
-        _action2keyMappings.Add(EInputAction.SKILL3, new List<KeyCode>() { KeyCode.E });
-        _action2keyMappings.Add(EInputAction.ULI_SKILL, new List<KeyCode>() { KeyCode.R });
+        _action2keyMappings.Add(EInputAction.ATTACK, new List<KeyCode>() { KeyCode.Q });
+        _action2keyMappings.Add(EInputAction.SKILL1, new List<KeyCode>() { KeyCode.Alpha1 });
+        _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.Alpha2 });
+        _action2keyMappings.Add(EInputAction.SKILL3, new List<KeyCode>() { KeyCode.Alpha3 });
+        _action2keyMappings.Add(EInputAction.ULI_SKILL, new List<KeyCode>() { KeyCode.Alpha4 });
 
         foreach (EInputAction inputAction in Enum.GetValues(typeof(EInputAction)))
         {
@@ -87,9 +89,9 @@ public class InputManager : IManager, IManagerUpdatable
         //게임 실행했을 때부터 초를 기록
         _time += Time.deltaTime;
 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        
         if (h != 0 || v != 0)
             InvokeMoveKeyAction(new Vector2(h, v));
 
