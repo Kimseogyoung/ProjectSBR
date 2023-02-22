@@ -9,6 +9,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
+public enum ECharacterType
+{
+    None = 0,
+    Player,
+    Boss,
+    Zzol
+}
 
 public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
 {
@@ -35,9 +42,10 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
         currentState.UpdateBase();
     }
 
-    public void SetCharacter(T character)
+    public void SetCharacter(T character, ECharacterType characterType)
     {
         _character = character;
+        _character.SetCharacterType(characterType);
         _transform.position = _character.CurPos;
     }
 

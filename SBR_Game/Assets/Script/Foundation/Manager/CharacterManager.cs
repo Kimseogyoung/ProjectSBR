@@ -21,6 +21,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessibl
     {
         player = (Player)Spawn(1001);
         Spawn(1010);
+        Spawn(1011);
     }
 
     public void StartManager()
@@ -51,16 +52,19 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessibl
             characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Hero1");
             PlayerStateMachine stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
             stateMachine.SetCharacterAccessible(this);
-            character = new Player();
-            stateMachine.SetCharacter((Player)character);
+            character = new Player(id);
+            stateMachine.SetCharacter((Player)character, ECharacterType.Player);
         }
         else
         {
             characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Enemy1");
             CharacterStateMachine stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
             stateMachine.SetCharacterAccessible(this);
-            character = new CharacterBase();
-            stateMachine.SetCharacter(character);
+            character = new CharacterBase(id);
+            if(id % 10 == 0)//  º¸½º
+                stateMachine.SetCharacter(character, ECharacterType.Boss);
+            else
+                stateMachine.SetCharacter(character, ECharacterType.Zzol);
 
         }
 

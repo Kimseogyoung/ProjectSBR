@@ -14,6 +14,7 @@ public enum EAttack
 [Serializable]
 public class CharacterBase 
 {
+    public ECharacterType CharacterType;
     public int Id;
     
     public string Name;
@@ -23,7 +24,9 @@ public class CharacterBase
     public float AttackRangeRadius = 2;//부채꼴의 반지름
     public float AttackRangeAngle = 90;//부채꼴의 각도
 
+    public float HPBase = 100;
     public float HP = 100;
+    public float MPBase = 100;
     public float MP = 100;
     public float SPEED=5;
 
@@ -32,6 +35,13 @@ public class CharacterBase
     public float MATK = 1;//마법 공격력
     public float DEF = 1; //방어력
     public float CRT = 1;// 크리티컬
+
+    public CharacterBase(int characterId)
+    {
+        Id = characterId;
+        Name = "DUMMY";
+        SetBaseStat();
+    }
 
     public float AccumulateDamage(CharacterBase attacker, CharacterBase victim, EAttack atk ,float multiplier =1f)//공격자, 피격자, 공격력 종류, 데미지 계수
     {
@@ -54,15 +64,19 @@ public class CharacterBase
             GameLogger.Strong("{0}는 죽었다.", Name);
         }
 
+        
+        EventQueue.PushEvent<HPEvent>(
+            CharacterType == ECharacterType.Player? EEventActionType.PlayerHpChange:
+            CharacterType == ECharacterType.Boss? EEventActionType.BossHpChange : EEventActionType.ZzolHpChange,
+            new HPEvent(Id, HPBase, HP, true));
+
         return damage;
     }
 
 
-    protected void SetCharacterId(int characterId)
+    public void SetCharacterType(ECharacterType characterType)
     {
-        Id = characterId;
-        Name = "DUMMY";
-        SetBaseStat();
+        CharacterType = characterType;
     }
 
     private bool CheckCritical()

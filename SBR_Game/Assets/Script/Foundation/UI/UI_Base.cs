@@ -77,7 +77,7 @@ abstract public class UI_Base : MonoBehaviour
 		button.onClick.AddListener(unityAction);
 	}
 
-	/*
+    /*
 	//BindEvent UI 오브젝트에 이벤트 등록하기
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
@@ -96,6 +96,10 @@ abstract public class UI_Base : MonoBehaviour
 		}
 	}
 	*/
-
+    private void OnDestroy()
+    {
+		_objects.Clear();
+        _objectLists.Clear();
+    }
     public abstract void Init();
 }
