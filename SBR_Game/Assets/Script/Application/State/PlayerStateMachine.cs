@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateMachine : StateMachineBase<Player>
+public class PlayerStateMachine : StateMachineBase
 {
     
     protected override void Init()
     {
-        APP.InputManager.AddInputAction(EInputAction.MOVE, MoveCharacter);  
-        APP.InputManager.AddInputAction(EInputAction.ATTACK, Attack);
+        
     }
   
 }

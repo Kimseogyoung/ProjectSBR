@@ -42,3 +42,13 @@ public class NotiEvent : EventBase
     }
 }
 
+public class CharacterDeadEvent : EventBase
+{
+    public int CharacterId;
+
+    public CharacterDeadEvent(int characterId)
+    {
+        CharacterId = characterId;
+    }
+}
+

@@ -79,6 +79,11 @@ public class CharacterBase
         CharacterType = characterType;
     }
 
+    public bool IsDead()
+    {
+        return HP <= 0 ? true : false;
+    }
+
     private bool CheckCritical()
     {
         System.Random rand = new System.Random(DateTime.Now.Millisecond);

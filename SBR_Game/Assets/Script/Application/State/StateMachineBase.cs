@@ -17,9 +17,9 @@ public enum ECharacterType
     Zzol
 }
 
-public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
+public class StateMachineBase : MonoBehaviour 
 {
-    [SerializeField] protected T _character;
+    [SerializeField] protected CharacterBase _character;
     private CharacterState<CharacterBase> currentState;
 
     private Transform _transform;//현재 캐릭터 위치
@@ -42,11 +42,12 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
         currentState.UpdateBase();
     }
 
-    public void SetCharacter(T character, ECharacterType characterType)
+    public void SetCharacter(CharacterBase character, ECharacterType characterType)
     {
         _character = character;
         _character.SetCharacterType(characterType);
         _transform.position = _character.CurPos;
+        SetState(new IdleState());
     }
 
     public void SetState(CharacterState<CharacterBase> nextState)
@@ -60,7 +61,7 @@ public class StateMachineBase<T> : MonoBehaviour where T : CharacterBase
 
         // 다음state 시작
         currentState = nextState;
-        currentState.OnEnterBase(_character);
+        currentState.OnEnterBase(_character,_characterList, this);
 
     }
 

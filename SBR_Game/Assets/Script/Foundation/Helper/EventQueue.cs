@@ -14,7 +14,10 @@ public enum EEventActionType
     ZzolHpChange,
     Phase1Start,
     Phase2Start,
-    StageInfoSet
+    StageInfoSet,
+    PlayerDead,
+    BossDead,
+    ZzolDead
 }
 
 public class EventQueue : MonoBehaviour

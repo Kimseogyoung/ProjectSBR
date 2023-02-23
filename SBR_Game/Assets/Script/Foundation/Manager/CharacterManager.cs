@@ -8,18 +8,20 @@ public interface ICharacterAccessible
     public List<CharacterBase> GetEnemyList();
     public List<CharacterBase> GetHeroList();
     public List<CharacterBase> GetAllCharacterList();
+    public CharacterBase GetPlayer();
 
 }
 
 public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessible
 {
+    //private List<StateMachineBase<CharacterBase>> _stateMachines = new List<StateMachineBase<CharacterBase>>();
     private List<CharacterBase> _enemyList = new List<CharacterBase>();
     private List<CharacterBase> _heroList = new List<CharacterBase>();
-    private Player player;
+    private Player _player;
 
     public void Init()
     {
-        player = (Player)Spawn(1001);
+        _player = (Player)Spawn(1001);
         Spawn(1010);
         Spawn(1011);
     }
@@ -54,6 +56,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessibl
             stateMachine.SetCharacterAccessible(this);
             character = new Player(id);
             stateMachine.SetCharacter((Player)character, ECharacterType.Player);
+
+            //_stateMachines.Add((StateMachineBase<CharacterBase>)stateMachine);
+
         }
         else
         {
@@ -66,6 +71,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessibl
             else
                 stateMachine.SetCharacter(character, ECharacterType.Zzol);
 
+            //_stateMachines.Add(stateMachine);
         }
 
         if (id < 1010)
@@ -82,7 +88,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacterAccessibl
         return character;
     }
 
+    public CharacterBase GetPlayer() { return _player; }
     public List<CharacterBase> GetEnemyList() { return _enemyList; }
     public List<CharacterBase> GetHeroList() { return _heroList; }
     public List<CharacterBase> GetAllCharacterList() { return (List<CharacterBase>)_enemyList.Concat(_heroList); }
+    //public List<StateMachineBase<CharacterBase>> GetAllStateMachine() { return _stateMachines; }
 }

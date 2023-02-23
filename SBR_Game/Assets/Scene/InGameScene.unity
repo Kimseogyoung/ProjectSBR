@@ -619,5 +619,49 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_InGameScene
       objectReference: {fileID: 0}
+    - target: {fileID: 1810762472655890238, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1810762472655890238, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243528516347119981, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243528516347119981, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014542528101066352, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014542528101066352, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4260969288112205950, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4260969288112205950, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7987100766217099798, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7987100766217099798, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127201154896515368, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f281bee342184d0489644ceee1273c25, type: 3}
