@@ -93,6 +93,20 @@ public class StateMachineBase : MonoBehaviour
             , EAttack.ATK);   
     }
 
+    public void NonTargetingDirAttack(Vector3 dir)
+    {
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
+            , EHitType.ALONE
+            , EAttack.ATK);
+    }
+
+    public void TargetingDirAttack(CharacterBase target)
+    {
+       // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
+        //    , EHitType.ALONE
+        //    , EAttack.ATK);
+    }
+
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);
     public void UseSkill2() => UseSkill(EInputAction.SKILL2); 
     public void UseSkill3() => UseSkill(EInputAction.SKILL3);

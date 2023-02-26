@@ -108,6 +108,7 @@ public class CharacterBase
             HP = 100;
             MP = 100;
             SPD = 3;
+            AttackRangeRadius = 2;
             ATKSPD = 1;
             ATK = 10;
             MATK = 1;
@@ -118,10 +119,11 @@ public class CharacterBase
         {
             HP = 100;
             MP = 100;
-            SPD = 1;
-            AttackRangeRadius = 5;
-            ATKSPD = 1;
-            ATK = 1;
+            SPD = 2;
+            AttackRangeRadius = 1.5f;
+            AttackRangeAngle = 180;
+            ATKSPD = 2;
+            ATK = 2;
             MATK = 1;
             DEF = 1;
             CRT = 1;

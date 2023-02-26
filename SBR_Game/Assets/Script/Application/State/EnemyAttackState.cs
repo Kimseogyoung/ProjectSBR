@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class EnemyFollowState : CharacterState<CharacterBase>
+public class EnemyAttackState : CharacterState<CharacterBase>
 {
     private CharacterBase _player;
+    private float _currentAtkCoolTime;
     protected override void OnEnter()
     {
         _player = APP.Characters.GetPlayer();
@@ -20,6 +21,7 @@ public class EnemyFollowState : CharacterState<CharacterBase>
 
     protected override void Update()
     {
+        _currentAtkCoolTime -= Time.deltaTime;
         if (_character.IsDead())
         {
             _stateMachine.SetState(new DeadState());
@@ -33,14 +35,24 @@ public class EnemyFollowState : CharacterState<CharacterBase>
         }
 
         Vector3 dir = (_player.CurPos - _character.CurPos);
-        //공격 가능한 범위인가
-        if (dir.magnitude < _character.AttackRangeRadius - 0.5f)
+
+        //공격 불가한 범위인가
+        if (dir.magnitude > _character.AttackRangeRadius)
         {
-            _stateMachine.SetState(new EnemyAttackState());
+            _stateMachine.SetState(new EnemyFollowState());
             return;
         }
-         
-        _stateMachine.MoveCharacter(dir.normalized.ConvertVec2());
+
+        if (IsReadyToAttack())
+        {
+            _stateMachine.NonTargetingDirAttack(dir.normalized);
+            _currentAtkCoolTime = _character.ATKSPD;
+        }
+    }
+
+    private bool IsReadyToAttack()
+    {
+        return _currentAtkCoolTime <= 0;
     }
 
 
