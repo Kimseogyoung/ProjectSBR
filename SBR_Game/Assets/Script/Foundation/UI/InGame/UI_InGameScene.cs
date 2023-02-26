@@ -26,12 +26,26 @@ public class UI_InGameScene : UI_Scene
         EventQueue.AddEventListener<HPEvent>(EEventActionType.PlayerHpChange, UpdateHpBar);
         EventQueue.AddEventListener<HPEvent>(EEventActionType.BossHpChange, UpdateHpBar);
         EventQueue.AddEventListener<HPEvent>(EEventActionType.ZzolHpChange, UpdateHpBar);
+
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BossDead, SuccessGame);
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PlayerDead, FailGame);
     }
 
     private void Update()
     {
         
     }
+
+    private void SuccessGame(CharacterDeadEvent characterDeadEvent)
+    {
+        APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
+    }
+
+    private void FailGame(CharacterDeadEvent characterDeadEvent)
+    {
+        APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
+    }
+
 
     private void UpdateHpBar(HPEvent evt)
     {

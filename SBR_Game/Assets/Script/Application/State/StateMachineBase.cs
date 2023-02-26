@@ -77,8 +77,6 @@ public class StateMachineBase : MonoBehaviour
         dir = dir * _character.SPD * Time.deltaTime;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
         SetCharacterPos();
-
-        GizmoHelper.PushDrawQueue(TestDrawCircle);
     }
 
     public void SetCharacterPos()
@@ -130,11 +128,6 @@ public class StateMachineBase : MonoBehaviour
     virtual protected void Init()
     {
 
-    }
-
-    private void TestDrawCircle()
-    {
-        Gizmos.DrawLine(transform.position, transform.forward + transform.position);
     }
 
 }

@@ -12,6 +12,7 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
+        APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
         characterManager = new CharacterManager();
         characterManager.Init();
     }

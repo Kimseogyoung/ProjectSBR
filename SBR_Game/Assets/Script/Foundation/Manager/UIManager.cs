@@ -68,7 +68,9 @@ public class UIManager : IManager, IManagerUpdatable
             sceneUI = Util.GameObj.GetOrAddComponent<T>(go);
         }
         else
+        {
             go = sceneUI.gameObject;
+        }
 
         _sceneUI = sceneUI;
 

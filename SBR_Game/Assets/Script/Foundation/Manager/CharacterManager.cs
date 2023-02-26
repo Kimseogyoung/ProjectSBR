@@ -46,7 +46,8 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
     public void FinishManager()
     {
-
+        _heroList.Clear();
+        _enemyList.Clear();
     }
 
     public CharacterBase Spawn(int id)

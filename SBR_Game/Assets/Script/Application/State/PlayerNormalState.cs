@@ -18,6 +18,10 @@ public class playerNormalState : CharacterState<CharacterBase>
 
     protected override void Update()
     {
-
+        if (_character.IsDead())
+        {
+            _stateMachine.SetState(new DeadState());
+            return;
+        }
     }
 }
