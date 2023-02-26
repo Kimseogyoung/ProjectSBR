@@ -21,6 +21,8 @@ public class CharacterBase
 
     public Vector3 CurDir = Vector3.zero;
     public Vector3 CurPos = Vector3.zero;
+
+    //기본공격 관련 스탯
     public float AttackRangeRadius = 2;//부채꼴의 반지름
     public float AttackRangeAngle = 90;//부채꼴의 각도
 
@@ -28,13 +30,15 @@ public class CharacterBase
     public float HP = 100;
     public float MPBase = 100;
     public float MP = 100;
-    public float SPEED=5;
-
-    public float ATKSPEED = 1;
+    public float SPD=5;
+    public float ATKSPD = 1; //공격속도(초당 기본 공격 횟수)
     public float ATK =1; //공격력
     public float MATK = 1;//마법 공격력
     public float DEF = 1; //방어력
     public float CRT = 1;// 크리티컬
+    public float CDR = 1;// 쿨타임 감소 퍼센트
+
+    private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
     public CharacterBase(int characterId)
     {
@@ -84,6 +88,8 @@ public class CharacterBase
         return HP <= 0 ? true : false;
     }
 
+    public SkillBase GetSkill(EInputAction inputAction) { return _skillList[inputAction]; }
+
     private bool CheckCritical()
     {
         System.Random rand = new System.Random(DateTime.Now.Millisecond);
@@ -97,14 +103,34 @@ public class CharacterBase
     private void SetBaseStat()
     {
         //추후 캐릭터별 기본 스탯으로 조정
-        HP = 100;
-        MP = 100;
-        SPEED = 3;
-        ATKSPEED = 1;
-        ATK = 1;
-        MATK= 1;
-        DEF = 1;
-        CRT = 1;
+        if(Id == 1001)
+        {
+            HP = 100;
+            MP = 100;
+            SPD = 3;
+            ATKSPD = 1;
+            ATK = 10;
+            MATK = 1;
+            DEF = 1;
+            CRT = 1;
+        }
+        else
+        {
+            HP = 100;
+            MP = 100;
+            SPD = 1;
+            AttackRangeRadius = 5;
+            ATKSPD = 1;
+            ATK = 1;
+            MATK = 1;
+            DEF = 1;
+            CRT = 1;
+        }
+
+        _skillList.Add(EInputAction.SKILL1, new Skill0(this));
+        _skillList.Add(EInputAction.SKILL2, new Skill0(this));
+        _skillList.Add(EInputAction.SKILL3, new Skill0(this));
+        _skillList.Add(EInputAction.ULT_SKILL, new Skill0(this));
 
     }
 }

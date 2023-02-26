@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGameScene : SceneBase
 {
+    private CharacterManager characterManager;
     public InGameScene(string sceneName)
     {
         _sceneName = sceneName;
@@ -11,25 +12,25 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
-        APP.CharacterManager = new CharacterManager();
-        APP.CharacterManager.Init();
+        characterManager = new CharacterManager();
+        characterManager.Init();
     }
 
     protected override void Exit()
     {
-        APP.CharacterManager.FinishManager();
-        APP.CharacterManager = null;
+        characterManager.FinishManager();
+        characterManager = null;
     }
 
     protected override void Start()
     {
-        APP.CharacterManager.StartManager();
+        characterManager.StartManager();
 
     }
 
     protected override void Update()
     {
-        APP.CharacterManager.UpdateManager();
+        characterManager.UpdateManager();
     }
 
     

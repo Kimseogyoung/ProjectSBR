@@ -10,7 +10,7 @@ public class HeroFollowState : CharacterState<CharacterBase>
     private CharacterBase _player;
     protected override void OnEnter()
     {
-        _player = _characterList.GetPlayer();
+        _player = APP.Characters.GetPlayer();
     }
 
     protected override void OnExit()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
@@ -40,6 +41,10 @@ public class StateMachineBase : MonoBehaviour
     {
         if (currentState == null) return;
         currentState.UpdateBase();
+        _character.GetSkill(EInputAction.SKILL1).UpdateSkill();
+        _character.GetSkill(EInputAction.SKILL2).UpdateSkill();
+        _character.GetSkill(EInputAction.SKILL3).UpdateSkill();
+        _character.GetSkill(EInputAction.ULT_SKILL).UpdateSkill();
     }
 
     public void SetCharacter(CharacterBase character, ECharacterType characterType)
@@ -61,7 +66,7 @@ public class StateMachineBase : MonoBehaviour
 
         // 다음state 시작
         currentState = nextState;
-        currentState.OnEnterBase(_character,_characterList, this);
+        currentState.OnEnterBase(_character, this);
 
     }
 
@@ -69,7 +74,7 @@ public class StateMachineBase : MonoBehaviour
     public void MoveCharacter(Vector2 dir)
     {
         _character.CurDir = new Vector3(dir.x, 0, dir.y);
-        dir = dir * _character.SPEED * Time.deltaTime;
+        dir = dir * _character.SPD * Time.deltaTime;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
         SetCharacterPos();
 
@@ -83,57 +88,29 @@ public class StateMachineBase : MonoBehaviour
 
     public void Attack()
     {
-        FindTargetAndApplyDamage(new HitBox(EHitShape.Corn, _character.AttackRangeRadius, _character.CurDir, _character.AttackRangeAngle)
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, _character.CurDir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);   
     }
 
-    private void FindTargetAndApplyDamage(HitBox hitBox, EHitType hitType, EAttack attackPowerType)
+    public void UseSkill1() => UseSkill(EInputAction.SKILL1);
+    public void UseSkill2() => UseSkill(EInputAction.SKILL2); 
+    public void UseSkill3() => UseSkill(EInputAction.SKILL3);
+    public void UseUltSkill() => UseSkill(EInputAction.ULT_SKILL);
+
+    private void UseSkill(EInputAction inputAction)
     {
-        List<CharacterBase> targetList = new List<CharacterBase>();
-        List<CharacterBase> enemyList = _characterList.GetEnemyList();
-        for (int i = 0; i < enemyList.Count; i++)
+        SkillBase skill= _character.GetSkill(inputAction);
+        if(skill != null)
         {
-            if (hitBox.CheckHit(_character.CurPos, enemyList[i].CurPos))
+            if (_character.GetSkill(inputAction).TryUseSkill())
             {
-                targetList.Add(enemyList[i]);
+                GameLogger.Info("{0} 사용 성공", inputAction);
+                //스킬 사용 성공
+                return;
             }
         }
-
-        if (targetList.Count == 0) return;//적이 없음
-
-        switch (hitType)
-        {
-            case EHitType.ALONE:
-                CharacterBase target = targetList[0];
-                float distance = (target.CurPos - _character.CurPos).magnitude;
-                for (int i=1; i< targetList.Count; i++)
-                {
-                    float newTargetDistance = (targetList[i].CurPos -_character.CurPos).magnitude;
-                    if (distance > newTargetDistance)
-                    {
-                        target = targetList[i];
-                        distance= newTargetDistance;
-                    }
-                }
-                ApplyDamageToTarget(_character, target, attackPowerType);
-                break;
-            case EHitType.ALL:
-                for(int i=0; i< targetList.Count; i++)
-                {
-                    ApplyDamageToTarget(_character, targetList[i], attackPowerType);
-                }
-                break;
-            default:
-
-                break;
-        }
-    }
-
-    private void ApplyDamageToTarget(CharacterBase attacker, CharacterBase victim, EAttack atk, float multiplier = 1f)
-    {
-        GameLogger.Info("{0}이 {1}에게 맞음", victim.Name, attacker.Name);
-        victim.ApplyDamage(_character.AccumulateDamage(attacker, victim, atk, multiplier));
+        //실패
     }
 
     virtual protected void Init()
@@ -146,7 +123,4 @@ public class StateMachineBase : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.forward + transform.position);
     }
 
-
-    private ICharacterAccessible _characterList;
-    public void SetCharacterAccessible(ICharacterAccessible characters) { _characterList = characters; }
 }

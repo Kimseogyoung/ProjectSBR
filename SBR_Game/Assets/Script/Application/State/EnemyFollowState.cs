@@ -10,7 +10,7 @@ public class EnemyFollowState : CharacterState<CharacterBase>
     private CharacterBase _player;
     protected override void OnEnter()
     {
-        _player = _characterList.GetPlayer();
+        _player = APP.Characters.GetPlayer();
     }
 
     protected override void OnExit()
@@ -34,7 +34,7 @@ public class EnemyFollowState : CharacterState<CharacterBase>
 
         Vector3 dir = (_player.CurPos - _character.CurPos);
         //공격 가능한 범위인가
-        if (dir.magnitude < _character.AttackRangeRadius - 0.5f)
+        if (dir.magnitude < _character.AttackRangeRadius + 0.5f)
         {
             return;
         }
