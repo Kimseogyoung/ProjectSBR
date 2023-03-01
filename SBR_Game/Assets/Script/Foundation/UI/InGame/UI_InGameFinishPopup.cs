@@ -10,6 +10,7 @@ public class UI_InGameFinishPopup : UI_Popup
     {
         Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
         {
+            EventQueue.PushEvent<PauseEvent>(EEventActionType.Play, new PauseEvent(false));
             APP.SceneManager.ChangeScene("LobbyScene");
         });
         Bind<TMP_Text>(UI.GameResultText.ToString());

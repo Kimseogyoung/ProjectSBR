@@ -11,6 +11,8 @@ public interface IManager
 public interface IManagerUpdatable
 {
     public void UpdateManager();
+    public void UpdatePausedManager();
+    public void Pause(bool IsPause);
 }
 
 

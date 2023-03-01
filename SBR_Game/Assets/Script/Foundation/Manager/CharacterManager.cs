@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -18,7 +20,7 @@ public interface ICharacters
 
 public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 {
-    //private List<StateMachineBase<CharacterBase>> _stateMachines = new List<StateMachineBase<CharacterBase>>();
+    private List<StateMachineBase> _stateMachines = new List<StateMachineBase>();
     private List<CharacterBase> _enemyList = new List<CharacterBase>();
     private List<CharacterBase> _heroList = new List<CharacterBase>();
     private Player _player;
@@ -33,19 +35,43 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
     public void StartManager()
     {
-        for (int i = 0; i < _enemyList.Count; i++)
+        for (int i = 0; i < _stateMachines.Count; i++)
         {
-            //_enemyList[i].Set
+            if (_stateMachines[i] is PlayerStateMachine)
+            {
+                _stateMachines[i].SetState(new playerNormalState());
+            }
+            else if(_stateMachines[i] is CharacterStateMachine )
+            {
+                _stateMachines[i].SetState(new EnemyFollowState());
+            }
         }
     }
 
     public void UpdateManager()
+    {
+        for (int i=0; i<_stateMachines.Count; i++)
+        {
+            _stateMachines[i].UpdateStateMachine();
+        }
+    }
+    public void UpdatePausedManager()
+    {
+       
+    }
+
+    public void Pause(bool IsPause)
     {
 
     }
 
     public void FinishManager()
     {
+        for (int i = 0; i < _stateMachines.Count; i++)
+        {
+            _stateMachines[i].SetState(new IdleState());
+        }
+        _stateMachines.Clear();
         _heroList.Clear();
         _enemyList.Clear();
     }
@@ -54,29 +80,22 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
     {
         CharacterBase character;
         GameObject characterObj;
-
+        StateMachineBase stateMachine;
         if (id == 1001)//플레이어 캐릭터라면 (수정)
         {
             characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Hero1");
-            PlayerStateMachine stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
+            stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
             character = new Player(id);
             stateMachine.SetCharacter((Player)character, ECharacterType.Player);
-
-            //_stateMachines.Add((StateMachineBase<CharacterBase>)stateMachine);
-
         }
         else
         {
             characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Enemy1");
-            CharacterStateMachine stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
+            stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
             character = new CharacterBase(id);
-            if(id % 10 == 0)//  보스
-                stateMachine.SetCharacter(character, ECharacterType.Boss);
-            else
-                stateMachine.SetCharacter(character, ECharacterType.Zzol);
-
-            //_stateMachines.Add(stateMachine);
+            
         }
+        _stateMachines.Add(stateMachine);
 
         if (id < 1010)
         {
@@ -85,6 +104,11 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         }
         else
         {
+            if (id % 10 == 0)//  보스
+                stateMachine.SetCharacter(character, ECharacterType.Boss);
+            else
+                stateMachine.SetCharacter(character, ECharacterType.Zzol);
+
             _enemyList.Add(character);
 
         }

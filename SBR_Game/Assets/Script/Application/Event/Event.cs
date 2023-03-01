@@ -51,4 +51,14 @@ public class CharacterDeadEvent : EventBase
         CharacterId = characterId;
     }
 }
+public class PauseEvent : EventBase
+{
+    public bool IsPause;
+
+    public PauseEvent(bool isPause)
+    {
+        IsPause = isPause;
+    }
+}
+
 

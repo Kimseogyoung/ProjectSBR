@@ -34,6 +34,16 @@ public class SceneManager : IManager, IManagerUpdatable
         _currentScene.UpdateBase();
     }
 
+    public void UpdatePausedManager()
+    {
+        
+    }
+
+    public void Pause(bool IsPause)
+    {
+       
+    }
+
     public T GetCurrentScene<T>() where T : SceneBase
     {
         if(_currentScene == null) return null;

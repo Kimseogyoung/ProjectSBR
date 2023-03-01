@@ -23,6 +23,16 @@ public class UIManager : IManager, IManagerUpdatable
         
     }
 
+    public void UpdatePausedManager()
+    {
+       
+    }
+
+    public void Pause(bool IsPause)
+    {
+        
+    }
+
     int _order = 10; // 현재까지 최근에 사용한 오더
 
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>(); // 오브젝트 말고 컴포넌트를 담음. 팝업 캔버스 UI 들을 담는다.
@@ -134,4 +144,5 @@ public class UIManager : IManager, IManagerUpdatable
         while (_popupStack.Count > 0)
             ClosePopupUI();
     }
+
 }

@@ -13,13 +13,28 @@ public class GameManager: MonoBehaviour
 
     private bool _isStopped = false;
 
+    public T AddUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
+    {
+        _managerUpdatables.Add(manager);
+        return manager;
+    }
+
+    public void RemoveUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
+    {
+        if (!_managerUpdatables.Contains(manager)) return;
+        _managerUpdatables.Remove(manager);
+    }
+
     private void Awake()
     {
+        
         if (FindObjectsOfType(typeof(GameManager)).Length >= 2) 
         {
             Destroy(gameObject);
             return;
         }
+        
+        APP.GameManager = this;
 
         GameLogger.Info("GameManager Awake");
 
@@ -43,8 +58,11 @@ public class GameManager: MonoBehaviour
             manager.Init();
         }
 
-        APP.InputManager.AddInputAction(EInputAction.PAUSE, StopManagers);
-        APP.InputManager.AddInputAction(EInputAction.PLAY, PlayManagers);
+        APP.InputManager.AddInputAction(EInputAction.PAUSE, () => { Pause(new PauseEvent(true)); });
+        APP.InputManager.AddInputAction(EInputAction.PLAY, () => { Pause(new PauseEvent(false)); });
+
+        EventQueue.AddEventListener<PauseEvent>(EEventActionType.Pause, Pause);
+        EventQueue.AddEventListener<PauseEvent>(EEventActionType.Play, Pause);
     }
 
     void Start()
@@ -59,18 +77,26 @@ public class GameManager: MonoBehaviour
 
     void Update()
     {
-        for(int i=0; i<_managerUpdatables.Count; i++)
+        if (_isStopped)
+        {
+            for (int i = 0; i < _managerUpdatables.Count; i++)
+                _managerUpdatables[i].UpdatePausedManager();
+            return;
+        }
+
+        for (int i=0; i<_managerUpdatables.Count; i++)
             _managerUpdatables[i].UpdateManager();
         
     }
 
-    private void StopManagers()
+    private void Pause(PauseEvent pause)
     {
-        _inputManager.SetStop(true);
-    }
-    private void PlayManagers()
-    {
-        _inputManager.SetStop(false);
+
+        if (pause.IsPause == _isStopped) return;
+        _isStopped = pause.IsPause;
+
+        for (int i = 0; i < _managerUpdatables.Count; i++)
+            _managerUpdatables[i].Pause(pause.IsPause);
     }
 
     private void AddManager<T>(T manager, bool isUpdatable = false) where T :IManager

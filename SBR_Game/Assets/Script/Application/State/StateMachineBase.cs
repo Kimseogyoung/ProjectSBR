@@ -21,7 +21,9 @@ public enum ECharacterType
 public class StateMachineBase : MonoBehaviour 
 {
     [SerializeField] protected CharacterBase _character;
-    private CharacterState<CharacterBase> currentState;
+
+    private CharacterState<CharacterBase> _currentState;
+    [SerializeField] private string _currentStateName;
 
     private Transform _transform;//현재 캐릭터 위치
     private float _currentAtkCoolTime = 0;
@@ -37,13 +39,13 @@ public class StateMachineBase : MonoBehaviour
 
     }
 
-    private void Update()
+    public void UpdateStateMachine()
     {
-        if (currentState == null) return;
-        
+        if (_currentState == null) return;
+
         _currentAtkCoolTime -= Time.deltaTime;
 
-        currentState.UpdateBase();
+        _currentState.UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateSkill();
         _character.GetSkill(EInputAction.SKILL2).UpdateSkill();
         _character.GetSkill(EInputAction.SKILL3).UpdateSkill();
@@ -60,16 +62,17 @@ public class StateMachineBase : MonoBehaviour
 
     public void SetState(CharacterState<CharacterBase> nextState)
     {
-        if (currentState != null)
+        if (_currentState != null)
         {
             // 기존의 상태가 존재했다면 OnExit()호출
-            currentState.OnExitBase();
+            _currentState.OnExitBase();
 
         }
 
         // 다음state 시작
-        currentState = nextState;
-        currentState.OnEnterBase(_character, this);
+        _currentStateName = nextState.ToString();
+        _currentState = nextState;
+        _currentState.OnEnterBase(_character, this);
 
     }
 

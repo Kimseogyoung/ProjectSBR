@@ -19,7 +19,7 @@ public enum EInputAction
     ULT_SKILL
 }
 
-public class InputManager : IManager, IManagerUpdatable
+public class InputManager :IManager, IManagerUpdatable
 {
     private bool _isStopped = false;
 
@@ -75,7 +75,7 @@ public class InputManager : IManager, IManagerUpdatable
     public void AddInputAction(EInputAction inputAction, Action action) { _actions[inputAction] += action; }
     public void AddInputAction(EInputAction inputAction, Action<Vector2> action) { _moveAction += action; }
     public void RemoveInputAction(EInputAction inputAction, Action action) { _actions[inputAction] -= action; }
-    public void RemoveInputAction(EInputAction inputAction, Action<Vector2> action) { _moveAction += action; }
+    public void RemoveInputAction(EInputAction inputAction, Action<Vector2> action) { _moveAction -= action; }
     public void ClearInputAction(EInputAction inputAction) 
     {
         if (inputAction == EInputAction.MOVE)
@@ -104,6 +104,16 @@ public class InputManager : IManager, IManagerUpdatable
             }
         }
         
+    }
+
+    public void UpdatePausedManager()
+    {
+     
+    }
+
+    public void Pause(bool IsPause)
+    {
+       
     }
 
     public void InvokeKeyAction(EInputAction inputAction)
@@ -141,4 +151,5 @@ public class InputManager : IManager, IManagerUpdatable
     {
         _isStopped = isStop;
     }
+
 }

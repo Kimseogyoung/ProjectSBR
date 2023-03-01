@@ -26,7 +26,7 @@ abstract public class SceneBase
     public void ExitBase()
     {
         GameLogger.Info($"{_sceneName} Exit!");
-        Enter();
+        Exit();
     }
 
     abstract protected void Enter();

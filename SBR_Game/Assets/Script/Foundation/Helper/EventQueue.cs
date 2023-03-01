@@ -8,6 +8,13 @@ using Util;
 public enum EEventActionType
 {
     None = 0,
+    Pause,
+    Play,
+
+    //Game
+    LoadInGame,
+
+    //UI
     PlayerHpChange,
     PlayerMpChange,
     BossHpChange,
@@ -23,17 +30,24 @@ public enum EEventActionType
 public class EventQueue : MonoBehaviour
 {
     private static Dictionary<EEventActionType, Action<EventBase>> _actions = new Dictionary<EEventActionType, Action<EventBase>>();
-    private static Queue<EventBase> _eventQueue= new Queue<EventBase>();
+    private static Queue<EventBase> _waitedEventQueue= new Queue<EventBase>();
+    private static Queue<EventBase> _immediateEventQueue = new Queue<EventBase>();
 
     private float _playingTime = 0;
-    private bool _isPlayingEvent = false;
+    private bool _isPlayingWaitedEvent = false;
     private EventBase _playingEvent = null;
 
-    static public void PushEvent<T>(EEventActionType eventActionType, T evt, double time = 0) where T : EventBase
+    static public void PushEvent<T>(EEventActionType eventActionType, T evt, double time) where T : EventBase
     {
         evt.eventActionType = eventActionType;
         evt.eventPlayTime = time;
-        _eventQueue.Enqueue(evt);
+        _waitedEventQueue.Enqueue(evt);
+    }
+
+    static public void PushEvent<T>(EEventActionType eventActionType, T evt) where T : EventBase
+    {
+        evt.eventActionType = eventActionType;
+        _immediateEventQueue.Enqueue(evt);
     }
 
     static public void AddEventListener<T>(EEventActionType eventActionType, Action<T> action) where T : EventBase
@@ -57,16 +71,27 @@ public class EventQueue : MonoBehaviour
 
     private void Update()
     {
-        if(!_isPlayingEvent)
+        while (_immediateEventQueue.Count > 0)
         {
-            if (_eventQueue.Count > 0)
+            EventBase dequeueAction =_immediateEventQueue.Dequeue();
+            if (!_actions.TryGetValue(dequeueAction.eventActionType, out Action<EventBase> action) || dequeueAction == null)
             {
-                _playingEvent = _eventQueue.Dequeue();
+                return;
+            }
+            GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
+            action.Invoke(dequeueAction);
+        }
+
+        if (!_isPlayingWaitedEvent)
+        {
+            if (_waitedEventQueue.Count > 0)
+            {
+                _playingEvent = _waitedEventQueue.Dequeue();
                 if(!_actions.TryGetValue(_playingEvent.eventActionType, out Action<EventBase> action) || action == null)
                 {
                     return; 
                 }
-                GameLogger.Info("EventQueue Dequeue : {0} 이벤트 호출", _playingEvent.eventActionType);
+                GameLogger.Info("WaitedEventQueue Dequeue : {0} 이벤트 호출", _playingEvent.eventActionType);
                 action.Invoke(_playingEvent);
               
             }
@@ -75,11 +100,11 @@ public class EventQueue : MonoBehaviour
         if (_playingTime >= _playingEvent.eventPlayTime)
         {
             _playingTime = 0;
-            _isPlayingEvent = false;
+            _isPlayingWaitedEvent = false;
             return;
         }
         else
-            _isPlayingEvent = true;
+            _isPlayingWaitedEvent = true;
 
         _playingTime += Time.deltaTime;
     }

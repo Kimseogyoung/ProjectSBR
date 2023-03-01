@@ -5,6 +5,7 @@ static public class APP
     static public Config.Debug DebugConf { get; set; }
 
     //Manager
+    static public GameManager GameManager { get; set; }
     static public ICharacters Characters { get; set; }
     static public InputManager InputManager { get; set; }
     static public SceneManager SceneManager { get; set; }
