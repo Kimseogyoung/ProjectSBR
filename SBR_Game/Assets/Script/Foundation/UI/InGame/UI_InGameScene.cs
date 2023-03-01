@@ -75,6 +75,9 @@ public class UI_InGameScene : UI_Scene
         EventQueue.RemoveEventListener<HPEvent>(EEventActionType.PlayerHpChange, UpdateHpBar);
         EventQueue.RemoveEventListener<HPEvent>(EEventActionType.BossHpChange, UpdateHpBar);
         EventQueue.RemoveEventListener<HPEvent>(EEventActionType.ZzolHpChange, UpdateHpBar);
+
+        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.BossDead, SuccessGame);
+        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.PlayerDead, FailGame);
     }
 
     enum UI{

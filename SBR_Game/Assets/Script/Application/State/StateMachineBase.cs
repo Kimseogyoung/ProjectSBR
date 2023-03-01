@@ -24,7 +24,7 @@ public class StateMachineBase : MonoBehaviour
     private CharacterState<CharacterBase> currentState;
 
     private Transform _transform;//현재 캐릭터 위치
-
+    private float _currentAtkCoolTime = 0;
     private void Awake()
     {
         _transform = gameObject.transform;
@@ -40,6 +40,9 @@ public class StateMachineBase : MonoBehaviour
     private void Update()
     {
         if (currentState == null) return;
+        
+        _currentAtkCoolTime -= Time.deltaTime;
+
         currentState.UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateSkill();
         _character.GetSkill(EInputAction.SKILL2).UpdateSkill();
@@ -86,6 +89,8 @@ public class StateMachineBase : MonoBehaviour
 
     public void Attack()
     {
+        if (!IsReadyToAttack()) return;
+        _currentAtkCoolTime = _character.ATKSPD;
         APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, _character.CurDir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);   
@@ -93,6 +98,8 @@ public class StateMachineBase : MonoBehaviour
 
     public void NonTargetingDirAttack(Vector3 dir)
     {
+        if (!IsReadyToAttack()) return;
+        _currentAtkCoolTime = _character.ATKSPD;
         APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);
@@ -100,7 +107,9 @@ public class StateMachineBase : MonoBehaviour
 
     public void TargetingDirAttack(CharacterBase target)
     {
-       // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
+        if (!IsReadyToAttack()) return;
+        _currentAtkCoolTime = _character.ATKSPD;
+        // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
         //    , EHitType.ALONE
         //    , EAttack.ATK);
     }
@@ -123,6 +132,11 @@ public class StateMachineBase : MonoBehaviour
             }
         }
         //실패
+    }
+
+    private bool IsReadyToAttack()
+    {
+        return _currentAtkCoolTime <= 0;
     }
 
     virtual protected void Init()

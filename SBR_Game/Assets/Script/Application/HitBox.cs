@@ -81,12 +81,12 @@ public class HitBox
         switch (_hitShape)
         {
             case EHitShape.Circle:
-                GizmoHelper.PushDrawQueue(DrawCircle,0.5f);
+                GizmoHelper.PushDrawQueue(DrawCircle,0.1f);
                 return IsTargetInCircle(targetPos, _centerPos, _radius);
             case EHitShape.Corn:
 
                 _centerPos = attackerPos;
-                GizmoHelper.PushDrawQueue(DrawCorn,0.5f);
+                GizmoHelper.PushDrawQueue(DrawCorn,0.1f);
                 if (!IsTargetInCircle(targetPos, _centerPos, _radius)) return false;
 
                 // '타겟-나 벡터'와 '내 정면 벡터'를 내적
@@ -109,7 +109,7 @@ public class HitBox
                 _rotation = Quaternion.LookRotation(_dir);
                 // 쿼터니언 값을 로테이션 값으로 변환하여 y 축 방향 값(오일러 각) 반환
                 float yRotation = _rotation.eulerAngles.y;
-                GizmoHelper.PushDrawQueue(DrawSqure, 0.5f);
+                GizmoHelper.PushDrawQueue(DrawSqure, 0.1f);
                 if (IsTargetInRect(targetPos, _centerPos, new Vector3(_width, 1, _height), yRotation)) return true;
                 break;
             default:

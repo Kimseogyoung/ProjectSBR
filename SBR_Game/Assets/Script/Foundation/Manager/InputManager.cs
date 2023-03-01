@@ -38,7 +38,7 @@ public class InputManager : IManager, IManagerUpdatable
     private Action<Vector2> _moveAction;
 
     private float _time = 0f;
-    private float _baseCoolTime = 1f;
+    private float _baseCoolTime = 0.1f;
 
 
     public void Init()

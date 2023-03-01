@@ -66,8 +66,8 @@ public class EventQueue : MonoBehaviour
                 {
                     return; 
                 }
-                action.Invoke(_playingEvent);
                 GameLogger.Info("EventQueue Dequeue : {0} 이벤트 호출", _playingEvent.eventActionType);
+                action.Invoke(_playingEvent);
               
             }
             return;
