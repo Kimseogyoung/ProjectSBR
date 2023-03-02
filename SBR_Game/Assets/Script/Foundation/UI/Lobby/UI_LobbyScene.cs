@@ -59,7 +59,7 @@ public class UI_LobbyScene : UI_Scene
     {
         for(int i=0; i< _stageButtons.Count; i++)
         {
-            int stageNum = i;
+            int stageNum = ProtoHelper.GetUsingIndex<StageProto>(i).Id;
             _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
             _stageButtonStars[i].SetStarLevel(2);
             _stageButtonTexts[i].text = $"Stage {stageNum}";

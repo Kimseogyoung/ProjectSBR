@@ -11,7 +11,7 @@ public class IdleState : CharacterState<CharacterBase>
         if (_character.CharacterType == ECharacterType.Player)
         {
             GameLogger.Strong("플레이어 이동 이벤트 삭제");
-            APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacter);
+            APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.RemoveInputAction(EInputAction.ATTACK, _stateMachine.Attack);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL1, _stateMachine.UseSkill1);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);
@@ -27,7 +27,7 @@ public class IdleState : CharacterState<CharacterBase>
     {
         if(_character.CharacterType == ECharacterType.Player)
         {
-            APP.InputManager.AddInputAction(EInputAction.MOVE, _stateMachine.MoveCharacter);
+            APP.InputManager.AddInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.AddInputAction(EInputAction.ATTACK, _stateMachine.Attack);
             APP.InputManager.AddInputAction(EInputAction.SKILL1, _stateMachine.UseSkill1);
             APP.InputManager.AddInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);

@@ -18,6 +18,7 @@ public class InGameScene : SceneBase
 
         _characterManager = new CharacterManager();
         _characterManager.Init();
+
         APP.GameManager.AddUpdatablePublicManager(_characterManager);
 
 

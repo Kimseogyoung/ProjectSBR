@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public class ProtoItem
+{
+    public int Idx { get; set; }
+}
 
-public class StageProto
+public class StageProto : ProtoItem
 {
     public int Id { get; set; }
     public string Name { get; set; }

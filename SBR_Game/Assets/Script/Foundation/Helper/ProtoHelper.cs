@@ -32,7 +32,23 @@ public class ProtoHelper
         return (TProto)value;
     }
 
-    static private void Bind<TProto>(string className = "") where TProto : class, new()
+    static public TProto GetUsingIndex<TProto>(int idx) where TProto : ProtoItem
+    {
+        if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
+        {
+            GameLogger.Error($"{typeof(TProto).Name} is not exist");
+            return default(TProto);
+        }
+
+        foreach(ProtoItem value in dict.Values)
+        {
+            if (value.Idx == idx) return (TProto)value;
+        }
+
+        return default(TProto);
+    }
+
+    static private void Bind<TProto>(string className = "") where TProto : ProtoItem, new()
     {
         if(className == "") className= typeof(TProto).Name.Replace("Proto","");
         Type protoClassType = typeof(TProto);
@@ -42,6 +58,7 @@ public class ProtoHelper
         _protoDict.Add(protoClassType, new Dictionary<object, object>());
         for (int i=0; i<list.Count; i++)
         {
+            list[i].Idx = i;
             PropertyInfo property = typeof(TProto).GetProperty(pkName);
             _protoDict[protoClassType].Add(property.GetValue(list[i]), list[i]);
         }

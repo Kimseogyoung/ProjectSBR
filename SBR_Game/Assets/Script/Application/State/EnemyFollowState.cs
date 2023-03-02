@@ -40,7 +40,7 @@ public class EnemyFollowState : CharacterState<CharacterBase>
             return;
         }
          
-        _stateMachine.MoveCharacter(dir.normalized.ConvertVec2());
+        _stateMachine.MoveCharacterPos(dir.normalized.ConvertVec2());
     }
 
 

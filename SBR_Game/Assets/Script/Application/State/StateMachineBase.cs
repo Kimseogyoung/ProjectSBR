@@ -55,11 +55,13 @@ public class StateMachineBase : MonoBehaviour
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateSkill();
     }
 
-    public void SetCharacter(CharacterBase character, ECharacterType characterType)
+    public void SetCharacter(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
     {
         _character = character;
         _character.SetCharacterType(characterType);
         _transform.position = _character.CurPos;
+        _mapRangeStartPos= mapPos1;
+        _mapRangeEndPos= mapPos2;
         SetState(new IdleState());
     }
 
@@ -80,16 +82,32 @@ public class StateMachineBase : MonoBehaviour
     }
 
     //Character
-    public void MoveCharacter(Vector2 dir)
+    public void MoveCharacterPos(Vector2 dir)
     {
         _character.CurDir = new Vector3(dir.x, 0, dir.y);
         dir = dir * _character.SPD * Time.deltaTime;
+
+        if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
-        SetCharacterPos();
+        SyncCharacterPos();
     }
 
-    public void SetCharacterPos()
+    public void MoveCharacterPos(Vector3 vector3)
     {
+        if (!CanMove(_character.CurPos + vector3)) return;
+        _character.CurPos += vector3;
+        SyncCharacterPos();
+    }
+    public void SetCharacterPos(Vector3 vector3)
+    {
+        if (!CanMove(vector3)) return;
+        _character.CurPos = vector3;
+        SyncCharacterPos();
+    }
+
+    public void SyncCharacterPos()
+    {
+        
         _transform.position = _character.CurPos;
     }
 
@@ -140,6 +158,11 @@ public class StateMachineBase : MonoBehaviour
         //½ÇÆÐ
     }
 
+    private bool CanMove(Vector3 nextPos)
+    {
+        return nextPos.x > _mapRangeStartPos.x && nextPos.x < _mapRangeEndPos.x
+            && nextPos.z > _mapRangeStartPos.y && nextPos.z < _mapRangeEndPos.y;
+    }
     private bool IsReadyToAttack()
     {
         return _currentAtkCoolTime <= 0;

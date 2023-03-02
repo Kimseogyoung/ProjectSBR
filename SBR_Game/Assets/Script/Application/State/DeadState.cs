@@ -13,7 +13,7 @@ public class DeadState : CharacterState<CharacterBase>
 
         if(_character.CharacterType == ECharacterType.Player)
         {
-            APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacter);
+            APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.RemoveInputAction(EInputAction.ATTACK, _stateMachine.Attack);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL1, _stateMachine.UseSkill1);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);

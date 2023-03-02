@@ -25,13 +25,20 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
     private List<CharacterBase> _heroList = new List<CharacterBase>();
     private Player _player;
 
+    private Vector2 _minimumMapPos;
+    private Vector2 _maximumMapPos;
     public void Init()
     {
         APP.Characters = this;
+
+        _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
+        _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
+
         _player = (Player)Spawn(1001);
         Spawn(1010);
         Spawn(1011);
     }
+
 
     public void StartManager()
     {
@@ -86,7 +93,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
             characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Hero1");
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
             character = new Player(id);
-            stateMachine.SetCharacter((Player)character, ECharacterType.Player);
+            stateMachine.SetCharacter((Player)character, ECharacterType.Player,_minimumMapPos,_maximumMapPos);
         }
         else
         {
@@ -105,9 +112,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         else
         {
             if (id % 10 == 0)//  º¸½º
-                stateMachine.SetCharacter(character, ECharacterType.Boss);
+                stateMachine.SetCharacter(character, ECharacterType.Boss, _minimumMapPos, _maximumMapPos);
             else
-                stateMachine.SetCharacter(character, ECharacterType.Zzol);
+                stateMachine.SetCharacter(character, ECharacterType.Zzol, _minimumMapPos, _maximumMapPos);
 
             _enemyList.Add(character);
 
