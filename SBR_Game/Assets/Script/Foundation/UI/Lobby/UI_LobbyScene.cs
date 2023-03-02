@@ -30,7 +30,7 @@ public class UI_LobbyScene : UI_Scene
 
         foreach(GameObject point in _stageButtonPoints)
         {
-            GameObject stageButton = Util.Resource.Instantiate(Path.StageButton);
+            GameObject stageButton = Util.Resource.Instantiate(AppPath.StageButton);
             stageButton.transform.SetParent(point.transform,false);
         }
 

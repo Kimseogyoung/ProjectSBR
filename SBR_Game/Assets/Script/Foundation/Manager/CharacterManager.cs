@@ -83,14 +83,14 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         StateMachineBase stateMachine;
         if (id == 1001)//플레이어 캐릭터라면 (수정)
         {
-            characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Hero1");
+            characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Hero1");
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
             character = new Player(id);
             stateMachine.SetCharacter((Player)character, ECharacterType.Player);
         }
         else
         {
-            characterObj = Util.Resource.Instantiate(Path.CharacterDir + "Enemy1");
+            characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Enemy1");
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
             character = new CharacterBase(id);
             

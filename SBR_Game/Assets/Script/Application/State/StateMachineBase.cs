@@ -27,6 +27,9 @@ public class StateMachineBase : MonoBehaviour
 
     private Transform _transform;//현재 캐릭터 위치
     private float _currentAtkCoolTime = 0;
+
+    private Vector2 _mapRangeStartPos;
+    private Vector2 _mapRangeEndPos;
     private void Awake()
     {
         _transform = gameObject.transform;

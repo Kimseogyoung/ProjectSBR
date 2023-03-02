@@ -12,8 +12,8 @@ public class UI_Star : UI_Panel
     {
         _currentLevel = 0;
 
-        _emptyStar = Util.Resource.Load(Path.CasualUI, Path.EmptyStar);
-        _filledStar = Util.Resource.Load(Path.CasualUI,Path.FilledStar);
+        _emptyStar = Util.Resource.Load(AppPath.CasualUI, AppPath.EmptyStar);
+        _filledStar = Util.Resource.Load(AppPath.CasualUI,AppPath.FilledStar);
 
         Bind<Image>(UI.StarImage1.ToString());
         Bind<Image>(UI.StarImage2.ToString());

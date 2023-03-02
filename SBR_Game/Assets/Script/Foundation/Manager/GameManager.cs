@@ -36,6 +36,8 @@ public class GameManager: MonoBehaviour
         
         APP.GameManager = this;
 
+        ProtoHelper.Start();
+
         GameLogger.Info("GameManager Awake");
 
         DontDestroyOnLoad(gameObject);

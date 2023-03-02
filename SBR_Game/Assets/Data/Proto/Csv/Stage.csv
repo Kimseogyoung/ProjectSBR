@@ -1,0 +1,10 @@
+﻿Id,Name,Width,Height,PrefabPath,LimitTime,#주석
+int:pk,str,int,int,str,int,
+10,시작의 평원,10,10,Stage/Stage1,300,
+20,시원한 계곡,20,5,Stage/Stage2,500,
+30,노란색 땅,10,10,Stage/Stage3,300,
+40,용암,10,10,Stage/Stage4,300,
+50,광활한 대지,10,10,Stage/Stage5,300,
+60,죽음의 사막,10,10,Stage/Stage6,300,
+70,어쩌구,10,10,Stage/Stage7,300,
+80,세계수 앞,10,10,Stage/Stage8,300,

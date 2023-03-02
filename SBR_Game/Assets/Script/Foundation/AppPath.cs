@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Path 
+public class AppPath 
 {
     static public string ConfigDir { get; private set; } = "/Data/Config";
     static public string GameConfig { get; private set; } = "/Game.yaml";
