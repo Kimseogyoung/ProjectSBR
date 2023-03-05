@@ -16,6 +16,8 @@ public class InGameScene : SceneBase
     {
         _inGameScene = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
 
+        SpawnMap(APP.CurrentStage);
+
         _characterManager = new CharacterManager();
         _characterManager.Init();
 
@@ -35,6 +37,21 @@ public class InGameScene : SceneBase
     private void FailGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.Pause, new PauseEvent(true));
+        _inGameScene.ShowFinishPopup(deadEvent);
+    }
+
+    private void SpawnMap(StageProto currentStage)
+    {
+        GameObject map = GameObject.FindObjectOfType<Terrain>()?.gameObject;
+        if(map == null)
+            map = Util.Resource.Instantiate(currentStage.PrefabPath);
+
+        if (map == null)
+        {
+            GameLogger.Error($"No GameObject {currentStage.PrefabPath}");
+            return;
+        }
+        map.transform.position = new Vector3(-currentStage.Width / 2, -1, -currentStage.Height / 2);
     }
 
     protected override void Exit()
