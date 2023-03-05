@@ -1,3 +1,2 @@
 ﻿Id,Name,Type,property,multiplier,MPCost,CoolTime,radius,arrivalOfTime
-int:pk,str,int,int,float,int,float,float,float
-,,,,,,,,
+int:pk,string,int,int,float,int,float,float,float

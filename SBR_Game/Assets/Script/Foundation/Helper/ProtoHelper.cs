@@ -53,7 +53,7 @@ public class ProtoHelper
         if(className == "") className= typeof(TProto).Name.Replace("Proto","");
         Type protoClassType = typeof(TProto);
         List<TProto> list = _reader.LoadCsv<TProto>(out Type pkType, out string pkName,
-            _reader.ReadCsv($"{className}.csv"));
+            _reader.ReadCsv(System.IO.Path.Join(Application.dataPath, "Data/Proto/Csv", $"{className}.csv")));
 
         _protoDict.Add(protoClassType, new Dictionary<object, object>());
         for (int i=0; i<list.Count; i++)

@@ -1,5 +1,5 @@
 ﻿Id,Name,Width,Height,PrefabPath,LimitTime,#주석
-int:pk,str,int,int,str,int,
+int:pk,string,int,int,string,int,
 10,시작의 평원,10,10,Stage/Stage1,300,
 20,시원한 계곡,20,5,Stage/Stage2,500,
 30,노란색 땅,10,10,Stage/Stage3,300,

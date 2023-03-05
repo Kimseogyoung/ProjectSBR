@@ -10,26 +10,22 @@ using System.ComponentModel;
 
 public class ProtoReader
 {
-    private Dictionary<string, Type> _types = new Dictionary<string, Type>();
-
     public ProtoReader()
     {
-        _types.Add("int",GetTypeFromString("int"));
-        _types.Add("float",GetTypeFromString("float"));
-        _types.Add("str",GetTypeFromString("str"));
-        _types.Add("bool",GetTypeFromString("bool"));
-        _types.Add("double",GetTypeFromString("double"));
 
     }
 
-    public List<T> LoadCsv<T>(out Type pkType,out string pkName, string text) where T : class, new()
+    public List<T> LoadCsv<T>(out Type pkType, out string pkName, string text) where T : class, new()
     {
-        string[] lines = text.Split("\n");
+        string[] lines = text.Split("\r\n");
+        pkType = null;
+        pkName = string.Empty;
 
-
-        List<string> names = lines[0].Split(",").ToList<string>();
-        List<string> types = lines[1].Split(",").ToList<string>();
-
+        if (!LoadCsvField(out pkName, out List<string> names, out List<string> types, text))
+        {
+            GameLogger.Error("Load Csv Error");
+            return null;
+        }
         
 
         List<List<string>> columns = new List<List<string>>();
@@ -41,8 +37,7 @@ public class ProtoReader
 
         }
 
-        pkName = names[0];
-        pkType = GetTypeFromString(types[0].Split(":pk")[0]);
+        pkType = GetTypeFromString(types[0]);
 
         List<T> results = new List<T>();
         for (int i = 0; i < columns.Count; i++)
@@ -51,10 +46,8 @@ public class ProtoReader
             for (int j = 0; j < names.Count; j++)
             {
                 string propertyName = names[j];
-                if (propertyName.StartsWith("#")) continue;
-
                 string typeString = types[j];
-                GameLogger.Strong("{0} {1}", i, j);
+
                 string value = columns[i][j];
 
 
@@ -66,16 +59,48 @@ public class ProtoReader
                     GameLogger.Error($"property Null {propertyName}");
                     return null;
                 }
-                
-                if (typeString.EndsWith(":pk")){
-                    typeString = typeString.Split(":pk")[0];
-                }
 
-                property.SetValue(obj, ConvertToType(columns[i][j], _types[typeString]));
+                property.SetValue(obj, ConvertToType(columns[i][j], GetTypeFromString(typeString)));
             }
             results.Add(obj);
         }
         return results;
+    }
+
+    public bool LoadCsvField(out string pkName, out List<string> fieldNames, out List<string> fieldTypes, string text)
+    {
+        string[] lines = text.Split("\r\n");
+        pkName = string.Empty;
+        fieldNames = new List<string>();
+        fieldTypes = new List<string>();
+
+        List<string> names = lines[0].Split(",").ToList<string>();
+        List<string> types = lines[1].Split(",").ToList<string>();
+
+        try
+        {
+            for (int i = 0; i < names.Count; i++)
+            {
+                
+                if (names[i].StartsWith("#")) continue;
+                fieldNames.Add(names[i]);
+
+                if (types[i].EndsWith(":pk")) 
+                { 
+                    types[i] = types[i].Replace(":pk", "");
+                    pkName = names[i];
+                }
+
+                
+                fieldTypes.Add(types[i]);
+            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            GameLogger.Error(e.Message);
+            return false;
+        }
     }
 
     public string ReadCsv(string filePath)
@@ -83,7 +108,7 @@ public class ProtoReader
         string text = string.Empty;
         try
         {
-            text = File.ReadAllText(Path.Join(Application.dataPath, "Data/Proto/Csv", filePath));
+            text = File.ReadAllText(filePath);
         }
         catch (FileNotFoundException e)
         {
@@ -94,6 +119,7 @@ public class ProtoReader
 
     private Type GetTypeFromString(string typeString)
     {
+        GameLogger.Info($"{typeString}");
         switch (typeString)
         {
             case "int":
@@ -102,10 +128,10 @@ public class ProtoReader
                 return typeof(double);
             case "bool":
                 return typeof(bool);
-            case "str":
+            case "string":
                 return typeof(string);
             case "float":
-                return typeof(string);
+                return typeof(float);
             default:
                 throw new Exception($"Unsupported type: {typeString}");
         }
@@ -119,7 +145,7 @@ public class ProtoReader
         }
         catch (Exception e)
         {
-            throw new Exception($"Unsupported type: {type.Name} {field} {e}");
+            throw new Exception($"Unsupported type(ConvertToType): {type.Name} {field} {e}");
         }
     }
 }
