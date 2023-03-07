@@ -12,15 +12,16 @@ public class ProtoHelper
     static public void Start()
     {
         _reader = new ProtoReader();
-        Bind<StageProto>();
     }
     
-    static public TProto Get<TProto, TKey>(TKey key)
+    static public TProto Get<TProto, TKey>(TKey key) where TProto : ProtoItem, new()
     {
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
-            GameLogger.Error($"{typeof(TProto).Name} is not exist");
-            return default(TProto);
+            Bind<TProto>();
+            GameLogger.Info($"{typeof(TProto).Name} is not exist. so Bind");
+            dict = _protoDict[typeof(TProto)];
+            //return default(TProto);
         }
 
         if (!dict.TryGetValue(key, out object value))
@@ -32,12 +33,13 @@ public class ProtoHelper
         return (TProto)value;
     }
 
-    static public TProto GetUsingIndex<TProto>(int idx) where TProto : ProtoItem
+    static public TProto GetUsingIndex<TProto>(int idx) where TProto : ProtoItem, new()
     {
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
-            GameLogger.Error($"{typeof(TProto).Name} is not exist");
-            return default(TProto);
+            Bind<TProto>();
+            GameLogger.Info($"{typeof(TProto).Name} is not exist. so Bind");
+            dict = _protoDict[typeof(TProto)];
         }
 
         foreach(ProtoItem value in dict.Values)

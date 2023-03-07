@@ -11,5 +11,6 @@ public class CharacterProto : ProtoItem
     public float DEF { get; set; }
     public float CDR { get; set; }
     public float HPGEN { get; set; }
-    public float CRI { get; set; }
+    public float CRT { get; set; }
+    public float DRAIN { get; set; }
 }

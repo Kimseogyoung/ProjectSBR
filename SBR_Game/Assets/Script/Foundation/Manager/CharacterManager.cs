@@ -34,9 +34,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
 
-        _player = (Player)Spawn(1001);
+        _player = (Player)Spawn(1);
         Spawn(1010);
-        Spawn(1011);
+        Spawn(1010);
     }
 
 
@@ -88,7 +88,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         CharacterBase character;
         GameObject characterObj;
         StateMachineBase stateMachine;
-        if (id == 1001)//플레이어 캐릭터라면 (수정)
+        if (id <10)//플레이어 캐릭터라면 (수정)
         {
             characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Hero1");
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);

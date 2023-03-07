@@ -86,36 +86,26 @@ public partial class CharacterBase
 
     private void SetBaseStat()
     {
-        //추후 캐릭터별 기본 스탯으로 조정
-        if(Id == 1001)
-        {
-            HP = new Stat(EStat.HP, 100);
-            MP = new Stat(EStat.MP, 100);
-            SPD = new Stat(EStat.SPD, 3);
-            ATKSPD = new Stat(EStat.ATKSPD, 1);
-            ATK = new Stat(EStat.ATK, 10);
-            MATK = new Stat(EStat.MATK, 10);
-            DEF = new Stat(EStat.DEF, 10);
-            CRT = new Stat(EStat.CRT, 1);
-            CDR = new Stat(EStat.CDR, 1);
-            DRAIN = new Stat(EStat.DRAIN, 1);
-            HPGEN = new Stat(EStat.HPGEN, 1);
+        CharacterProto charProto = ProtoHelper.Get<CharacterProto, int>(Id);
+        HP = new Stat(EStat.HP, charProto.HP);
+        MP = new Stat(EStat.MP, charProto.MP);
+        SPD = new Stat(EStat.SPD, charProto.SPD);
+        ATKSPD = new Stat(EStat.ATKSPD, charProto.ATKSPD);
+        ATK = new Stat(EStat.ATK, charProto.ATK);
+        MATK = new Stat(EStat.MATK, charProto.MATK);
+        DEF = new Stat(EStat.DEF, charProto.DEF);
+        CRT = new Stat(EStat.CRT, charProto.CRT);
+        CDR = new Stat(EStat.CDR, charProto.CDR);
+        DRAIN = new Stat(EStat.DRAIN, charProto.DRAIN);
+        HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
+        //추후 캐릭터별 기본 스탯으로 조정
+        if (Id == 1001)
+        {
             AttackRangeRadius = 2;
         }
         else
         {
-            HP = new Stat(EStat.HP, 100);
-            MP = new Stat(EStat.MP, 100);
-            SPD = new Stat(EStat.SPD, 3);
-            ATKSPD = new Stat(EStat.ATKSPD, 1);
-            ATK = new Stat(EStat.ATK, 2);
-            MATK = new Stat(EStat.MATK, 10);
-            DEF = new Stat(EStat.DEF, 10);
-            CRT = new Stat(EStat.CRT, 1);
-            CDR = new Stat(EStat.CDR, 1);
-            DRAIN = new Stat(EStat.DRAIN, 1);
-            HPGEN = new Stat(EStat.HPGEN, 1);
 
             AttackRangeRadius = 1.5f;
             AttackRangeAngle = 180;
