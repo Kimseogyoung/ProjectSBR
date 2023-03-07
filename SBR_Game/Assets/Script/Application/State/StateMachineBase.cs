@@ -85,7 +85,7 @@ public class StateMachineBase : MonoBehaviour
     public void MoveCharacterPos(Vector2 dir)
     {
         _character.CurDir = new Vector3(dir.x, 0, dir.y);
-        dir = dir * _character.SPD * Time.deltaTime;
+        dir = dir * _character.SPD.Value * Time.deltaTime;
 
         if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
@@ -114,7 +114,7 @@ public class StateMachineBase : MonoBehaviour
     public void Attack()
     {
         if (!IsReadyToAttack()) return;
-        _currentAtkCoolTime = _character.ATKSPD;
+        _currentAtkCoolTime = _character.ATKSPD.Value;
         APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, _character.CurDir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);   
@@ -123,7 +123,7 @@ public class StateMachineBase : MonoBehaviour
     public void NonTargetingDirAttack(Vector3 dir)
     {
         if (!IsReadyToAttack()) return;
-        _currentAtkCoolTime = _character.ATKSPD;
+        _currentAtkCoolTime = _character.ATKSPD.Value;
         APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);
@@ -132,7 +132,7 @@ public class StateMachineBase : MonoBehaviour
     public void TargetingDirAttack(CharacterBase target)
     {
         if (!IsReadyToAttack()) return;
-        _currentAtkCoolTime = _character.ATKSPD;
+        _currentAtkCoolTime = _character.ATKSPD.Value;
         // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
         //    , EHitType.ALONE
         //    , EAttack.ATK);

@@ -30,7 +30,7 @@ abstract public class SkillBase
 
     private float CoolTime
     {
-        get { return _baseCoolTime * ((100 - _character.CDR) / 100); }
+        get { return _baseCoolTime * ((100 - _character.CDR.Value) / 100); }
     }
 
     public void Init(CharacterBase characterBase, HitBox hitBox, EAttack attackType, float multiply, float baseCoolTime, float startTime = 0, float durationTime = 0, float periodTime = 0)
