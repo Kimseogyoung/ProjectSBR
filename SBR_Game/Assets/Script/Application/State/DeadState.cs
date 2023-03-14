@@ -7,11 +7,11 @@ public class DeadState : CharacterState<CharacterBase>
     protected override void OnEnter()
     {
         //Dead¿Ã∫•∆Æ Push
-        EventQueue.PushEvent(_character.CharacterType == ECharacterType.Player?
-            EEventActionType.PlayerDead: _character.CharacterType == ECharacterType.Boss? EEventActionType.BossDead : EEventActionType.ZzolDead, 
+        EventQueue.PushEvent(_character.CharacterType == ECharacterType.PLAYER?
+            EEventActionType.PLAYER_DEAD: _character.CharacterType == ECharacterType.BOSS? EEventActionType.BOSS_DEAD : EEventActionType.ZZOL_DEAD, 
             new CharacterDeadEvent(_character.Id));
 
-        if(_character.CharacterType == ECharacterType.Player)
+        if(_character.CharacterType == ECharacterType.PLAYER)
         {
             APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.RemoveInputAction(EInputAction.ATTACK, _stateMachine.Attack);

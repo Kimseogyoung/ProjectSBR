@@ -24,19 +24,19 @@ public class InGameScene : SceneBase
         APP.GameManager.AddUpdatablePublicManager(_characterManager);
 
 
-        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BossDead, SuccessGame);
-        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PlayerDead, FailGame);
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
     }
 
     private void SuccessGame(CharacterDeadEvent deadEvent)
     {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.Pause, new PauseEvent(true));
+        EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
         _inGameScene.ShowFinishPopup(deadEvent);
     }
 
     private void FailGame(CharacterDeadEvent deadEvent)
     {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.Pause, new PauseEvent(true));
+        EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
         _inGameScene.ShowFinishPopup(deadEvent);
     }
 
@@ -56,8 +56,8 @@ public class InGameScene : SceneBase
 
     protected override void Exit()
     {
-        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.BossDead, SuccessGame);
-        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.PlayerDead, FailGame);
+        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
+        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
 
         APP.GameManager.RemoveUpdatablePublicManager(_characterManager);
         _characterManager.FinishManager();

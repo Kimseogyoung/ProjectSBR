@@ -22,9 +22,9 @@ public class UI_InGameScene : UI_Scene
         Bind<GameObject>(UI.GameHUD.ToString());
         Bind<GameObject>(UI.NormalEnemyHPPanel.ToString());
 
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.PlayerHpChange, UpdateHpBar);
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.BossHpChange, UpdateHpBar);
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.ZzolHpChange, UpdateHpBar);
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.BOSS_HP_CHANGE, UpdateHpBar);
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.ZZOL_HP_CHANGE, UpdateHpBar);
     }
 
     private void Update()
@@ -46,13 +46,13 @@ public class UI_InGameScene : UI_Scene
 
         switch (evt.eventActionType)
         {
-            case EEventActionType.PlayerHpChange:
+            case EEventActionType.PLAYER_HP_CHANGE:
                 Get<Slider>(UI.PlayerHPSlider.ToString()).value = value;
                 break;
-            case EEventActionType.BossHpChange:
+            case EEventActionType.BOSS_HP_CHANGE:
                 Get<Slider>(UI.BossHPSlider.ToString()).value = value;
                 break;
-            case EEventActionType.ZzolHpChange:
+            case EEventActionType.ZZOL_HP_CHANGE:
                 //Get<Slider>(UI.PlayerHPSlider.ToString()).value = value;
                 break;
             default:
@@ -64,9 +64,9 @@ public class UI_InGameScene : UI_Scene
 
     private void OnDestroy()
     {
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.PlayerHpChange, UpdateHpBar);
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.BossHpChange, UpdateHpBar);
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.ZzolHpChange, UpdateHpBar);
+        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
+        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.BOSS_HP_CHANGE, UpdateHpBar);
+        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.ZZOL_HP_CHANGE, UpdateHpBar);
     }
 
     enum UI{

@@ -12,7 +12,7 @@ public class Skill0 : SkillBase
     {
         Init(character,
             //EHitShape hitShape, Vector3 centerPos, Vector3 dir, float width, float height
-            new HitBox(EHitShape.Squre, character.CurPos + character.CurDir *2, character.CurDir, 1, 2)
+            new HitBox(EHitShape.SQURE, character.CurPos + character.CurDir *2, character.CurDir, 1, 2)
             ,EAttack.ATK
             ,1.5f
             , 5);

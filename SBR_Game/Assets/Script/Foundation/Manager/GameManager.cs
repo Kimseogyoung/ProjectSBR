@@ -63,8 +63,8 @@ public class GameManager: MonoBehaviour
         APP.InputManager.AddInputAction(EInputAction.PAUSE, () => { Pause(new PauseEvent(true)); });
         APP.InputManager.AddInputAction(EInputAction.PLAY, () => { Pause(new PauseEvent(false)); });
 
-        EventQueue.AddEventListener<PauseEvent>(EEventActionType.Pause, Pause);
-        EventQueue.AddEventListener<PauseEvent>(EEventActionType.Play, Pause);
+        EventQueue.AddEventListener<PauseEvent>(EEventActionType.PAUSE, Pause);
+        EventQueue.AddEventListener<PauseEvent>(EEventActionType.PLAY, Pause);
     }
 
     void Start()

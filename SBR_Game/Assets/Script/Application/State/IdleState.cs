@@ -8,7 +8,7 @@ public class IdleState : CharacterState<CharacterBase>
 {
     protected override void OnEnter()
     {
-        if (_character.CharacterType == ECharacterType.Player)
+        if (_character.CharacterType == ECharacterType.PLAYER)
         {
             GameLogger.Strong("플레이어 이동 이벤트 삭제");
             APP.InputManager.RemoveInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
@@ -25,7 +25,7 @@ public class IdleState : CharacterState<CharacterBase>
 
     protected override void OnExit()
     {
-        if(_character.CharacterType == ECharacterType.Player)
+        if(_character.CharacterType == ECharacterType.PLAYER)
         {
             APP.InputManager.AddInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.AddInputAction(EInputAction.ATTACK, _stateMachine.Attack);

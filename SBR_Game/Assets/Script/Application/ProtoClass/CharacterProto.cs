@@ -2,6 +2,8 @@ public class CharacterProto : ProtoItem
 {
     public int Id { get; set; }// pk 
     public string Name { get; set; }
+    public ECharacterTeamType TeamType { get; set; }
+    public ECharacterType Type { get; set; }
     public int HP { get; set; }
     public int MP { get; set; }
     public float SPD { get; set; }
@@ -12,5 +14,7 @@ public class CharacterProto : ProtoItem
     public float CDR { get; set; }
     public float HPGEN { get; set; }
     public float CRT { get; set; }
+    public float RANGE { get; set; }
     public float DRAIN { get; set; }
+    public string Prefab { get; set; }
 }

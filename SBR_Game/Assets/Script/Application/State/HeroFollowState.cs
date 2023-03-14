@@ -28,7 +28,7 @@ public class HeroFollowState : CharacterState<CharacterBase>
 
         Vector3 dir = (_player.CurPos - _character.CurPos);
         //공격 가능한 범위인가
-        if (dir.magnitude < _character.AttackRangeRadius - 0.5f)
+        if (dir.magnitude < _character.RANGE.Value - 0.5f)
         {
             return;
         }

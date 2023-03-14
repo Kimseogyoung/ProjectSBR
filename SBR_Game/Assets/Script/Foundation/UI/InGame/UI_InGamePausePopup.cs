@@ -5,10 +5,10 @@ public class UI_InGamePausePopup : UI_Popup
 {
     private void Awake()
     {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.Pause, new PauseEvent(true));
+        EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
 
         Bind<Button>(UI.PlayButton.ToString()).onClick.AddListener(() => { 
-            EventQueue.PushEvent<PauseEvent>(EEventActionType.Play, new PauseEvent(false));
+            EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
             ClosePopupUI();
         });
         Bind<Button>(UI.GiveUpButton.ToString()).onClick.AddListener(() => { GiveUp(); });
@@ -17,7 +17,7 @@ public class UI_InGamePausePopup : UI_Popup
 
     private void GiveUp()
     {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.Play, new PauseEvent(false));
+        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
         APP.SceneManager.ChangeScene("LobbyScene");
     }
 

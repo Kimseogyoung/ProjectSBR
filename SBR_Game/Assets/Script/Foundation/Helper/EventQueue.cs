@@ -5,27 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Util;
-public enum EEventActionType
-{
-    None = 0,
-    Pause,
-    Play,
-
-    //Game
-    LoadInGame,
-
-    //UI
-    PlayerHpChange,
-    PlayerMpChange,
-    BossHpChange,
-    ZzolHpChange,
-    Phase1Start,
-    Phase2Start,
-    StageInfoSet,
-    PlayerDead,
-    BossDead,
-    ZzolDead
-}
 
 public class EventQueue : MonoBehaviour
 {

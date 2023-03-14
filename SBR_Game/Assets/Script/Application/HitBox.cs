@@ -9,18 +9,6 @@ using UnityEngine.UIElements;
 using Util;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public enum EHitType
-{
-    ALONE,
-    ALL
-}
-
-public enum EHitShape
-{
-    Circle,//원
-    Corn,//원뿔
-    Squre
-}
 
 public class HitBox
 {
@@ -80,10 +68,10 @@ public class HitBox
     {
         switch (_hitShape)
         {
-            case EHitShape.Circle:
+            case EHitShape.CIRCLE:
                 GizmoHelper.PushDrawQueue(DrawCircle,0.1f);
                 return IsTargetInCircle(targetPos, _centerPos, _radius);
-            case EHitShape.Corn:
+            case EHitShape.CORN:
 
                 _centerPos = attackerPos;
                 GizmoHelper.PushDrawQueue(DrawCorn,0.1f);
@@ -103,7 +91,7 @@ public class HitBox
                 else
                     return false;
 
-            case EHitShape.Squre:
+            case EHitShape.SQURE:
                
                 // LookRotation()을 사용하여 targetDir의 방향으로 회전하는 쿼터니언 값 구하기
                 _rotation = Quaternion.LookRotation(_dir);

@@ -10,13 +10,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
-public enum ECharacterType
-{
-    None = 0,
-    Player,
-    Boss,
-    Zzol
-}
 
 public class StateMachineBase : MonoBehaviour 
 {
@@ -115,7 +108,7 @@ public class StateMachineBase : MonoBehaviour
     {
         if (!IsReadyToAttack()) return;
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, _character.CurDir, _character.AttackRangeAngle)
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);   
     }
@@ -124,7 +117,7 @@ public class StateMachineBase : MonoBehaviour
     {
         if (!IsReadyToAttack()) return;
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
             , EHitType.ALONE
             , EAttack.ATK);
     }

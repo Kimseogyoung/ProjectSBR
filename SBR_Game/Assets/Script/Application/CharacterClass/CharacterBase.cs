@@ -4,13 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public enum EAttack
-{
-    ATK,
-    MATK
-}
-
-
 [Serializable]
 public partial class CharacterBase 
 {
@@ -28,8 +21,7 @@ public partial class CharacterBase
     public CharacterBase(int characterId)
     {
         Id = characterId;
-        Name = "DUMMY";
-        SetBaseStat();
+        InitCharacterSetting();
     }
 
     public float AccumulateDamage(CharacterBase attacker, CharacterBase victim, EAttack atk ,float multiplier =1f)//공격자, 피격자, 공격력 종류, 데미지 계수
@@ -54,8 +46,8 @@ public partial class CharacterBase
 
         
         EventQueue.PushEvent<HPEvent>(
-            CharacterType == ECharacterType.Player? EEventActionType.PlayerHpChange:
-            CharacterType == ECharacterType.Boss? EEventActionType.BossHpChange : EEventActionType.ZzolHpChange,
+            CharacterType == ECharacterType.PLAYER? EEventActionType.PLAYER_HP_CHANGE:
+            CharacterType == ECharacterType.BOSS? EEventActionType.BOSS_HP_CHANGE : EEventActionType.ZZOL_HP_CHANGE,
             new HPEvent(Id, HP.TotalValue, HP.Value, true));
 
         return damage;
@@ -84,9 +76,10 @@ public partial class CharacterBase
         return false;
     }
 
-    private void SetBaseStat()
+    private void InitCharacterSetting()
     {
         CharacterProto charProto = ProtoHelper.Get<CharacterProto, int>(Id);
+        Name = charProto.Name;
         HP = new Stat(EStat.HP, charProto.HP);
         MP = new Stat(EStat.MP, charProto.MP);
         SPD = new Stat(EStat.SPD, charProto.SPD);
@@ -97,19 +90,8 @@ public partial class CharacterBase
         CRT = new Stat(EStat.CRT, charProto.CRT);
         CDR = new Stat(EStat.CDR, charProto.CDR);
         DRAIN = new Stat(EStat.DRAIN, charProto.DRAIN);
+        RANGE = new Stat(EStat.RANGE, charProto.CDR);
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
-
-        //추후 캐릭터별 기본 스탯으로 조정
-        if (Id == 1001)
-        {
-            AttackRangeRadius = 2;
-        }
-        else
-        {
-
-            AttackRangeRadius = 1.5f;
-            AttackRangeAngle = 180;
-        }
 
         _skillList.Add(EInputAction.SKILL1, new Skill0(this));
         _skillList.Add(EInputAction.SKILL2, new Skill0(this));

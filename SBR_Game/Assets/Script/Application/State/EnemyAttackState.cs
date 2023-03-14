@@ -35,7 +35,7 @@ public class EnemyAttackState : CharacterState<CharacterBase>
         Vector3 dir = (_player.CurPos - _character.CurPos);
 
         //공격 불가한 범위인가
-        if (dir.magnitude > _character.AttackRangeRadius)
+        if (dir.magnitude > _character.RANGE.Value)
         {
             _stateMachine.SetState(new EnemyFollowState());
             return;

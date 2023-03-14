@@ -4,21 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
-public enum EInputAction
-{
-    MOVE,
-    PAUSE,
-    PLAY,
-    ESC,
-    TAB,
-    FASTMODE,
-    ATTACK,
-    SKILL1,
-    SKILL2,
-    SKILL3,
-    ULT_SKILL
-}
-
 public class InputManager :IManager, IManagerUpdatable
 {
     private bool _isStopped = false;
@@ -31,7 +16,7 @@ public class InputManager :IManager, IManagerUpdatable
     //pause 상태에서도 사용 가능한 액션
     private List<EInputAction> _actionsCanUsePause = new List<EInputAction>()
     {
-        EInputAction.TAB, EInputAction.PAUSE, EInputAction.PLAY, EInputAction.ESC, EInputAction.FASTMODE
+        EInputAction.TAB, EInputAction.PAUSE, EInputAction.PLAY, EInputAction.ESC, EInputAction.FAST_MODE
     };
 
     //Move는 dir로 받기 때문에 분리
@@ -47,7 +32,7 @@ public class InputManager :IManager, IManagerUpdatable
         _action2keyMappings.Add(EInputAction.TAB, new List<KeyCode>() { KeyCode.Tab });
         _action2keyMappings.Add(EInputAction.PAUSE, new List<KeyCode>() { KeyCode.P });
         _action2keyMappings.Add(EInputAction.PLAY, new List<KeyCode>() { KeyCode.P });
-        _action2keyMappings.Add(EInputAction.FASTMODE, new List<KeyCode>() { KeyCode.LeftControl, KeyCode.RightControl });
+        _action2keyMappings.Add(EInputAction.FAST_MODE, new List<KeyCode>() { KeyCode.LeftControl, KeyCode.RightControl });
         _action2keyMappings.Add(EInputAction.ATTACK, new List<KeyCode>() { KeyCode.Q });
         _action2keyMappings.Add(EInputAction.SKILL1, new List<KeyCode>() { KeyCode.Alpha1 });
         _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.Alpha2 });

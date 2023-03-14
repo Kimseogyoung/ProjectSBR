@@ -12,7 +12,7 @@ public class ProtoReader
 {
     public ProtoReader()
     {
-
+        RegisterType();
     }
 
     public List<T> LoadCsv<T>(out Type pkType, out string pkName, string text) where T : class, new()
@@ -59,7 +59,7 @@ public class ProtoReader
                     GameLogger.Error($"property Null {propertyName}");
                     return null;
                 }
-
+                
                 property.SetValue(obj, ConvertToType(columns[i][j], GetTypeFromString(typeString)));
             }
             results.Add(obj);
@@ -117,24 +117,29 @@ public class ProtoReader
         return text;
     }
 
+    private void RegisterType()
+    {
+        _typeMappingDict.Add("string", typeof(string));
+        _typeMappingDict.Add("int", typeof(int));
+        _typeMappingDict.Add("float", typeof(float));
+        _typeMappingDict.Add("double", typeof(double));
+        _typeMappingDict.Add("bool", typeof(bool));
+        _typeMappingDict.Add($"enum:{nameof(ECharacterType)}", typeof(ECharacterType));
+        _typeMappingDict.Add($"enum:{nameof(EAttack)}", typeof(EAttack));
+        _typeMappingDict.Add($"enum:{nameof(EStat)}", typeof(EStat));
+        _typeMappingDict.Add($"enum:{nameof(EHitShape)}", typeof(EHitShape));
+        _typeMappingDict.Add($"enum:{nameof(EHitType)}", typeof(EHitType));
+        _typeMappingDict.Add($"enum:{nameof(ECharacterTeamType)}", typeof(ECharacterTeamType));
+    }
+
     private Type GetTypeFromString(string typeString)
     {
         GameLogger.Info($"{typeString}");
-        switch (typeString)
+        if(!_typeMappingDict.TryGetValue(typeString, out var type))
         {
-            case "int":
-                return typeof(int);
-            case "double":
-                return typeof(double);
-            case "bool":
-                return typeof(bool);
-            case "string":
-                return typeof(string);
-            case "float":
-                return typeof(float);
-            default:
-                throw new Exception($"Unsupported type: {typeString}");
+            throw new Exception($"Unsupported type: {typeString}");
         }
+        return type;
     }
 
     private object ConvertToType(string field, Type type)
@@ -148,4 +153,5 @@ public class ProtoReader
             throw new Exception($"Unsupported type(ConvertToType): {type.Name} {field} {e}");
         }
     }
+    private Dictionary<string, Type> _typeMappingDict= new Dictionary<string, Type>();
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,8 +13,11 @@ public class UI_LobbyScene : UI_Scene
     private List<UI_Star> _stageButtonStars;
     private List<Button> _stageButtons;
     private List<Image> _stageButtonImages;
+    private UI ui;
+
     private void Awake()
     {
+        
         Bind<Button>(UI.TmpButton.ToString());
         Bind<Button>(UI.RecordButton.ToString());
         Bind<Button>(UI.SettingButton.ToString());

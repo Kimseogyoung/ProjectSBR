@@ -30,9 +30,15 @@ public class ProtoMenu : MonoBehaviour
             builder.AppendLine("{");
 
             for (int j = 0; j < names.Count; j++)
-            {
+            {       
                 string fieldName = names[j];
                 string fieldType = types[j];
+
+                int idx = fieldType.IndexOf(":");
+                if (idx != -1)
+                {
+                    fieldType = fieldType.Substring(idx + 1, fieldType.Length- (idx + 1));
+                }
                 builder.AppendLine("    public " + fieldType + " " + fieldName + " { get; set; }" + (pkName == fieldName?"// pk ":""));
             }
 

@@ -34,9 +34,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
 
-        _player = (Player)Spawn(1);
+        _player = (Player)Spawn(1, true);
         Spawn(1010);
-        Spawn(1010);
+        Spawn(1011);
     }
 
 
@@ -83,41 +83,43 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         _enemyList.Clear();
     }
 
-    public CharacterBase Spawn(int id)
+    public CharacterBase Spawn(int id, bool isPlayer = false)
     {
         CharacterBase character;
         GameObject characterObj;
         StateMachineBase stateMachine;
-        if (id <10)//플레이어 캐릭터라면 (수정)
+        CharacterProto characterProto = ProtoHelper.Get<CharacterProto, int>(id);
+
+        characterObj = Util.Resource.Instantiate(characterProto.Prefab);
+
+        ECharacterType characterType = isPlayer ? ECharacterType.PLAYER : characterProto.Type;
+        if (!CanSpawnCharacter(characterType))
         {
-            characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Hero1");
+            GameLogger.Info($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
+            return null;
+        }
+
+        if (isPlayer)
+        {
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
             character = new Player(id);
-            stateMachine.SetCharacter((Player)character, ECharacterType.Player,_minimumMapPos,_maximumMapPos);
         }
         else
         {
-            characterObj = Util.Resource.Instantiate(AppPath.CharacterDir + "Enemy1");
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
             character = new CharacterBase(id);
-            
         }
+
+        stateMachine.SetCharacter(character,characterType, _minimumMapPos, _maximumMapPos);
         _stateMachines.Add(stateMachine);
 
-        if (id < 1010)
+        if (characterProto.TeamType == ECharacterTeamType.HERO)
         {
             _heroList.Add(character);
-            //플레이어 캐릭터라면
         }
         else
         {
-            if (id % 10 == 0)//  보스
-                stateMachine.SetCharacter(character, ECharacterType.Boss, _minimumMapPos, _maximumMapPos);
-            else
-                stateMachine.SetCharacter(character, ECharacterType.Zzol, _minimumMapPos, _maximumMapPos);
-
             _enemyList.Add(character);
-
         }
 
         return character;
@@ -127,7 +129,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         List<CharacterBase> targetList = new List<CharacterBase>();
         List<CharacterBase> enemyList;
 
-        if (attacker.CharacterType == ECharacterType.Boss || attacker.CharacterType == ECharacterType.Zzol)
+        if (attacker.CharacterType == ECharacterType.BOSS || attacker.CharacterType == ECharacterType.ZZOL)
             enemyList = APP.Characters.GetHeroList();
         else
             enemyList = APP.Characters.GetLivedEnemyList();
@@ -169,6 +171,29 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
                 break;
         }
     }
+
+    private bool CanSpawnCharacter(ECharacterType characterType)
+    {
+        if (characterType == ECharacterType.BOSS)
+        {
+            for (int i = 0; i < _enemyList.Count; i++)
+            {
+                if (_enemyList[i].CharacterType == ECharacterType.BOSS)
+                    return false;
+            }
+        }
+        else if(characterType == ECharacterType.PLAYER)
+        {
+            for (int i = 0; i < _heroList.Count; i++)
+            {
+                if (_heroList[i].CharacterType == ECharacterType.PLAYER)
+                    return false;
+            }
+
+        }
+        return true;
+    }
+
     public CharacterBase GetPlayer() { return _player; }
     public List<CharacterBase> GetLivedHeroList() { return _heroList.FindAll((hero) => hero.IsDead() == false); }
     public List<CharacterBase> GetLivedEnemyList() { return _enemyList.FindAll((enemy) => enemy.IsDead() == false); }
