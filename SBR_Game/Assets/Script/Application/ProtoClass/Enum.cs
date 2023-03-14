@@ -16,6 +16,7 @@ public enum EStat
     DRAIN,// 피흡
 }
 
+//ref Character Proto
 public enum ECharacterType
 {
     NONE = 0,
@@ -24,15 +25,58 @@ public enum ECharacterType
     BOSS,
     ZZOL
 }
-
-//-------------------------------------------------------------------
-
 public enum ECharacterTeamType
 {
     NONE = 0,
     HERO,
     ENEMY
 }
+
+//ref Skill Proto
+
+public enum EHitTargetType
+{
+    NONE = 0,
+    ALONE,
+    SOME,
+    ALL
+}
+
+public enum EHitTargetSelectType
+{
+    NONE = 0,
+    ALONE_CLOSE,
+    ALONE_RANDOM,
+    SOME_CLOSE,
+    SOME_RANDOM,
+    ALL
+}
+
+public enum EHitStyleType
+{
+    NONE = 0,
+    IMMEDIATE,
+    PROJECTILE,
+}
+public enum EHitShapeType
+{
+    NONE = 0,
+    CIRCLE,//원
+    CORN,//원뿔
+    SQURE
+}
+public enum EGamePropertyType//네이밍 수정 (속성 공격에 해당)
+{
+    NONE = 0,
+    FIRE,
+    ICE,
+    LIGHT,
+    DARK,
+    NATURE
+}
+
+
+//-------------------------------------------------------------------
 
 public enum EInputAction
 {
@@ -78,19 +122,4 @@ public enum EEventActionType
     PLAYER_DEAD,
     BOSS_DEAD,
     ZZOL_DEAD
-}
-
-public enum EHitType
-{
-    NONE = 0,
-    ALONE,
-    ALL
-}
-
-public enum EHitShape
-{
-    NONE = 0,
-    CIRCLE,//원
-    CORN,//원뿔
-    SQURE
 }

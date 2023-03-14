@@ -4,9 +4,21 @@ public class SkillProto : ProtoItem
     public string Name { get; set; }
     public int Type { get; set; }
     public int property { get; set; }
-    public float multiplier { get; set; }
+    public ECharacterTeamType TargetTeam { get; set; }
+    public EHitTargetType HitTargetType { get; set; }
+    public int TargetCnt { get; set; }
+    public EHitTargetSelectType HitTargetSelectType { get; set; }
+    public EHitStyleType HitStyleType { get; set; }
+    public int Cnt { get; set; }
+    public EHitShapeType HitShapeType { get; set; }
+    public float MultiplierValue { get; set; }
+    public float FixedValue { get; set; }
     public int MPCost { get; set; }
     public float CoolTime { get; set; }
-    public float radius { get; set; }
-    public float arrivalOfTime { get; set; }
+    public float Range { get; set; }
+    public float HitWidth { get; set; }
+    public float HitHeight { get; set; }
+    public float ProjectileSpeed { get; set; }
+    public int ParentSkillId { get; set; }
+    public bool IsNormalAttack { get; set; }
 }

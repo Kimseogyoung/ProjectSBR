@@ -1,12 +1,17 @@
-﻿Id,Name,Type,property,multiplier,MPCost,CoolTime,radius,arrivalOfTime
-int:pk,string,int,int,float,int,float,float,float
-#dd,#dd,#dd,#dd,#dd,#dd,#dd,#dd,#dd
-1000001,근딜 스킬1,0,0,0,0,0,0,0
-1000002,근딜 스킬2,0,0,0,0,0,0,0
-1000003,근딜 스킬3,0,0,0,0,0,0,0
-1000004,근딜 스킬4,0,0,0,0,0,0,0
-1000005,법사 스킬,0,0,0,0,0,0,0
-1000006,법사 스킬,0,0,0,0,0,0,0
-1000007,법사 스킬,0,0,0,0,0,0,0
-1000008,법사 스킬,0,0,0,0,0,0,0
-1000009,법사 스킬,0,0,0,0,0,0,0
+﻿Id,Name,Type,property,TargetTeam,HitTargetType,TargetCnt,HitTargetSelectType,HitStyleType,Cnt,HitShapeType,MultiplierValue,FixedValue,MPCost,CoolTime,Range,HitWidth,HitHeight,ProjectileSpeed,ParentSkillId,IsNormalAttack
+int:pk,string,int,int,enum:ECharacterTeamType,enum:EHitTargetType,int,enum:EHitTargetSelectType,enum:EHitStyleType,int,enum:EHitShapeType,float,float,int,float,float,float,float,float,int,bool
+#dd,#dd,#dd,#속성,#타겟 팀,#몇 명 타겟팅,#타겟의 수,#타겟 선택 기준,# 투사체인지 뭐지,#스킬 반복횟수,# 타격 모양,#dd,#dd,#dd,#dd,#dd,#`,#`,#투사체 속도,#스킬이 연결되어있을 경우,#기본공격인가
+1000001,근딜 스킬1,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,TRUE
+1000002,근딜 스킬2,0,0,ENEMY,SOME,3,SOME_RANDOM,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000003,근딜 스킬3,0,0,ENEMY,ALL,0,ALL,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000004,근딜 스킬4,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000005,법사 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,PROJECTILE,1,CIRCLE,1,0,0,1,3,1,1,1,0,TRUE
+1000006,법사 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000007,법사 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000008,법사 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000009,법사 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000010,힐러 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,PROJECTILE,1,CIRCLE,1,0,0,1,3,1,1,1,0,TRUE
+1000011,힐러 스킬,0,0,ENEMY,ALL,1,ALL,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000012,힐러 스킬,0,0,ENEMY,ALONE,1,ALONE_RANDOM,PROJECTILE,1,CIRCLE,1,0,0,1,3,1,1,0,1000011,FALSE
+1000013,힐러 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE
+1000014,힐러 스킬,0,0,ENEMY,ALONE,1,ALONE_CLOSE,IMMEDIATE,1,CIRCLE,1,0,0,1,3,1,1,0,0,FALSE

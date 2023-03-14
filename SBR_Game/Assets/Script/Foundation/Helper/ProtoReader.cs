@@ -31,6 +31,8 @@ public class ProtoReader
         List<List<string>> columns = new List<List<string>>();
         for (int i = 2; i < lines.Length; i++)
         {
+            if (lines[i].StartsWith("#"))
+                continue;
             List<string> value = lines[i].Split(",").ToList<string>();
             if (value.Count < names.Count) continue;
             columns.Add(value);
@@ -127,9 +129,12 @@ public class ProtoReader
         _typeMappingDict.Add($"enum:{nameof(ECharacterType)}", typeof(ECharacterType));
         _typeMappingDict.Add($"enum:{nameof(EAttack)}", typeof(EAttack));
         _typeMappingDict.Add($"enum:{nameof(EStat)}", typeof(EStat));
-        _typeMappingDict.Add($"enum:{nameof(EHitShape)}", typeof(EHitShape));
-        _typeMappingDict.Add($"enum:{nameof(EHitType)}", typeof(EHitType));
+        _typeMappingDict.Add($"enum:{nameof(EHitShapeType)}", typeof(EHitShapeType));
+        _typeMappingDict.Add($"enum:{nameof(EHitTargetType)}", typeof(EHitTargetType));
         _typeMappingDict.Add($"enum:{nameof(ECharacterTeamType)}", typeof(ECharacterTeamType));
+        _typeMappingDict.Add($"enum:{nameof(EHitStyleType)}", typeof(EHitStyleType));
+        _typeMappingDict.Add($"enum:{nameof(EHitTargetSelectType)}", typeof(EHitTargetSelectType));
+
     }
 
     private Type GetTypeFromString(string typeString)

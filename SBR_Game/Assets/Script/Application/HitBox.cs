@@ -12,7 +12,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class HitBox
 {
-    private EHitShape _hitShape;
+    private EHitShapeType _hitShape;
 
     //Circle
     private float _radius;
@@ -32,7 +32,7 @@ public class HitBox
     public Vector3 CenterPos;
 
     //Circle
-    public HitBox(EHitShape hitShape, Vector3 centerPos, float radius)
+    public HitBox(EHitShapeType hitShape, Vector3 centerPos, float radius)
     {
         _hitShape = hitShape;
         _centerPos = centerPos;
@@ -40,7 +40,7 @@ public class HitBox
     }
 
     //Corn
-    public HitBox(EHitShape hitShape, float radius, Vector3 dir, float angle)
+    public HitBox(EHitShapeType hitShape, float radius, Vector3 dir, float angle)
     {
         _hitShape = hitShape;
         _radius = radius;
@@ -49,7 +49,7 @@ public class HitBox
     }
 
     //Squere
-    public HitBox(EHitShape hitShape, Vector3 centerPos, Vector3 dir, float width, float height)
+    public HitBox(EHitShapeType hitShape, Vector3 centerPos, Vector3 dir, float width, float height)
     {
         _hitShape = hitShape;
         _dir = dir;
@@ -68,10 +68,10 @@ public class HitBox
     {
         switch (_hitShape)
         {
-            case EHitShape.CIRCLE:
+            case EHitShapeType.CIRCLE:
                 GizmoHelper.PushDrawQueue(DrawCircle,0.1f);
                 return IsTargetInCircle(targetPos, _centerPos, _radius);
-            case EHitShape.CORN:
+            case EHitShapeType.CORN:
 
                 _centerPos = attackerPos;
                 GizmoHelper.PushDrawQueue(DrawCorn,0.1f);
@@ -91,7 +91,7 @@ public class HitBox
                 else
                     return false;
 
-            case EHitShape.SQURE:
+            case EHitShapeType.SQURE:
                
                 // LookRotation()을 사용하여 targetDir의 방향으로 회전하는 쿼터니언 값 구하기
                 _rotation = Quaternion.LookRotation(_dir);

@@ -108,8 +108,8 @@ public class StateMachineBase : MonoBehaviour
     {
         if (!IsReadyToAttack()) return;
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
-            , EHitType.ALONE
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
+            , EHitTargetType.ALONE
             , EAttack.ATK);   
     }
 
@@ -117,8 +117,8 @@ public class StateMachineBase : MonoBehaviour
     {
         if (!IsReadyToAttack()) return;
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
-            , EHitType.ALONE
+        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
+            , EHitTargetType.ALONE
             , EAttack.ATK);
     }
 

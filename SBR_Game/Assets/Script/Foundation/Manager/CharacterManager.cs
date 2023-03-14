@@ -8,7 +8,7 @@ using UnityEngine.TextCore.Text;
 
 public interface ICharacters
 {
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitType hitType, EAttack attackPowerType, float multiply = 1);
+    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitTargetType hitType, EAttack attackPowerType, float multiply = 1);
     public List<CharacterBase> GetLivedEnemyList();
     public List<CharacterBase> GetLivedHeroList();
     public List<CharacterBase> GetEnemyList();
@@ -124,7 +124,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
         return character;
     }
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitType hitType, EAttack attackPowerType, float multiply)
+    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitTargetType hitType, EAttack attackPowerType, float multiply)
     {
         List<CharacterBase> targetList = new List<CharacterBase>();
         List<CharacterBase> enemyList;
@@ -146,7 +146,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
         switch (hitType)
         {
-            case EHitType.ALONE:
+            case EHitTargetType.ALONE:
                 CharacterBase target = targetList[0];
                 float distance = (target.CurPos - attacker.CurPos).magnitude;
                 for (int i = 1; i < targetList.Count; i++)
@@ -160,7 +160,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
                 }
                 target.ApplyDamage(attacker.AccumulateDamage(attacker, target, attackPowerType, multiply));
                 break;
-            case EHitType.ALL:
+            case EHitTargetType.ALL:
                 for (int i = 0; i < targetList.Count; i++)
                 {
                     targetList[i].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[i], attackPowerType, multiply));
