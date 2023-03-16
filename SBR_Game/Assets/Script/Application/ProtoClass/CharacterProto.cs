@@ -17,4 +17,9 @@ public class CharacterProto : ProtoItem
     public float RANGE { get; set; }
     public float DRAIN { get; set; }
     public string Prefab { get; set; }
+    public int AttackSkill { get; set; }
+    public int Skill1 { get; set; }
+    public int Skill2 { get; set; }
+    public int Skill3 { get; set; }
+    public int UltSkill { get; set; }
 }

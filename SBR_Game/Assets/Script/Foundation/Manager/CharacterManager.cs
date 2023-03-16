@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ using UnityEngine.TextCore.Text;
 
 public interface ICharacters
 {
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitTargetType hitType, EAttack attackPowerType, float multiply = 1);
+    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
+        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType, int targetCnt, float multiply = 1);
     public List<CharacterBase> GetLivedEnemyList();
     public List<CharacterBase> GetLivedHeroList();
     public List<CharacterBase> GetEnemyList();
@@ -110,7 +112,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
             character = new CharacterBase(id);
         }
 
-        stateMachine.SetCharacter(character,characterType, _minimumMapPos, _maximumMapPos);
+        stateMachine.SetCharacter(character, characterType, _minimumMapPos, _maximumMapPos);
         _stateMachines.Add(stateMachine);
 
         if (characterProto.TeamType == ECharacterTeamType.HERO)
@@ -124,7 +126,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
         return character;
     }
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, EHitTargetType hitType, EAttack attackPowerType, float multiply)
+
+    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
+        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType , int targetCnt, float multiply)
     {
         List<CharacterBase> targetList = new List<CharacterBase>();
         List<CharacterBase> enemyList;
@@ -144,32 +148,68 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
         if (targetList.Count == 0) return;//적이 없음
 
-        switch (hitType)
+        //공격할 타겟 수가 영역 내 타겟 수보다 많으면 전부 공격처리
+        if(targetCnt >= targetList.Count || EHitTargetSelectType.ALL == hitTargetSelectType)
         {
-            case EHitTargetType.ALONE:
-                CharacterBase target = targetList[0];
-                float distance = (target.CurPos - attacker.CurPos).magnitude;
+            for(int i=0; i< targetList.Count; i++)
+            {
+                targetList[i].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[i], attackPowerType, multiply));
+            }
+            return;
+        }
+
+        switch (hitTargetSelectType)
+        {
+            case EHitTargetSelectType.CLOSE:
+                List<CharacterDistance> distanceList = new List<CharacterDistance>();
                 for (int i = 1; i < targetList.Count; i++)
                 {
-                    float newTargetDistance = (targetList[i].CurPos - attacker.CurPos).magnitude;
-                    if (distance > newTargetDistance)
-                    {
-                        target = targetList[i];
-                        distance = newTargetDistance;
-                    }
+                    distanceList.Add(new CharacterDistance { 
+                        Character = targetList[i],
+                        Distance = (targetList[i].CurPos - attacker.CurPos).magnitude
+                    });
+                    
                 }
-                target.ApplyDamage(attacker.AccumulateDamage(attacker, target, attackPowerType, multiply));
-                break;
-            case EHitTargetType.ALL:
-                for (int i = 0; i < targetList.Count; i++)
+                distanceList = distanceList.OrderBy(x => x.Distance).ToList();
+                for(int i=0; i<targetCnt; i++)
                 {
-                    targetList[i].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[i], attackPowerType, multiply));
+                    distanceList[i].Character.ApplyDamage(attacker.AccumulateDamage(attacker, distanceList[i].Character, attackPowerType, multiply));
                 }
                 break;
-            default:
+            case EHitTargetSelectType.DIR:
+                List<CharacterDistance> distanceAngleList = new List<CharacterDistance>();
+                for (int i = 1; i < targetList.Count; i++)
+                {
+                    distanceAngleList.Add(new CharacterDistance
+                    {
+                        Character = targetList[i],
+                        Distance = (targetList[i].CurPos - attacker.CurPos).magnitude,
+                        Angle = Mathf.Atan2(attacker.CurPos.y, targetList[i].CurPos.x) * Mathf.Rad2Deg
+                    });
+
+                }
+                distanceAngleList = distanceAngleList.OrderBy(x => x.Angle).ThenBy(x => x.Distance).ToList();
+                for (int i = 0; i < targetCnt; i++)
+                {
+                    distanceAngleList[i].Character.ApplyDamage(attacker.AccumulateDamage(attacker, distanceAngleList[i].Character, attackPowerType, multiply));
+                }
+                break;
+            case EHitTargetSelectType.RANDOM:
+                System.Random random = new System.Random(DateTime.Now.Millisecond);
+                
+                for(int i=0; i<targetCnt; i++)
+                {
+                    int targetIdx = random.Next(targetList.Count - 1);
+                    targetList[targetIdx].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[targetIdx], attackPowerType, multiply));
+                    targetList.RemoveAt(targetIdx);
+                }
 
                 break;
+            default:
+                GameLogger.Error("WRONG {0}", hitTargetSelectType);
+                break;
         }
+
     }
 
     private bool CanSpawnCharacter(ECharacterType characterType)
@@ -201,4 +241,10 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
     public List<CharacterBase> GetHeroList() { return _heroList; }
     public List<CharacterBase> GetAllCharacterList() { return (List<CharacterBase>)_enemyList.Concat(_heroList); }
     //public List<StateMachineBase<CharacterBase>> GetAllStateMachine() { return _stateMachines; }
+}
+
+class CharacterDistance{
+    public float Angle;
+    public float Distance;
+    public CharacterBase Character;
 }

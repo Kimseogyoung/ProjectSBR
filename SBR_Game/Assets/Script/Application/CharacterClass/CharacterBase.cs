@@ -93,10 +93,12 @@ public partial class CharacterBase
         RANGE = new Stat(EStat.RANGE, charProto.CDR);
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
-        _skillList.Add(EInputAction.SKILL1, new Skill0(this));
-        _skillList.Add(EInputAction.SKILL2, new Skill0(this));
-        _skillList.Add(EInputAction.SKILL3, new Skill0(this));
-        _skillList.Add(EInputAction.ULT_SKILL, new Skill0(this));
+
+        _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.AttackSkill));
+        _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.Skill1));
+        _skillList.Add(EInputAction.SKILL2, new Skill0(this, charProto.Skill2));
+        _skillList.Add(EInputAction.SKILL3, new Skill0(this, charProto.Skill3));
+        _skillList.Add(EInputAction.ULT_SKILL, new Skill0(this, charProto.UltSkill));
 
     }
 }

@@ -1,15 +1,15 @@
-﻿Id,Name,TeamType,Type,HP,MP,SPD,ATKSPD,ATK,MATK,DEF,CDR,HPGEN,CRT,RANGE,DRAIN,Prefab
-int:pk,string,enum:ECharacterTeamType,enum:ECharacterType,int,int,float,float,float,float,float,float,float,float,float,float,string
-1,검사,HERO,HERO,100,30,3,1,10,5,10,1,10,1,2,1,Character/Prefab/Hero1
-2,마법사,HERO,HERO,50,100,5,1,5,10,10,1,10,1,5,1,Character/Prefab/Hero2
-3,힐러,HERO,HERO,70,100,5,1,5,5,10,1,10,1,5,1,Character/Prefab/Hero3
-1010,1번 보스,Enemy,BOSS,1000,1000,0.5,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1010
-1020,2번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1020
-1030,3번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1030
-1040,4번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1040
-1050,5번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1050
-1011,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1011
-1021,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1021
-1031,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1031
-1041,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1041
-1051,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1051
+﻿Id,Name,TeamType,Type,HP,MP,SPD,ATKSPD,ATK,MATK,DEF,CDR,HPGEN,CRT,RANGE,DRAIN,Prefab,AttackSkill,Skill1,Skill2,Skill3,UltSkill
+int:pk,string,enum:ECharacterTeamType,enum:ECharacterType,int,int,float,float,float,float,float,float,float,float,float,float,string,int,int,int,int,int
+1,검사,HERO,HERO,100,30,3,1,10,5,10,1,10,1,2,1,Character/Prefab/Hero1,1000001,1000002,1000001,1000001,1000001
+2,마법사,HERO,HERO,50,100,5,1,5,10,10,1,10,1,5,1,Character/Prefab/Hero2,1000005,1000001,1000001,1000001,1000001
+3,힐러,HERO,HERO,70,100,5,1,5,5,10,1,10,1,5,1,Character/Prefab/Hero3,1000005,1000001,1000001,1000001,1000001
+1010,1번 보스,Enemy,BOSS,1000,1000,0.5,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1010,1000050,1000050,1000050,1000050,1000050
+1020,2번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1020,1000050,1000050,1000050,1000050,1000050
+1030,3번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1030,1000050,1000050,1000050,1000050,1000050
+1040,4번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1040,1000050,1000050,1000050,1000050,1000050
+1050,5번 보스,Enemy,BOSS,10000,1000,0,1,1,1,1,1,1,1,1.5,1,Character/Prefab/Enemy1050,1000050,1000050,1000050,1000050,1000050
+1011,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1011,1000050,1000050,1000050,1000050,1000050
+1021,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1021,1000050,1000050,1000050,1000050,1000050
+1031,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1031,1000050,1000050,1000050,1000050,1000050
+1041,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1041,1000050,1000050,1000050,1000050,1000050
+1051,1번  쫄,Enemy,ZZOL,100,30,0.5,2,0.5,5,10,1,10,1,1.5,1,Character/Prefab/Enemy1051,1000050,1000050,1000050,1000050,1000050

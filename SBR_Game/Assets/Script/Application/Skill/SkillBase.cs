@@ -12,13 +12,9 @@ abstract public class SkillBase
     protected HitBox _hitBox;
     protected CharacterBase _character;
     protected EAttack _attackType;
-    protected float _multiply;//스킬 계수
 
+    protected SkillProto _skillProto;
 
-    protected float _periodTime;//스킬 반복 데미지 시간
-    protected float _durationTime;//지속 시간
-    private float _baseCoolTime;
-    private float _startTime; //스킬 발동 시간.
 
     private float _currentDurationTime = 0;
     private float _currentPeriodTime = 0;
@@ -30,19 +26,14 @@ abstract public class SkillBase
 
     private float CoolTime
     {
-        get { return _baseCoolTime * ((100 - _character.CDR.Value) / 100); }
+        get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
     }
 
-    public void Init(CharacterBase characterBase, HitBox hitBox, EAttack attackType, float multiply, float baseCoolTime, float startTime = 0, float durationTime = 0, float periodTime = 0)
+    public SkillBase(CharacterBase characterBase, int skillNum)
     {
         _character = characterBase;
-        _hitBox = hitBox;
-        _baseCoolTime = baseCoolTime;
-        _attackType = attackType;
-        _multiply = multiply;
-        _startTime = startTime;
-        _durationTime= durationTime;
-        _periodTime = periodTime;
+       
+        _skillProto = ProtoHelper.Get<SkillProto, int>(skillNum);
     }
 
     // 스킬 실행
@@ -56,8 +47,8 @@ abstract public class SkillBase
         _isSkillRunning = true;
 
         _currentCooldownTime = CoolTime;
-        _currentStartTime = _startTime;
-        _currentDurationTime = _durationTime;
+        _currentStartTime = _skillProto.StartTime;
+        _currentDurationTime = _skillProto.DurationTime;
         return true;
     }
 
@@ -67,13 +58,13 @@ abstract public class SkillBase
         if (_isSkillRunning)
         {//스킬이 실행중일 떄
 
-            _currentStartTime -= _startTime;
+            _currentStartTime -= _skillProto.StartTime;
             if (!_isSkillApplyed && _currentStartTime <= 0.0f)
             {
                 //아직 시전되지 않았을 때, 발동 아직 안함.
                 _isSkillApplyed = true;
                 UseImmediateSkill();
-                _currentPeriodTime = _periodTime;
+                _currentPeriodTime = _skillProto.PeriodTime;
 
             }
 
@@ -92,7 +83,7 @@ abstract public class SkillBase
                 //지속 데미지 확인
                 if (IsReadyPeriodTime())
                 {
-                    _currentPeriodTime = _periodTime;
+                    _currentPeriodTime = _skillProto.PeriodTime;
                     //적용
                     UseContinuosSkill();
                 }

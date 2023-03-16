@@ -107,19 +107,25 @@ public class StateMachineBase : MonoBehaviour
     public void Attack()
     {
         if (!IsReadyToAttack()) return;
+
+
+        //TODO : 타겟찾기 State진입
+
+        //때리기
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
-            , EHitTargetType.ALONE
-            , EAttack.ATK);   
+        UseNormalAttck();
+       // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
+       //     , EHitSKillType.TARGET,
+       //     , EAttack.ATK);   
     }
 
     public void NonTargetingDirAttack(Vector3 dir)
     {
         if (!IsReadyToAttack()) return;
         _currentAtkCoolTime = _character.ATKSPD.Value;
-        APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
-            , EHitTargetType.ALONE
-            , EAttack.ATK);
+        //APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
+        //    , EHitSKillType.ALONE
+        //    , EAttack.ATK);
     }
 
     public void TargetingDirAttack(CharacterBase target)
@@ -131,6 +137,7 @@ public class StateMachineBase : MonoBehaviour
         //    , EAttack.ATK);
     }
 
+    public void UseNormalAttck() => UseSkill(EInputAction.ATTACK);
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);
     public void UseSkill2() => UseSkill(EInputAction.SKILL2); 
     public void UseSkill3() => UseSkill(EInputAction.SKILL3);

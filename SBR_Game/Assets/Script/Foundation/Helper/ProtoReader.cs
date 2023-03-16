@@ -130,7 +130,7 @@ public class ProtoReader
         _typeMappingDict.Add($"enum:{nameof(EAttack)}", typeof(EAttack));
         _typeMappingDict.Add($"enum:{nameof(EStat)}", typeof(EStat));
         _typeMappingDict.Add($"enum:{nameof(EHitShapeType)}", typeof(EHitShapeType));
-        _typeMappingDict.Add($"enum:{nameof(EHitTargetType)}", typeof(EHitTargetType));
+        _typeMappingDict.Add($"enum:{nameof(EHitSKillType)}", typeof(EHitSKillType));
         _typeMappingDict.Add($"enum:{nameof(ECharacterTeamType)}", typeof(ECharacterTeamType));
         _typeMappingDict.Add($"enum:{nameof(EHitStyleType)}", typeof(EHitStyleType));
         _typeMappingDict.Add($"enum:{nameof(EHitTargetSelectType)}", typeof(EHitTargetSelectType));

@@ -31,6 +31,7 @@ public class HitBox
 
     public Vector3 CenterPos;
 
+
     //Circle
     public HitBox(EHitShapeType hitShape, Vector3 centerPos, float radius)
     {

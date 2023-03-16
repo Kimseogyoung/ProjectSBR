@@ -5,11 +5,14 @@ public class SkillProto : ProtoItem
     public int Type { get; set; }
     public int property { get; set; }
     public ECharacterTeamType TargetTeam { get; set; }
-    public EHitTargetType HitTargetType { get; set; }
+    public EHitSKillType HitTargetType { get; set; }
     public int TargetCnt { get; set; }
     public EHitTargetSelectType HitTargetSelectType { get; set; }
     public EHitStyleType HitStyleType { get; set; }
     public int Cnt { get; set; }
+    public float PeriodTime { get; set; }
+    public float StartTime { get; set; }
+    public float DurationTime { get; set; }
     public EHitShapeType HitShapeType { get; set; }
     public float MultiplierValue { get; set; }
     public float FixedValue { get; set; }

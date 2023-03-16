@@ -34,22 +34,24 @@ public enum ECharacterTeamType
 
 //ref Skill Proto
 
-public enum EHitTargetType
+public enum EHitSKillType
 {
     NONE = 0,
-    ALONE,
-    SOME,
-    ALL
+    TARGET,
+    NONTARGET,
+    ALLTARGET
 }
 
 public enum EHitTargetSelectType
 {
     NONE = 0,
-    ALONE_CLOSE,
-    ALONE_RANDOM,
-    SOME_CLOSE,
-    SOME_RANDOM,
+
+    CLOSE,
+    DIR,
+    RANDOM,
+
     ALL
+
 }
 
 public enum EHitStyleType
