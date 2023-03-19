@@ -11,14 +11,10 @@ public class NormalAttackSkill : SkillBase
         :base(character, skillNum)
     {
     }
-    protected override void UseContinuosSkill()
-    {
-    }
 
     protected override void UseImmediateSkill()
     {
-        GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, nameof(Skill0));
-        _hitBox = new HitBox(_skillProto.HitShapeType, _character.CurPos, _skillProto.Range);
+        _hitBox = new HitBox(_skillProto.HitShapeType, _skillProto.Range, _skillProto.Angle, _character.CurPos, _character.CurDir);
         APP.Characters.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
             _skillProto.HitTargetType, _skillProto.HitTargetSelectType ,_attackType,  _skillProto.TargetCnt ,_skillProto.MultiplierValue);
     }

@@ -109,7 +109,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         else
         {
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
-            character = new CharacterBase(id);
+            character = new CharacterBase(id, characterProto.Type);
         }
 
         stateMachine.SetCharacter(character, characterType, _minimumMapPos, _maximumMapPos);

@@ -18,6 +18,7 @@ public class SkillProto : ProtoItem
     public float FixedValue { get; set; }
     public int MPCost { get; set; }
     public float CoolTime { get; set; }
+    public float Angle { get; set; }
     public float Range { get; set; }
     public float HitWidth { get; set; }
     public float HitHeight { get; set; }

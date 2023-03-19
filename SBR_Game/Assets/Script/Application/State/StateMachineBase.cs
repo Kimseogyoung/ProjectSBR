@@ -51,7 +51,6 @@ public class StateMachineBase : MonoBehaviour
     public void SetCharacter(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
     {
         _character = character;
-        _character.SetCharacterType(characterType);
         _transform.position = _character.CurPos;
         _mapRangeStartPos= mapPos1;
         _mapRangeEndPos= mapPos2;

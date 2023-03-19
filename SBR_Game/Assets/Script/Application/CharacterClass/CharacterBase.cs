@@ -18,9 +18,10 @@ public partial class CharacterBase
 
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
-    public CharacterBase(int characterId)
+    public CharacterBase(int characterId, ECharacterType characterType)
     {
         Id = characterId;
+        CharacterType= characterType;
         InitCharacterSetting();
     }
 
@@ -48,15 +49,9 @@ public partial class CharacterBase
         EventQueue.PushEvent<HPEvent>(
             CharacterType == ECharacterType.PLAYER? EEventActionType.PLAYER_HP_CHANGE:
             CharacterType == ECharacterType.BOSS? EEventActionType.BOSS_HP_CHANGE : EEventActionType.ZZOL_HP_CHANGE,
-            new HPEvent(Id, HP.TotalValue, HP.Value, true));
+            new HPEvent(Id, HP.FullValue, HP.Value, true));
 
         return damage;
-    }
-
-
-    public void SetCharacterType(ECharacterType characterType)
-    {
-        CharacterType = characterType;
     }
 
     public bool IsDead()
@@ -93,8 +88,8 @@ public partial class CharacterBase
         RANGE = new Stat(EStat.RANGE, charProto.CDR);
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
-
-        _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.AttackSkill));
+        
+        _skillList.Add(EInputAction.ATTACK, new NormalAttackSkill(this, charProto.AttackSkill));
         _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.Skill1));
         _skillList.Add(EInputAction.SKILL2, new Skill0(this, charProto.Skill2));
         _skillList.Add(EInputAction.SKILL3, new Skill0(this, charProto.Skill3));

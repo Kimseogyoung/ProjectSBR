@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -15,14 +16,10 @@ abstract public class SkillBase
 
     protected SkillProto _skillProto;
 
+    private int _currentSkillCnt;
+    
 
-    private float _currentDurationTime = 0;
-    private float _currentPeriodTime = 0;
-    private float _currentCooldownTime = 0;
-    private float _currentStartTime = 0;
-
-    private bool _isSkillRunning = false;
-    private bool _isSkillApplyed = false;
+    private bool _isReadySkill = true;
 
     private float CoolTime
     {
@@ -34,82 +31,74 @@ abstract public class SkillBase
         _character = characterBase;
        
         _skillProto = ProtoHelper.Get<SkillProto, int>(skillNum);
+
+        if (_skillProto.IsNormalAttack)
+        {
+            _skillProto.StartTime = 0;
+            _skillProto.DurationTime = 0;
+        }
+
     }
 
     // 스킬 실행
     public bool TryUseSkill()
     {
-        if(!IsReadySkill())
+        if(!_isReadySkill)
         {
             //쿨타임 안끝남
             return false;
         }
-        _isSkillRunning = true;
+        _isReadySkill = false;
 
-        _currentCooldownTime = CoolTime;
-        _currentStartTime = _skillProto.StartTime;
-        _currentDurationTime = _skillProto.DurationTime;
+        if (_skillProto.IsNormalAttack)
+            TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);
+        else
+            TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
+
+        TimeHelper.AddTimeEvent(_skillProto.StartTime, StartSkill);
+
         return true;
     }
 
     public void UpdateSkill()
     {
-        _currentCooldownTime -= Time.deltaTime;
-        if (_isSkillRunning)
-        {//스킬이 실행중일 떄
 
-            _currentStartTime -= _skillProto.StartTime;
-            if (!_isSkillApplyed && _currentStartTime <= 0.0f)
-            {
-                //아직 시전되지 않았을 때, 발동 아직 안함.
-                _isSkillApplyed = true;
-                UseImmediateSkill();
-                _currentPeriodTime = _skillProto.PeriodTime;
+    }
 
-            }
+    private void StartSkill()
+    {
+        GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, _skillProto.Name);
 
-            if (_isSkillApplyed)
-            {
-                _currentDurationTime -= Time.deltaTime;
-                _currentPeriodTime -= Time.deltaTime;
+        UseSkill();
 
-                if (IsSkillDone())
-                {//지속시간이 끝났는지 확인
-                    _isSkillRunning = false;
-                    _isSkillApplyed = false;
-                    return;
-                }
+        TimeHelper.AddTimeEvent(_skillProto.DurationTime, FinishSkill);
+    }
 
-                //지속 데미지 확인
-                if (IsReadyPeriodTime())
-                {
-                    _currentPeriodTime = _skillProto.PeriodTime;
-                    //적용
-                    UseContinuosSkill();
-                }
-            }
+    private void UseSkill()
+    {
+        _currentSkillCnt++;
+        UseImmediateSkill();
+
+        if (_skillProto.Cnt > _currentSkillCnt && _skillProto.DurationTime >= _skillProto.PeriodTime * _currentSkillCnt)
+        {
+            TimeHelper.AddTimeEvent(_skillProto.PeriodTime, UseSkill);
         }
+
+    }
+
+    private void FinishSkill()
+    {
+        
+    }
+
+    private void ResetCoolTime()
+    {
+        _isReadySkill = true;
+        _currentSkillCnt = 0;
     }
 
     abstract protected void UseImmediateSkill();
 
-    abstract protected void UseContinuosSkill();
-
-
-    private bool IsReadySkill() 
-    {
-        return _currentCooldownTime <= 0.0f;
-    }
-
-    private bool IsReadyPeriodTime()
-    {
-        return _currentPeriodTime <= 0.0f;
-    }
-
-    private bool IsSkillDone()
-    {
-        return _currentDurationTime <= 0.0f;
-    }
 
 
 

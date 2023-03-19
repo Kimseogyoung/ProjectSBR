@@ -41,12 +41,13 @@ public class HitBox
     }
 
     //Corn
-    public HitBox(EHitShapeType hitShape, float radius, Vector3 dir, float angle)
+    public HitBox(EHitShapeType hitShape, float radius, float angle, Vector3 centerPos, Vector3 dir)
     {
         _hitShape = hitShape;
         _radius = radius;
-        _dir = dir;
         _angle = angle;
+        _centerPos = centerPos;
+        _dir = dir;
     }
 
     //Squere

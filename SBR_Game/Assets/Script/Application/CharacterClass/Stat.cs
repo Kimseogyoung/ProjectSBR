@@ -32,7 +32,7 @@ public class Stat
         PercentStat += stat;
     }
 
-    public float TotalValue
+    public float FullValue
     {
         get { return (BaseStat + PlusStat) + ((BaseStat + PlusStat) * Mathf.Min(PercentStat,100) / 100f); }
     }
@@ -47,9 +47,9 @@ public class Stat
             {
                 _currentStat = 0;
             } 
-            else if(_currentStat > TotalValue)
+            else if(_currentStat > FullValue)
             {
-                _currentStat = TotalValue;
+                _currentStat = FullValue;
             }
         }
     }
