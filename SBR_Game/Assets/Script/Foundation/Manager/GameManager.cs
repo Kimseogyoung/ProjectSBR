@@ -77,7 +77,7 @@ public class GameManager: MonoBehaviour
         APP.UI.StartManager();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_isStopped)
         {
@@ -95,6 +95,8 @@ public class GameManager: MonoBehaviour
     {
 
         if (pause.IsPause == _isStopped) return;
+
+        TimeHelper.Stop(pause.IsPause);
         _isStopped = pause.IsPause;
 
         for (int i = 0; i < _managerUpdatables.Count; i++)

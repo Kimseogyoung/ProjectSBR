@@ -6,6 +6,7 @@ using UnityEngine;
 public class InGameScene : SceneBase
 {
     private CharacterManager _characterManager;
+    private BulletManager _bulletManager;
     private UI_InGameScene _inGameScene;
     public InGameScene(string sceneName)
     {
@@ -21,7 +22,11 @@ public class InGameScene : SceneBase
         _characterManager = new CharacterManager();
         _characterManager.Init();
 
+        _bulletManager = new BulletManager();
+        _bulletManager.Init();
+
         APP.GameManager.AddUpdatablePublicManager(_characterManager);
+        APP.GameManager.AddUpdatablePublicManager(_bulletManager);
 
 
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);

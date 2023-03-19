@@ -91,7 +91,7 @@ public partial class CharacterBase
         
         _skillList.Add(EInputAction.ATTACK, new NormalAttackSkill(this, charProto.AttackSkill));
         _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.Skill1));
-        _skillList.Add(EInputAction.SKILL2, new Skill0(this, charProto.Skill2));
+        _skillList.Add(EInputAction.SKILL2, new NormalProjectileSkill(this, charProto.Skill2));
         _skillList.Add(EInputAction.SKILL3, new Skill0(this, charProto.Skill3));
         _skillList.Add(EInputAction.ULT_SKILL, new Skill0(this, charProto.UltSkill));
 

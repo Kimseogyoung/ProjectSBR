@@ -9,6 +9,7 @@ public class SkillProto : ProtoItem
     public int TargetCnt { get; set; }
     public EHitTargetSelectType HitTargetSelectType { get; set; }
     public EHitStyleType HitStyleType { get; set; }
+    public string ProjectilePrefab { get; set; }
     public int Cnt { get; set; }
     public float PeriodTime { get; set; }
     public float StartTime { get; set; }

@@ -31,7 +31,7 @@ public class IntroScene : SceneBase
 
     protected override void Update()
     {
-        _currentTime += Time.deltaTime;
+        _currentTime += Time.fixedDeltaTime;
         if(_currentTime > _introTime && _isLoadingNextScene == false)
         {
             _isLoadingNextScene = true;

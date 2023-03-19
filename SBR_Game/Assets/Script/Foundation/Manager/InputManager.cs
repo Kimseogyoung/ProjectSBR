@@ -72,7 +72,7 @@ public class InputManager :IManager, IManagerUpdatable
     public void UpdateManager()
     {
         //게임 실행했을 때부터 초를 기록
-        _time += Time.deltaTime;
+        _time += Time.fixedDeltaTime;
 
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");

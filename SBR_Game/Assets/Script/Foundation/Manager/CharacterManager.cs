@@ -9,6 +9,7 @@ using UnityEngine.TextCore.Text;
 
 public interface ICharacters
 {
+    public float GetGameTime();
     public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType, int targetCnt, float multiply = 1);
     public List<CharacterBase> GetLivedEnemyList();
@@ -16,16 +17,20 @@ public interface ICharacters
     public List<CharacterBase> GetEnemyList();
     public List<CharacterBase> GetHeroList();
     public List<CharacterBase> GetAllCharacterList();
+    public CharacterBase GetBoss();
     public CharacterBase GetPlayer();
 
 }
 
 public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 {
+    private float _gameTime;
+
     private List<StateMachineBase> _stateMachines = new List<StateMachineBase>();
     private List<CharacterBase> _enemyList = new List<CharacterBase>();
     private List<CharacterBase> _heroList = new List<CharacterBase>();
     private Player _player;
+    private CharacterBase _boss;
 
     private Vector2 _minimumMapPos;
     private Vector2 _maximumMapPos;
@@ -37,13 +42,14 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
 
         _player = (Player)Spawn(1, true);
-        Spawn(1010);
+        _boss = Spawn(1010);
         Spawn(1011);
     }
 
 
     public void StartManager()
     {
+        _gameTime = 0;
         for (int i = 0; i < _stateMachines.Count; i++)
         {
             if (_stateMachines[i] is PlayerStateMachine)
@@ -59,6 +65,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
     public void UpdateManager()
     {
+        _gameTime += Time.fixedDeltaTime;
         for (int i=0; i<_stateMachines.Count; i++)
         {
             _stateMachines[i].UpdateStateMachine();
@@ -117,10 +124,12 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
         if (characterProto.TeamType == ECharacterTeamType.HERO)
         {
+            characterObj.layer = LayerMask.NameToLayer("Hero");
             _heroList.Add(character);
         }
         else
         {
+            characterObj.layer = LayerMask.NameToLayer("Enemy");
             _enemyList.Add(character);
         }
 
@@ -234,7 +243,9 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         return true;
     }
 
+    public float GetGameTime() { return _gameTime; }
     public CharacterBase GetPlayer() { return _player; }
+    public CharacterBase GetBoss() { return _boss; }
     public List<CharacterBase> GetLivedHeroList() { return _heroList.FindAll((hero) => hero.IsDead() == false); }
     public List<CharacterBase> GetLivedEnemyList() { return _enemyList.FindAll((enemy) => enemy.IsDead() == false); }
     public List<CharacterBase> GetEnemyList() { return _enemyList; }

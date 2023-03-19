@@ -35,11 +35,16 @@ public class StateMachineBase : MonoBehaviour
 
     }
 
+    public CharacterBase GetCharacter()
+    {
+        return _character;
+    }
+
     public void UpdateStateMachine()
     {
         if (_currentState == null) return;
 
-        _currentAtkCoolTime -= Time.deltaTime;
+        _currentAtkCoolTime -= Time.fixedDeltaTime;
 
         _currentState.UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateSkill();
@@ -77,7 +82,7 @@ public class StateMachineBase : MonoBehaviour
     public void MoveCharacterPos(Vector2 dir)
     {
         _character.CurDir = new Vector3(dir.x, 0, dir.y);
-        dir = dir * _character.SPD.Value * Time.deltaTime;
+        dir = dir * _character.SPD.Value * Time.fixedDeltaTime;
 
         if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);

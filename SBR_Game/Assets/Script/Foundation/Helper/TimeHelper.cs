@@ -7,7 +7,8 @@ using UnityEngine;
 
 
 public class TimeHelper : MonoBehaviour
-{
+{ 
+    private static bool _isStopped = false;
     private static float _currentTime = 0;
     private static List<TimeAction> _timeActionList = new List<TimeAction>();
 
@@ -21,8 +22,16 @@ public class TimeHelper : MonoBehaviour
         _timeActionList.Add(new TimeAction(_currentTime + time, action));
     }
 
+    public static void Stop(bool isStopped)
+    {
+        _isStopped = isStopped;
+    }
+
     private void FixedUpdate()
     {
+        if (_isStopped)
+            return;
+
         _currentTime += Time.fixedDeltaTime;
 
         for (int i = 0; i < _timeActionList.Count; i++)
