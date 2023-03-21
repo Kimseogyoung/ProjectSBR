@@ -29,7 +29,7 @@ public class EventQueue : MonoBehaviour
         _immediateEventQueue.Enqueue(evt);
     }
 
-    static public void AddEventListener<T>(EEventActionType eventActionType, Action<T> action) where T : EventBase
+    static public Action<EventBase> AddEventListener<T>(EEventActionType eventActionType, Action<T> action) where T : EventBase
     {
         Action<EventBase> act = (e) => { action.Invoke((T)e); };
         if (!_actions.ContainsKey(eventActionType))
@@ -37,16 +37,27 @@ public class EventQueue : MonoBehaviour
             _actions.Add(eventActionType, act);
         }
         _actions[eventActionType] += act;
+
+        return act;
     }
-    static public void RemoveEventListener<T>(EEventActionType eventActionType, Action<T> action) where T : EventBase
+    static public void RemoveEventListener(EEventActionType eventActionType, Action<EventBase> action)
     {
-        Action<EventBase> act = (e) => { action.Invoke((T)e); };
+        if (!_actions.ContainsKey(eventActionType))
+        {
+            return;
+        }
+        _actions[eventActionType] -= action;
+    }
+
+    static public void RemoveAllEventListener(EEventActionType eventActionType)
+    {
         if (!_actions.ContainsKey(eventActionType))
         {
             return;
         }
         _actions[eventActionType] = null;
     }
+
 
     private void Update()
     {

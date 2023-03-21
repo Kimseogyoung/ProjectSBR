@@ -23,8 +23,7 @@ public class UI_InGameScene : UI_Scene
         Bind<GameObject>(UI.NormalEnemyHPPanel.ToString());
 
         EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.BOSS_HP_CHANGE, UpdateHpBar);
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.ZZOL_HP_CHANGE, UpdateHpBar);
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
     }
 
     private void Update()
@@ -49,12 +48,19 @@ public class UI_InGameScene : UI_Scene
             case EEventActionType.PLAYER_HP_CHANGE:
                 Get<Slider>(UI.PlayerHPSlider.ToString()).value = value;
                 break;
-            case EEventActionType.BOSS_HP_CHANGE:
-                Get<Slider>(UI.BossHPSlider.ToString()).value = value;
+            case EEventActionType.ENEMY_HP_CHANGE:
+                {
+                    if(APP.Characters.GetBoss().Id == evt.CharacterId)
+                    {
+                        Get<Slider>(UI.BossHPSlider.ToString()).value = value;
+                        return;
+                    }
+                    
+
+                    //TODO : 쫄 몹 처리
+                }
                 break;
-            case EEventActionType.ZZOL_HP_CHANGE:
-                //Get<Slider>(UI.PlayerHPSlider.ToString()).value = value;
-                break;
+
             default:
                 GameLogger.Info("UpdateHpBar : {0}", evt.eventActionType);
                 break;
@@ -64,9 +70,8 @@ public class UI_InGameScene : UI_Scene
 
     private void OnDestroy()
     {
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.BOSS_HP_CHANGE, UpdateHpBar);
-        EventQueue.RemoveEventListener<HPEvent>(EEventActionType.ZZOL_HP_CHANGE, UpdateHpBar);
+        EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_HP_CHANGE);
+        EventQueue.RemoveAllEventListener(EEventActionType.ENEMY_HP_CHANGE);
     }
 
     enum UI{

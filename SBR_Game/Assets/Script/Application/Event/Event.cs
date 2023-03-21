@@ -9,14 +9,18 @@ public class HPEvent : EventBase
     public int CharacterId;
     public float FullHP;
     public float CurHP;
+    public float DeltaHP;
+    public CharacterBase Attacker;
 
     public bool IsAttacked;
-    public HPEvent(int characterId, float fullHP, float curHP, bool isAttacked)
+    public HPEvent(int characterId, float deltaHP, float fullHP, float curHP, bool isAttacked, CharacterBase attacker)
     {
         CharacterId = characterId;
         FullHP = fullHP;
         CurHP = curHP;
+        DeltaHP = deltaHP;
         IsAttacked = isAttacked;
+        Attacker = attacker;
     }
 }
 

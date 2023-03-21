@@ -116,8 +116,7 @@ public enum EEventActionType
     //UI
     PLAYER_HP_CHANGE,
     PLAYER_MP_CHANGE,
-    BOSS_HP_CHANGE,
-    ZZOL_HP_CHANGE,
+    ENEMY_HP_CHANGE,
     PHASE1_START,
     PHASE2_START,
     STAGE_INFO_SET,

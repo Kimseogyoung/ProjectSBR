@@ -9,13 +9,12 @@ using UnityEngine;
 abstract public class SkillBase
 {
     protected Vector3 _firstSkillPos;
-    protected List<CharacterBase> _firstTargetList;
+    protected CharacterBase _target;
     protected HitBox _hitBox;
     protected CharacterBase _character;
     protected EAttack _attackType;
 
     protected SkillProto _skillProto;
-
     private int _currentSkillCnt;
     
 
@@ -41,7 +40,7 @@ abstract public class SkillBase
     }
 
     // 스킬 실행
-    public bool TryUseSkill()
+    public bool TryUseSkill(CharacterBase target = null)
     {
         if(!_isReadySkill)
         {
@@ -49,6 +48,8 @@ abstract public class SkillBase
             return false;
         }
         _isReadySkill = false;
+
+        _target = target;
 
         if (_skillProto.IsNormalAttack)
             TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);

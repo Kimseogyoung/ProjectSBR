@@ -139,7 +139,6 @@ public class ProtoReader
 
     private Type GetTypeFromString(string typeString)
     {
-        GameLogger.Info($"{typeString}");
         if(!_typeMappingDict.TryGetValue(typeString, out var type))
         {
             throw new Exception($"Unsupported type: {typeString}");

@@ -7,10 +7,21 @@ using UnityEngine;
 
 public class EnemyAttackState : CharacterState<CharacterBase>
 {
-    private CharacterBase _player;
+    private CharacterBase _target;
+    public EnemyAttackState(CharacterBase target)
+    {
+        _target = target;
+    }
+
     protected override void OnEnter()
     {
-        _player = APP.Characters.GetPlayer();
+        _stateMachine._currentTarget = _target;
+        //TODO: 공격 애니메이션 재생
+
+        //TODO: 타겟팅
+        _stateMachine.Attack();
+
+        _stateMachine.SetState(new EnemyFollowState());
     }
 
     protected override void OnExit()
@@ -20,28 +31,6 @@ public class EnemyAttackState : CharacterState<CharacterBase>
 
     protected override void Update()
     {
-        if (_character.IsDead())
-        {
-            _stateMachine.SetState(new DeadState());
-            return;
-        }
-
-        if (_player.IsDead())
-        {
-            _stateMachine.SetState(new IdleState());
-            return;
-        }
-
-        Vector3 dir = (_player.CurPos - _character.CurPos);
-
-        //공격 불가한 범위인가
-        if (dir.magnitude > _character.RANGE.Value)
-        {
-            _stateMachine.SetState(new EnemyFollowState());
-            return;
-        }
-
-        _stateMachine.NonTargetingDirAttack(dir.normalized);
     }
 
 }

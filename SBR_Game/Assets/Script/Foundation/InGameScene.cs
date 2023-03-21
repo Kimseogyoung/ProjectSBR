@@ -61,8 +61,8 @@ public class InGameScene : SceneBase
 
     protected override void Exit()
     {
-        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
-        EventQueue.RemoveEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
+        EventQueue.RemoveAllEventListener(EEventActionType.BOSS_DEAD);
+        EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_DEAD);
 
         APP.GameManager.RemoveUpdatablePublicManager(_characterManager);
         _characterManager.FinishManager();

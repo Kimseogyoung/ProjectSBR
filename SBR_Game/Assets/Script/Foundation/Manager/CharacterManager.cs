@@ -162,7 +162,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         {
             for(int i=0; i< targetList.Count; i++)
             {
-                targetList[i].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[i], attackPowerType, multiply));
+                targetList[i].ApplyDamage(attacker, attackPowerType, multiply);
             }
             return;
         }
@@ -182,7 +182,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
                 distanceList = distanceList.OrderBy(x => x.Distance).ToList();
                 for(int i=0; i<targetCnt; i++)
                 {
-                    distanceList[i].Character.ApplyDamage(attacker.AccumulateDamage(attacker, distanceList[i].Character, attackPowerType, multiply));
+                    distanceList[i].Character.ApplyDamage(attacker, attackPowerType, multiply);
                 }
                 break;
             case EHitTargetSelectType.DIR:
@@ -200,7 +200,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
                 distanceAngleList = distanceAngleList.OrderBy(x => x.Angle).ThenBy(x => x.Distance).ToList();
                 for (int i = 0; i < targetCnt; i++)
                 {
-                    distanceAngleList[i].Character.ApplyDamage(attacker.AccumulateDamage(attacker, distanceAngleList[i].Character, attackPowerType, multiply));
+                    distanceAngleList[i].Character.ApplyDamage(attacker, attackPowerType, multiply);
                 }
                 break;
             case EHitTargetSelectType.RANDOM:
@@ -209,7 +209,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
                 for(int i=0; i<targetCnt; i++)
                 {
                     int targetIdx = random.Next(targetList.Count - 1);
-                    targetList[targetIdx].ApplyDamage(attacker.AccumulateDamage(attacker, targetList[targetIdx], attackPowerType, multiply));
+                    targetList[targetIdx].ApplyDamage(attacker, attackPowerType, multiply);
                     targetList.RemoveAt(targetIdx);
                 }
 

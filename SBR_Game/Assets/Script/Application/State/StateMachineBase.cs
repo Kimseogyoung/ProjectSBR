@@ -13,6 +13,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class StateMachineBase : MonoBehaviour 
 {
+    public CharacterBase _currentTarget = null;
     [SerializeField] protected CharacterBase _character;
 
     private CharacterState<CharacterBase> _currentState;
@@ -152,7 +153,7 @@ public class StateMachineBase : MonoBehaviour
         SkillBase skill= _character.GetSkill(inputAction);
         if(skill != null)
         {
-            if (_character.GetSkill(inputAction).TryUseSkill())
+            if (_character.GetSkill(inputAction).TryUseSkill(_currentTarget))
             {
                 GameLogger.Info("{0} 사용 성공", inputAction);
                 //스킬 사용 성공
