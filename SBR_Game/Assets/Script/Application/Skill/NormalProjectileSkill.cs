@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class NormalProjectileSkill : SkillBase
 {
-    public NormalProjectileSkill(CharacterBase characterBase, int skillNum) : base(characterBase, skillNum)
-    {
-    }
 
     protected override void UseImmediateSkill()
     {

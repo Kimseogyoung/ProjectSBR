@@ -2,6 +2,7 @@ public class SkillProto : ProtoItem
 {
     public int Id { get; set; }// pk 
     public string Name { get; set; }
+    public string ClassType { get; set; }
     public int Type { get; set; }
     public int property { get; set; }
     public ECharacterTeamType TargetTeam { get; set; }

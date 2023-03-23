@@ -90,23 +90,18 @@ public partial class CharacterBase
         RANGE = new Stat(EStat.RANGE, charProto.CDR);
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
-        // TODO: 스킬 클래스 proto로 일반화
-        if(charProto.TeamType== ECharacterTeamType.ENEMY)
-        {
-            _skillList.Add(EInputAction.ATTACK, new NormalTargetAttack(this, charProto.AttackSkill));
-            _skillList.Add(EInputAction.SKILL1, new NormalTargetAttack(this, charProto.Skill1));
-            _skillList.Add(EInputAction.SKILL2, new NormalTargetAttack(this, charProto.Skill2));
-            _skillList.Add(EInputAction.SKILL3, new NormalTargetAttack(this, charProto.Skill3));
-            _skillList.Add(EInputAction.ULT_SKILL, new NormalTargetAttack(this, charProto.UltSkill));
-        }
-        else
-        {
-            _skillList.Add(EInputAction.ATTACK, new NormalAttackSkill(this, charProto.AttackSkill));
-            _skillList.Add(EInputAction.SKILL1, new Skill0(this, charProto.Skill1));
-            _skillList.Add(EInputAction.SKILL2, new NormalProjectileSkill(this, charProto.Skill2));
-            _skillList.Add(EInputAction.SKILL3, new Skill0(this, charProto.Skill3));
-            _skillList.Add(EInputAction.ULT_SKILL, new Skill0(this, charProto.UltSkill));
-        }
-
+        AddSkill(EInputAction.ATTACK, charProto.AttackSkill);
+        AddSkill(EInputAction.SKILL1, charProto.Skill1);
+        AddSkill(EInputAction.SKILL2, charProto.Skill2);
+        AddSkill(EInputAction.SKILL3, charProto.Skill3);
+        AddSkill(EInputAction.ULT_SKILL, charProto.UltSkill);
+    }
+    
+    private void AddSkill(EInputAction action, int skillId)
+    {
+        var skillInstance = Activator.CreateInstance(Type.GetType(ProtoHelper.Get<SkillProto, int>(skillId).ClassType));
+        SkillBase skill = (SkillBase)skillInstance;
+        skill.Init(this, skillId);
+        _skillList.Add(action, skill);
     }
 }

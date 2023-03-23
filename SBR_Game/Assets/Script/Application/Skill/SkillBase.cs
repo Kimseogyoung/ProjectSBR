@@ -25,10 +25,12 @@ abstract public class SkillBase
         get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
     }
 
-    public SkillBase(CharacterBase characterBase, int skillNum)
+    public SkillBase() { }
+
+    public void Init(CharacterBase characterBase, int skillNum)
     {
         _character = characterBase;
-       
+
         _skillProto = ProtoHelper.Get<SkillProto, int>(skillNum);
 
         if (_skillProto.IsNormalAttack)
@@ -36,7 +38,6 @@ abstract public class SkillBase
             _skillProto.StartTime = 0;
             _skillProto.DurationTime = 0;
         }
-
     }
 
     // 스킬 실행

@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 public class NormalAttackSkill : SkillBase
 {
-    public NormalAttackSkill(CharacterBase character, int skillNum)
-        :base(character, skillNum)
-    {
-    }
 
     protected override void UseImmediateSkill()
     {

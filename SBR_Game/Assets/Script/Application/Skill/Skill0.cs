@@ -8,11 +8,7 @@ using UnityEngine.TextCore.Text;
 
 public class Skill0 : SkillBase
 {
-    public Skill0(CharacterBase character, int skillNum) 
-        :base(character, skillNum)
-    {
-    }
-
+   
     protected override void UseImmediateSkill()
     {
         _hitBox = new HitBox(EHitShapeType.SQURE, _character.CurPos + _character.CurDir * 2, _character.CurDir, 1, 2);
