@@ -24,9 +24,13 @@ public class StateMachineBase : MonoBehaviour
 
     private Vector2 _mapRangeStartPos;
     private Vector2 _mapRangeEndPos;
+
+    private CharacterEventHandler _cEventHandlder;
     private void Awake()
     {
         _transform = gameObject.transform;
+
+        _cEventHandlder = GetComponentInChildren<CharacterEventHandler>();
         //상태 전환 흐름 설정
         Init();
     }
@@ -87,6 +91,9 @@ public class StateMachineBase : MonoBehaviour
 
         if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
+
+        if(_cEventHandlder != null)
+            _cEventHandlder.Move(_character.CurDir);
         SyncCharacterPos();
     }
 
