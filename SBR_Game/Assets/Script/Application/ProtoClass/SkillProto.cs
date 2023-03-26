@@ -12,8 +12,8 @@ public class SkillProto : ProtoItem
     public EHitStyleType HitStyleType { get; set; }
     public string ProjectilePrefab { get; set; }
     public int Cnt { get; set; }
-    public bool HasAnimation { get; set; }
-    public bool HasApplyPoint { get; set; }
+    public bool CanMove { get; set; }
+    public float ApplyPointTime { get; set; }
     public float PeriodTime { get; set; }
     public float StartTime { get; set; }
     public float DurationTime { get; set; }

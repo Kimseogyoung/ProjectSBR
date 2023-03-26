@@ -14,12 +14,12 @@ abstract public class SkillBase
     protected CharacterBase _character;
     protected EAttack _attackType;
 
-    protected SkillProto _skillProto;
+    public SkillProto _skillProto { get; private set; }
     private int _currentSkillCnt;
     
 
     private bool _isReadySkill = true;
-    private CharacterEventHandler _cEventHandler;
+
     private float CoolTime
     {
         get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
@@ -30,7 +30,6 @@ abstract public class SkillBase
     public void Init(CharacterBase characterBase, int skillNum)
     {
         _character = characterBase;
-
         _skillProto = ProtoHelper.Get<SkillProto, int>(skillNum);
 
         if (_skillProto.IsNormalAttack)
@@ -41,63 +40,31 @@ abstract public class SkillBase
         //_cEventHandler = cHandler;
 
     }
-
-    // 스킬 실행
-    public bool TryUseSkill(EInputAction skillType, CharacterBase target = null)
+    public bool CanUseSkill()
     {
-        if(!_isReadySkill)
-        {
-            //쿨타임 안끝남
-            return false;
-        }
+        return _isReadySkill;
+    }
+
+
+    //스킬 실행 (취소될 수 있음) 취소되면 재사용 대기시간 초기화
+    public void StartSkill(CharacterBase target = null)
+    {
         _isReadySkill = false;
 
         _target = target;
 
-
-        //애니메이션 있으면 실행
-        if (_skillProto.HasAnimation)
-        {
-            // 스킬 적용 지점이 애니메이션에 존재하는지
-            if (_skillProto.HasApplyPoint)
-            {
-                //_cEventHandler.OnApplySkill += UseSkill;
-            }
-            else
-            {//타격지점이 존재하지 않는 다면 즉시 실행
-                //정신집중 시간은..?
-            }
-            //_cEventHandler.PlayAttackAnim(skillType);
-        }
-
-
         if (_skillProto.IsNormalAttack)
-            TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);
+            TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);//공격속도는 1초당 공격할 수 있는 횟수임.
         else
             TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
 
-        TimeHelper.AddTimeEvent(_skillProto.StartTime, StartSkill);
-
-        return true;
     }
 
-    public void UpdateSkill()
+    // 스킬 완전 실행
+    public void UseSkill()
     {
 
-    }
-
-    private void StartSkill()
-    {
         GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, _skillProto.Name);
-
-        UseSkill();
-
-        TimeHelper.AddTimeEvent(_skillProto.DurationTime, FinishSkill);
-    }
-
-    private void UseSkill()
-    {
-        //_cEventHandler.OnApplySkill -= UseSkill;
 
         _currentSkillCnt++;
         UseImmediateSkill();
@@ -106,6 +73,19 @@ abstract public class SkillBase
         {
             TimeHelper.AddTimeEvent(_skillProto.PeriodTime, UseSkill);
         }
+
+        //지속시간
+        TimeHelper.AddTimeEvent(_skillProto.DurationTime, FinishSkill);
+
+    }
+
+    public void CancelSkill()
+    {
+
+    }
+
+    public void UpdateSkill()
+    {
 
     }
 

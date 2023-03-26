@@ -31,7 +31,9 @@ public class StateMachineBase : MonoBehaviour
         _transform = gameObject.transform;
 
         _cEventHandlder = GetComponentInChildren<CharacterEventHandler>();
-        //_cEventHandlder.OnApplySkill += UseNormalAttck;
+        if(_cEventHandlder != null)
+            _cEventHandlder.OnApplySkill += UseNormalAttck;
+
         //상태 전환 흐름 설정
         Init();
     }
@@ -130,14 +132,9 @@ public class StateMachineBase : MonoBehaviour
         if (!IsReadyToAttack()) return;
 
 
-        //TODO : 타겟찾기 State진입
-
         //때리기
         _currentAtkCoolTime = _character.ATKSPD.Value;
         UseNormalAttck();
-       // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, _character.CurDir, _character.AttackRangeAngle)
-       //     , EHitSKillType.TARGET,
-       //     , EAttack.ATK);   
     }
 
     public void NonTargetingDirAttack(Vector3 dir)
@@ -169,9 +166,20 @@ public class StateMachineBase : MonoBehaviour
         SkillBase skill= _character.GetSkill(inputAction);
         if(skill != null)
         {
-            if (/*_cEventHandlder._isPlayingSkill && */_character.GetSkill(inputAction).TryUseSkill(inputAction, _currentTarget))
+            if (!_cEventHandlder._isPlayingSkill && skill.CanUseSkill())
             {
-                GameLogger.Info("{0} 사용 성공", inputAction);
+                
+                //스킬 애니메이션 재생
+                _cEventHandlder.PlayAttackAnim(inputAction);
+                skill.StartSkill(_currentTarget);
+                if (!skill._skillProto.CanMove)
+                {
+                    SetState(new ChannelingState());
+                }
+
+                TimeHelper.AddTimeEvent(skill._skillProto.ApplyPointTime, () => { skill.UseSkill(); }, "channeling");
+                GameLogger.Info("{0} 사용 시도", inputAction);
+
                 //스킬 사용 성공
                 return;
             }

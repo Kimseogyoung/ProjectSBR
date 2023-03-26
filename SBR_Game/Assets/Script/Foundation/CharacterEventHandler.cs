@@ -79,7 +79,7 @@ public class CharacterEventHandler : MonoBehaviour
             case EInputAction.SKILL2:
             case EInputAction.SKILL3:
             case EInputAction.ULT_SKILL:
-                _animator.Play(_skillClipDict[inputAction].name);
+                _animator.Play(inputAction.ToString(),0);
                 TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length, OnFinishSkill);
                 _isPlayingSkill = true;
                 break;
@@ -141,6 +141,12 @@ public class CharacterEventHandler : MonoBehaviour
         {
             AnimatorState skillState = _controller.layers[0].stateMachine.AddState(clip.Key.ToString());
             skillState.motion = clip.Value;
+
+            AnimationEvent animEvent = new AnimationEvent();
+            animEvent.time = 0.55f;
+            animEvent.functionName = "OnApplyedSkill";
+ 
+            clip.Value.AddEvent(animEvent);
 
             AnimatorStateTransition skillToIdle = skillState.AddTransition(idleState);
             skillToIdle.hasExitTime = true;
