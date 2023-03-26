@@ -31,12 +31,13 @@ public class CharacterEventHandler : MonoBehaviour
     private string _currentPlayingSkillAnim;
     public bool _isPlayingSkill { get; private set; }
 
-    public Action OnApplySkill;
-
     public bool _isMoving = false;
     private string _isMovingKey = "IsMoving";
+    private string _atkSpdKey = "AtkSpd";
 
+    private AnimatorState _attackAnimState;
     private AnimatorController _controller;
+    private TimeHelper.TimeAction _finishTimeAction;
     private void Awake()
     {
         for(int i=0; i<_skillClipList.Count; i++)
@@ -70,6 +71,14 @@ public class CharacterEventHandler : MonoBehaviour
     public void SetIdleState()
     {
         _animator.Play("Idle", 0);
+        OnFinishSkill();
+        TimeHelper.RemoveTimeEvent(_finishTimeAction);
+    }
+
+    public void SetAttackSpeed(float spd)
+    {
+        _attackAnimState.speed = spd;
+        //_animator.SetFloat(_atkSpdKey, spd);
     }
 
     public bool PlayAttackAnim(EInputAction inputAction)
@@ -80,12 +89,16 @@ public class CharacterEventHandler : MonoBehaviour
         switch (inputAction)
         {       
             case EInputAction.ATTACK:
+                _animator.Play(inputAction.ToString(), 0,0);
+                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length/ _attackAnimState.speed, OnFinishSkill);
+                _isPlayingSkill = true;
+                break;
             case EInputAction.SKILL1:
             case EInputAction.SKILL2:
             case EInputAction.SKILL3:
             case EInputAction.ULT_SKILL:
-                _animator.Play(inputAction.ToString(),0);
-                TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length, OnFinishSkill);
+                _animator.Play(inputAction.ToString(),0,0);
+                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length, OnFinishSkill);
                 _isPlayingSkill = true;
                 break;
             default:
@@ -117,10 +130,16 @@ public class CharacterEventHandler : MonoBehaviour
         _controller.AddMotion(_dieClip);
 
         // 파라미터 추가
-        AnimatorControllerParameter newParam = new AnimatorControllerParameter();
-        newParam.type = AnimatorControllerParameterType.Bool;
-        newParam.name = _isMovingKey;
-        _controller.AddParameter(newParam);
+        AnimatorControllerParameter movingParam = new AnimatorControllerParameter();
+        movingParam.type = AnimatorControllerParameterType.Bool;
+        movingParam.name = _isMovingKey;
+
+        AnimatorControllerParameter atkSpdParam = new AnimatorControllerParameter();
+        atkSpdParam.type = AnimatorControllerParameterType.Float;
+        atkSpdParam.name = _atkSpdKey;
+
+        _controller.AddParameter(movingParam);
+        _controller.AddParameter(atkSpdParam);
 
         // 상태 머신에서 기본 Idle 상태 추가
         AnimatorState idleState = _controller.layers[0].stateMachine.AddState("Idle");
@@ -146,13 +165,16 @@ public class CharacterEventHandler : MonoBehaviour
         {
             AnimatorState skillState = _controller.layers[0].stateMachine.AddState(clip.Key.ToString());
             skillState.motion = clip.Value;
-
+            if(clip.Key == EInputAction.ATTACK)
+                _attackAnimState = skillState;
+            /*
             AnimationEvent animEvent = new AnimationEvent();
+            // TODO : 각 스킬 타격점 으로 변경
             animEvent.time = 0.55f;
             animEvent.functionName = "OnApplyedSkill";
  
             clip.Value.AddEvent(animEvent);
-
+            */
             AnimatorStateTransition skillToIdle = skillState.AddTransition(idleState);
             skillToIdle.hasExitTime = true;
         }
@@ -162,10 +184,4 @@ public class CharacterEventHandler : MonoBehaviour
     {
         _isPlayingSkill = false;
     }
-
-    private void OnApplyedSkill()
-    {
-        OnApplySkill?.Invoke();
-    }
-
 }

@@ -25,16 +25,14 @@ public class StateMachineBase : MonoBehaviour
     private Vector2 _mapRangeStartPos;
     private Vector2 _mapRangeEndPos;
 
-    private CharacterEventHandler _cEventHandlder;
+    private CharacterEventHandler _cEventHandler;
     private SkillBase _currentPlaySkill;
     private TimeAction _currentSkillTimeEvent;
     private void Awake()
     {
         _transform = gameObject.transform;
 
-        _cEventHandlder = GetComponentInChildren<CharacterEventHandler>();
-        if(_cEventHandlder != null)
-            _cEventHandlder.OnApplySkill += UseNormalAttck;
+        _cEventHandler = GetComponentInChildren<CharacterEventHandler>();
 
         //상태 전환 흐름 설정
         Init();
@@ -47,8 +45,7 @@ public class StateMachineBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        _cEventHandlder.OnApplySkill -= UseNormalAttck;
-        _cEventHandlder = null;
+        _cEventHandler = null;
     }
 
     public CharacterBase GetCharacter()
@@ -104,8 +101,8 @@ public class StateMachineBase : MonoBehaviour
         if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
         _character.CurPos += new Vector3(dir.x, 0, dir.y);
 
-        if(_cEventHandlder != null)
-            _cEventHandlder.Move(_character.CurDir);
+        if(_cEventHandler != null)
+            _cEventHandler.Move(_character.CurDir);
 
         SyncCharacterPos();
     }
@@ -133,9 +130,8 @@ public class StateMachineBase : MonoBehaviour
     {
         if (!IsReadyToAttack()) return;
 
-
         //때리기
-        _currentAtkCoolTime = _character.ATKSPD.Value;
+        _currentAtkCoolTime = 1 / _character.ATKSPD.Value ;
         UseNormalAttck();
     }
 
@@ -166,28 +162,31 @@ public class StateMachineBase : MonoBehaviour
     private void UseSkill(EInputAction inputAction)
     {
         SkillBase skill= _character.GetSkill(inputAction);
-        if(skill != null)
-        {
-            if (!_cEventHandlder._isPlayingSkill && skill.CanUseSkill())
-            {
-                _currentPlaySkill = skill;
+        if(skill == null)
+            return;
 
-                //스킬 애니메이션 재생
-                _cEventHandlder.PlayAttackAnim(inputAction);
-                skill.StartSkill(_currentTarget);
+        if(_cEventHandler._isPlayingSkill || !skill.CanUseSkill())
+            return;
 
-                if (!skill._skillProto.CanMove)//시전시간동안 움직일 수 있는가? (캔슬될 수 있음)
-                {
-                    SetState(new ChannelingState(skill._skillProto.ApplyPointTime));
-                }
-
-                _currentSkillTimeEvent = TimeHelper.AddTimeEvent(skill._skillProto.ApplyPointTime,
-                    ApplyCurrentSkill, skill._skillProto.Name);
-
-                return;
-            }
+        float applyTiming = skill._skillProto.ApplyPointTime;
+        if (inputAction == EInputAction.ATTACK)
+        {//기본 공격 속도 조정
+            applyTiming /= _character.ATKSPD.Value;
+            _cEventHandler.SetAttackSpeed(_character.ATKSPD.Value);
         }
-        //실패
+        _currentPlaySkill = skill;
+
+        //스킬 애니메이션 재생
+        _cEventHandler.PlayAttackAnim(inputAction);
+        skill.StartSkill(_currentTarget);
+
+        if (!skill._skillProto.CanMove)//시전시간동안 움직일 수 있는가? (캔슬될 수 있음)
+        {
+            SetState(new ChannelingState(applyTiming));
+        }
+
+        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming,
+            ApplyCurrentSkill, skill._skillProto.Name);
     }
 
     //현재 시전중인 스킬 효과 시전
@@ -212,7 +211,7 @@ public class StateMachineBase : MonoBehaviour
         _currentPlaySkill.CancelSkill();
         _currentPlaySkill = null;
 
-        _cEventHandlder.SetIdleState();
+        _cEventHandler.SetIdleState();
         TimeHelper.RemoveTimeEvent(_currentSkillTimeEvent);
         SetState(new playerNormalState());
         GameLogger.Info($"시전중인 스킬 {_currentSkillTimeEvent.Name} 취소");
