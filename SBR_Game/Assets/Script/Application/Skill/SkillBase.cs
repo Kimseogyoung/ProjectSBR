@@ -19,7 +19,7 @@ abstract public class SkillBase
     
 
     private bool _isReadySkill = true;
-
+    private CharacterEventHandler _cEventHandler;
     private float CoolTime
     {
         get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
@@ -38,10 +38,12 @@ abstract public class SkillBase
             _skillProto.StartTime = 0;
             _skillProto.DurationTime = 0;
         }
+        //_cEventHandler = cHandler;
+
     }
 
     // 스킬 실행
-    public bool TryUseSkill(CharacterBase target = null)
+    public bool TryUseSkill(EInputAction skillType, CharacterBase target = null)
     {
         if(!_isReadySkill)
         {
@@ -51,6 +53,23 @@ abstract public class SkillBase
         _isReadySkill = false;
 
         _target = target;
+
+
+        //애니메이션 있으면 실행
+        if (_skillProto.HasAnimation)
+        {
+            // 스킬 적용 지점이 애니메이션에 존재하는지
+            if (_skillProto.HasApplyPoint)
+            {
+                //_cEventHandler.OnApplySkill += UseSkill;
+            }
+            else
+            {//타격지점이 존재하지 않는 다면 즉시 실행
+                //정신집중 시간은..?
+            }
+            //_cEventHandler.PlayAttackAnim(skillType);
+        }
+
 
         if (_skillProto.IsNormalAttack)
             TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);
@@ -78,6 +97,8 @@ abstract public class SkillBase
 
     private void UseSkill()
     {
+        //_cEventHandler.OnApplySkill -= UseSkill;
+
         _currentSkillCnt++;
         UseImmediateSkill();
 

@@ -31,6 +31,7 @@ public class StateMachineBase : MonoBehaviour
         _transform = gameObject.transform;
 
         _cEventHandlder = GetComponentInChildren<CharacterEventHandler>();
+        //_cEventHandlder.OnApplySkill += UseNormalAttck;
         //상태 전환 흐름 설정
         Init();
     }
@@ -38,6 +39,12 @@ public class StateMachineBase : MonoBehaviour
     private void Start()
     {
 
+    }
+
+    private void OnDestroy()
+    {
+        _cEventHandlder.OnApplySkill -= UseNormalAttck;
+        _cEventHandlder = null;
     }
 
     public CharacterBase GetCharacter()
@@ -56,6 +63,7 @@ public class StateMachineBase : MonoBehaviour
         _character.GetSkill(EInputAction.SKILL2).UpdateSkill();
         _character.GetSkill(EInputAction.SKILL3).UpdateSkill();
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateSkill();
+       
     }
 
     public void SetCharacter(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
@@ -94,6 +102,7 @@ public class StateMachineBase : MonoBehaviour
 
         if(_cEventHandlder != null)
             _cEventHandlder.Move(_character.CurDir);
+
         SyncCharacterPos();
     }
 
@@ -160,7 +169,7 @@ public class StateMachineBase : MonoBehaviour
         SkillBase skill= _character.GetSkill(inputAction);
         if(skill != null)
         {
-            if (_character.GetSkill(inputAction).TryUseSkill(_currentTarget))
+            if (/*_cEventHandlder._isPlayingSkill && */_character.GetSkill(inputAction).TryUseSkill(inputAction, _currentTarget))
             {
                 GameLogger.Info("{0} 사용 성공", inputAction);
                 //스킬 사용 성공

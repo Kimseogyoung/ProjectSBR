@@ -1,18 +1,18 @@
-﻿Id,Name,ClassType,Type,property,TargetTeam,HitTargetType,TargetCnt,HitTargetSelectType,HitStyleType,ProjectilePrefab,Cnt,PeriodTime,StartTime,DurationTime,HitShapeType,MultiplierValue,FixedValue,MPCost,CoolTime,Angle,Range,HitWidth,HitHeight,ProjectileSpeed,ParentSkillId,IsNormalAttack
-int:pk,string,string,int,int,enum:ECharacterTeamType,enum:EHitSKillType,int,enum:EHitTargetSelectType,enum:EHitStyleType,string,int,float,float,float,enum:EHitShapeType,float,float,int,float,float,float,float,float,float,int,bool
-#dd,#dd,#클래스이름,#dd,#속성,#타겟 팀,#몇 명 타겟팅,#타겟의 수,#타겟 선택 기준,# 투사체인지 뭐지,#투사체Prefab,#스킬 반복횟수,#스킬 반복 시간(텀),#스킬 발동까지 걸리는 시간,#지속 시간,# 타격 모양,#dd,#dd,#dd,#dd,#범위 각도,#dd,#`,#`,#투사체 속도,#스킬이 연결되어있을 경우,#기본공격인가
-1000001,근딜 기본공격,NormalAttackSkill,0,0,ENEMY,NONTARGET,0,ALL,IMMEDIATE,,1,0,0,0,CORN,1,0,0,1,90,3,1,1,0,0,TRUE
-1000002,근딜 스킬2,Skill0,0,0,ENEMY,NONTARGET,3,RANDOM,IMMEDIATE,,1,0,0,0,SQURE,1,0,0,1,90,3,1,2,0,0,FALSE
-1000003,근딜 스킬3,NormalProjectileSkill,0,0,ENEMY,ALLTARGET,0,ALL,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000004,근딜 스킬4,Skill0,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000005,법사 기본공격,NormalProjectileSkill,0,0,ENEMY,TARGET,1,CLOSE,PROJECTILE,Skill/Bullet1,1,0,0,0,NONE,1,0,0,1,90,5,1,1,3,0,TRUE
-1000006,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000007,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000008,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000009,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000010,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,PROJECTILE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,1,0,TRUE
-1000011,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,ALL,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000012,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,RANDOM,PROJECTILE,Skill/Bullet2,1,0,0,0,NONE,1,0,0,1,90,5,1,1,0,1000011,FALSE
-1000013,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000014,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
-1000050,Boss1 기본공격,NormalTargetAttack,0,0,HERO,TARGET,1,CLOSE,IMMEDIATE,,1,0,0,0,NONE,1,0,0,1,90,2,1,1,0,0,TRUE
+﻿Id,Name,ClassType,Type,property,TargetTeam,HitTargetType,TargetCnt,HitTargetSelectType,HitStyleType,ProjectilePrefab,Cnt,HasAnimation,HasApplyPoint,PeriodTime,StartTime,DurationTime,HitShapeType,MultiplierValue,FixedValue,MPCost,CoolTime,Angle,Range,HitWidth,HitHeight,ProjectileSpeed,ParentSkillId,IsNormalAttack
+int:pk,string,string,int,int,enum:ECharacterTeamType,enum:EHitSKillType,int,enum:EHitTargetSelectType,enum:EHitStyleType,string,int,bool,bool,float,float,float,enum:EHitShapeType,float,float,int,float,float,float,float,float,float,int,bool
+#dd,#dd,#클래스이름,#dd,#속성,#타겟 팀,#몇 명 타겟팅,#타겟의 수,#타겟 선택 기준,# 투사체인지 뭐지,#투사체Prefab,#스킬 반복횟수,#애니메이션이 있는지,#타격점이 있는지,#스킬 반복 시간(텀),#스킬 발동까지 정신집중 시간,#지속 시간,# 타격 모양,#dd,#dd,#dd,#dd,#범위 각도,#dd,#`,#`,#투사체 속도,#스킬이 연결되어있을 경우,#기본공격인가
+1000001,근딜 기본공격,NormalAttackSkill,0,0,ENEMY,NONTARGET,0,ALL,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CORN,1,0,0,1,90,3,1,1,0,0,TRUE
+1000002,근딜 스킬2,Skill0,0,0,ENEMY,NONTARGET,3,RANDOM,IMMEDIATE,,1,TRUE,TRUE,0,0,0,SQURE,1,0,0,1,90,3,1,2,0,0,FALSE
+1000003,근딜 스킬3,NormalProjectileSkill,0,0,ENEMY,ALLTARGET,0,ALL,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000004,근딜 스킬4,Skill0,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000005,법사 기본공격,NormalProjectileSkill,0,0,ENEMY,TARGET,1,CLOSE,PROJECTILE,Skill/Bullet1,1,TRUE,TRUE,0,0,0,NONE,1,0,0,1,90,5,1,1,3,0,TRUE
+1000006,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000007,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000008,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000009,법사 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000010,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,PROJECTILE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,1,0,TRUE
+1000011,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,ALL,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000012,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,RANDOM,PROJECTILE,Skill/Bullet2,1,TRUE,TRUE,0,0,0,NONE,1,0,0,1,90,5,1,1,0,1000011,FALSE
+1000013,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000014,힐러 스킬,NormalProjectileSkill,0,0,ENEMY,NONTARGET,1,CLOSE,IMMEDIATE,,1,TRUE,TRUE,0,0,0,CIRCLE,1,0,0,1,90,3,1,1,0,0,FALSE
+1000050,Boss1 기본공격,NormalTargetAttack,0,0,HERO,TARGET,1,CLOSE,IMMEDIATE,,1,FALSE,FALSE,0,0,0,NONE,1,0,0,1,90,2,1,1,0,0,TRUE
