@@ -178,7 +178,7 @@ public class StateMachineBase : MonoBehaviour
 
                 if (!skill._skillProto.CanMove)//시전시간동안 움직일 수 있는가? (캔슬될 수 있음)
                 {
-                    SetState(new ChannelingState());
+                    SetState(new ChannelingState(skill._skillProto.ApplyPointTime));
                 }
 
                 _currentSkillTimeEvent = TimeHelper.AddTimeEvent(skill._skillProto.ApplyPointTime,

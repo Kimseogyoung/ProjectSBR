@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ChannelingState : CharacterState<CharacterBase>
 {
+    public ChannelingState(float time)
+    {
+        TimeHelper.AddTimeEvent(time, ()=> { _stateMachine.SetState(new playerNormalState()); });
+    }
+
     protected override void OnEnter()
     {
         if (_character.CharacterType == ECharacterType.PLAYER)

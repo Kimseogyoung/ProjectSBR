@@ -17,7 +17,7 @@ namespace Util
         static public T Load<T>(string path) where T : Object
         {
             T obj = Resources.Load<T>(path);
-            GameLogger.NotImp("{0} 타입 {1}경로에서 Load", typeof(T), path);
+            //GameLogger.NotImp("{0} 타입 {1}경로에서 Load", typeof(T), path);
             return obj;
         }
 
