@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
+using static TimeHelper;
 
 
 public class StateMachineBase : MonoBehaviour 
@@ -26,6 +26,8 @@ public class StateMachineBase : MonoBehaviour
     private Vector2 _mapRangeEndPos;
 
     private CharacterEventHandler _cEventHandlder;
+    private SkillBase _currentPlaySkill;
+    private TimeAction _currentSkillTimeEvent;
     private void Awake()
     {
         _transform = gameObject.transform;
@@ -168,23 +170,53 @@ public class StateMachineBase : MonoBehaviour
         {
             if (!_cEventHandlder._isPlayingSkill && skill.CanUseSkill())
             {
-                
+                _currentPlaySkill = skill;
+
                 //스킬 애니메이션 재생
                 _cEventHandlder.PlayAttackAnim(inputAction);
                 skill.StartSkill(_currentTarget);
-                if (!skill._skillProto.CanMove)
+
+                if (!skill._skillProto.CanMove)//시전시간동안 움직일 수 있는가? (캔슬될 수 있음)
                 {
                     SetState(new ChannelingState());
                 }
 
-                TimeHelper.AddTimeEvent(skill._skillProto.ApplyPointTime, () => { skill.UseSkill(); }, "channeling");
-                GameLogger.Info("{0} 사용 시도", inputAction);
+                _currentSkillTimeEvent = TimeHelper.AddTimeEvent(skill._skillProto.ApplyPointTime,
+                    ApplyCurrentSkill, skill._skillProto.Name);
 
-                //스킬 사용 성공
                 return;
             }
         }
         //실패
+    }
+
+    //현재 시전중인 스킬 효과 시전
+    public void ApplyCurrentSkill()
+    {
+        if(_currentPlaySkill == null)
+        {
+            GameLogger.Info($"{_character.Name} 시전중인 스킬이 없음");
+            return;
+        }
+        _currentPlaySkill.UseSkill();
+    }
+
+    public void CancelCurrentSkill()
+    {
+        if (_currentSkillTimeEvent == null)
+        {
+            GameLogger.Info($"{_character.Name} 시전중인 스킬이 없는데 취소함.");
+            return;
+        }
+
+        _currentPlaySkill.CancelSkill();
+        _currentPlaySkill = null;
+
+        _cEventHandlder.SetIdleState();
+        TimeHelper.RemoveTimeEvent(_currentSkillTimeEvent);
+        SetState(new playerNormalState());
+        GameLogger.Info($"시전중인 스킬 {_currentSkillTimeEvent.Name} 취소");
+        
     }
 
     private bool CanMove(Vector3 nextPos)
@@ -192,6 +224,7 @@ public class StateMachineBase : MonoBehaviour
         return nextPos.x > _mapRangeStartPos.x && nextPos.x < _mapRangeEndPos.x
             && nextPos.z > _mapRangeStartPos.y && nextPos.z < _mapRangeEndPos.y;
     }
+
     private bool IsReadyToAttack()
     {
         return _currentAtkCoolTime <= 0;

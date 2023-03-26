@@ -12,14 +12,16 @@ public class TimeHelper : MonoBehaviour
     private static float _currentTime = 0;
     private static List<TimeAction> _timeActionList = new List<TimeAction>();
 
-    public static void AddTimeEvent(float time, Action action, string name = "")
+    public static TimeAction AddTimeEvent(float time, Action action, string name = "")
     {
         if(time <= 0)
         {
             action.Invoke();
-            return;
+            return null;
         }
-        _timeActionList.Add(new TimeAction(_currentTime + time, action, name));
+        TimeAction timeAction = new TimeAction(_currentTime + time, action, name);
+        _timeActionList.Add(timeAction);
+        return timeAction;
     }
 
     public static void Stop(bool isStopped)
@@ -27,13 +29,12 @@ public class TimeHelper : MonoBehaviour
         _isStopped = isStopped;
     }
 
-    public static void RemoveTimeEvent(string name)
+    public static void RemoveTimeEvent(TimeAction action)
     {
-        TimeAction timeEvent = _timeActionList.Find(x => x.Name == name);
-        if (timeEvent == null)
+        if (action == null)
             return;
 
-        _timeActionList.Remove(timeEvent);
+        _timeActionList.Remove(action);
     }
 
     private void FixedUpdate()

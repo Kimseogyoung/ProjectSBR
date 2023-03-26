@@ -41,12 +41,11 @@ public class ChannelingState : CharacterState<CharacterBase>
 
     }
 
-    private void Exit()
+    private void Exit(Vector2 dir)
     {
         if (_character.CharacterType == ECharacterType.PLAYER)
         {
-            TimeHelper.RemoveTimeEvent("channeling");
-            _stateMachine.SetState(new playerNormalState());
+            _stateMachine.CancelCurrentSkill();
         }
     }
 }

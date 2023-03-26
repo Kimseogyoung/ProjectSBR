@@ -784,6 +784,18 @@ PrefabInstance:
       value: -54.270164
       objectReference: {fileID: 0}
     - target: {fileID: 6766485126959075108, guid: 71ffaf57dab1eb44a8b5a0c0b84f1a78, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.097922325
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766485126959075108, guid: 71ffaf57dab1eb44a8b5a0c0b84f1a78, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3767825
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766485126959075108, guid: 71ffaf57dab1eb44a8b5a0c0b84f1a78, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766485126959075108, guid: 71ffaf57dab1eb44a8b5a0c0b84f1a78, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.82685935
       objectReference: {fileID: 0}
@@ -896,7 +908,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 9e85d7d2392b5a148a673736576cd498, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -915,6 +927,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeaf302c83f686245978a9bbda23b3b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skillClipList: []
+  _idleClip: {fileID: 0}
+  _runClip: {fileID: 0}
+  _startClip: {fileID: 0}
+  _dieClip: {fileID: 0}
+  _isMoving: 0
 --- !u!1001 &1301637705
 PrefabInstance:
   m_ObjectHideFlags: 0

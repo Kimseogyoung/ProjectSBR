@@ -67,13 +67,18 @@ public class CharacterEventHandler : MonoBehaviour
         _isMoving = true;
     }
 
+    public void SetIdleState()
+    {
+        _animator.Play("Idle", 0);
+    }
+
     public bool PlayAttackAnim(EInputAction inputAction)
     {
         if (_isPlayingSkill)
             return false;
 
         switch (inputAction)
-        {
+        {       
             case EInputAction.ATTACK:
             case EInputAction.SKILL1:
             case EInputAction.SKILL2:

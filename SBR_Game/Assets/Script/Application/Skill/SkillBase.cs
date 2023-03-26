@@ -20,6 +20,8 @@ abstract public class SkillBase
 
     private bool _isReadySkill = true;
 
+
+    private TimeHelper.TimeAction _resetTimeEvent;
     private float CoolTime
     {
         get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
@@ -49,21 +51,18 @@ abstract public class SkillBase
     //스킬 실행 (취소될 수 있음) 취소되면 재사용 대기시간 초기화
     public void StartSkill(CharacterBase target = null)
     {
-        _isReadySkill = false;
-
         _target = target;
 
-        if (_skillProto.IsNormalAttack)
-            TimeHelper.AddTimeEvent(_character.ATKSPD.Value, ResetCoolTime);//공격속도는 1초당 공격할 수 있는 횟수임.
-        else
-            TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
-
+        if (!_skillProto.IsNormalAttack)
+        {
+            _isReadySkill = false;
+            _resetTimeEvent = TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
+        }
     }
 
     // 스킬 완전 실행
     public void UseSkill()
     {
-
         GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, _skillProto.Name);
 
         _currentSkillCnt++;
@@ -76,12 +75,12 @@ abstract public class SkillBase
 
         //지속시간
         TimeHelper.AddTimeEvent(_skillProto.DurationTime, FinishSkill);
-
     }
 
     public void CancelSkill()
     {
-
+        TimeHelper.RemoveTimeEvent(_resetTimeEvent);
+        ResetCoolTime();
     }
 
     public void UpdateSkill()
