@@ -68,7 +68,7 @@ public class EventQueue : MonoBehaviour
             {
                 return;
             }
-            GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
+            //GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
             action.Invoke(dequeueAction);
         }
 
@@ -81,7 +81,7 @@ public class EventQueue : MonoBehaviour
                 {
                     return; 
                 }
-                GameLogger.Info("WaitedEventQueue Dequeue : {0} 이벤트 호출", _playingEvent.eventActionType);
+                //GameLogger.Info("WaitedEventQueue Dequeue : {0} 이벤트 호출", _playingEvent.eventActionType);
                 action.Invoke(_playingEvent);
               
             }

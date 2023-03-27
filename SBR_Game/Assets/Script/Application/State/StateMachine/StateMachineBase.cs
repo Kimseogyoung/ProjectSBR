@@ -32,8 +32,6 @@ public class StateMachineBase : MonoBehaviour
     {
         _transform = gameObject.transform;
 
-        _cEventHandler = GetComponentInChildren<CharacterEventHandler>();
-
         //상태 전환 흐름 설정
         Init();
     }
@@ -67,8 +65,11 @@ public class StateMachineBase : MonoBehaviour
        
     }
 
-    public void SetCharacter(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
+    public void Initialize(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
     {
+        _cEventHandler = GetComponentInChildren<CharacterEventHandler>();
+        _cEventHandler.Initialize();
+
         _character = character;
         _transform.position = _character.CurPos;
         _mapRangeStartPos= mapPos1;
@@ -152,6 +153,11 @@ public class StateMachineBase : MonoBehaviour
         //    , EHitType.ALONE
         //    , EAttack.ATK);
     }
+
+    public void PlayStartAnim() => _cEventHandler.PlayStartAnim();
+    public void PlayDieAnim() => _cEventHandler.PlayDieAnim();
+    public void SetIdle() => _cEventHandler.SetIdleState();
+    
 
     public void UseNormalAttck() => UseSkill(EInputAction.ATTACK);
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);

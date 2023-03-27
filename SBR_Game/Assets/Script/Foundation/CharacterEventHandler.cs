@@ -38,9 +38,10 @@ public class CharacterEventHandler : MonoBehaviour
     private AnimatorState _attackAnimState;
     private AnimatorController _controller;
     private TimeHelper.TimeAction _finishTimeAction;
-    private void Awake()
+
+    public void Initialize()
     {
-        for(int i=0; i<_skillClipList.Count; i++)
+        for (int i = 0; i < _skillClipList.Count; i++)
         {
             _skillClipDict.Add((EInputAction)EInputAction.ATTACK + i, _skillClipList[i]);
         }
@@ -74,6 +75,10 @@ public class CharacterEventHandler : MonoBehaviour
         OnFinishSkill();
         TimeHelper.RemoveTimeEvent(_finishTimeAction);
     }
+
+    public void PlayStartAnim() => _animator.Play(_startClip.name, 0);
+    public void PlayDieAnim() => _animator.Play(_dieClip.name, 0);
+
 
     public void SetAttackSpeed(float spd)
     {
@@ -111,6 +116,9 @@ public class CharacterEventHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_animator == null)
+            return;
+
         _animator.SetBool("IsMoving", _isMoving);
         _isMoving = false;
 
@@ -145,6 +153,7 @@ public class CharacterEventHandler : MonoBehaviour
         AnimatorState idleState = _controller.layers[0].stateMachine.AddState("Idle");
         idleState.motion = _idleClip;
         _controller.layers[0].stateMachine.defaultState = idleState;
+        
 
         // 상태 머신에서 Run 상태 추가
         AnimatorState runState = _controller.layers[0].stateMachine.AddState("Run");

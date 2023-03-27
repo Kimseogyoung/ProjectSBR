@@ -70,7 +70,7 @@ public class InGameScene : SceneBase
 
     protected override void Start()
     {
-        _characterManager.StartManager();
+        TimeHelper.AddTimeEvent(1, () => { _characterManager.StartManager(); });
     }
 
     protected override void Update()

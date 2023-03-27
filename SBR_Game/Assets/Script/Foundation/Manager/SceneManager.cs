@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : IManager, IManagerUpdatable
@@ -11,10 +12,12 @@ public class SceneManager : IManager, IManagerUpdatable
     public void FinishManager()
     {
 
+
     }
 
     public void Init()
     {
+       
     }
 
     public void StartManager()
@@ -84,7 +87,7 @@ public class SceneManager : IManager, IManagerUpdatable
             default:
                 break;
         }
-        _currentScene.EnterBase();
+        _currentScene.EnterBase(); 
         _currentScene.StartBase();
     }
 }

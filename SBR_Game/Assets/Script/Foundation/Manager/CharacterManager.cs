@@ -49,18 +49,29 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
 
     public void StartManager()
     {
-        _gameTime = 0;
         for (int i = 0; i < _stateMachines.Count; i++)
         {
-            if (_stateMachines[i] is PlayerStateMachine)
-            {
-                _stateMachines[i].SetState(new playerNormalState());
-            }
-            else if(_stateMachines[i] is CharacterStateMachine )
-            {
-                _stateMachines[i].SetState(new EnemyFollowState());
-            }
+            _stateMachines[i].SetState(new IdleState());
+            _stateMachines[i].PlayStartAnim();          
         }
+
+        // 3초 후 시작
+        TimeHelper.AddTimeEvent(3.0f, () =>
+        {
+            _gameTime = 0;
+            for (int i = 0; i < _stateMachines.Count; i++)
+            {
+                _stateMachines[i].SetIdle();
+                if (_stateMachines[i] is PlayerStateMachine)
+                {
+                    _stateMachines[i].SetState(new playerNormalState());
+                }
+                else if (_stateMachines[i] is CharacterStateMachine)
+                {
+                    _stateMachines[i].SetState(new EnemyFollowState());
+                }
+            }
+        });   
     }
 
     public void UpdateManager()
@@ -119,13 +130,14 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
             character = new CharacterBase(id, characterProto.Type);
         }
 
-        stateMachine.SetCharacter(character, characterType, _minimumMapPos, _maximumMapPos);
+        stateMachine.Initialize(character, characterType, _minimumMapPos, _maximumMapPos);
         _stateMachines.Add(stateMachine);
 
         if (characterProto.TeamType == ECharacterTeamType.HERO)
         {
             characterObj.layer = LayerMask.NameToLayer("Hero");
             _heroList.Add(character);
+            stateMachine.SetCharacterPos(new Vector3(2, 0, 0));
         }
         else
         {
