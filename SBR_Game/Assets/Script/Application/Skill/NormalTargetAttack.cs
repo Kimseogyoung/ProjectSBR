@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 
 public class NormalTargetAttack : SkillBase
-{ 
-    protected override void UseImmediateSkill()
+{
+    protected override void UpdateSkill()
+    {
+        
+    }
+
+    protected override void ApplySkill()
     {
         if ((_target.CurPos - _character.CurPos).magnitude > _skillProto.Range)
         {

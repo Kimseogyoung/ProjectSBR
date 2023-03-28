@@ -9,6 +9,7 @@ using UnityEngine;
 abstract public class SkillBase
 {
     protected Vector3 _firstSkillPos;
+    protected Vector3 _firstSkillDir;
     protected CharacterBase _target;
     protected HitBox _hitBox;
     protected CharacterBase _character;
@@ -53,6 +54,9 @@ abstract public class SkillBase
     {
         _target = target;
 
+        _firstSkillPos = _character.CurPos;
+        _firstSkillDir = _character.CurDir;
+
         if (!_skillProto.IsNormalAttack)
         {
             _isReadySkill = false;
@@ -66,7 +70,7 @@ abstract public class SkillBase
         GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, _skillProto.Name);
 
         _currentSkillCnt++;
-        UseImmediateSkill();
+        ApplySkill();
 
         if (_skillProto.Cnt > _currentSkillCnt && _skillProto.DurationTime >= _skillProto.PeriodTime * _currentSkillCnt)
         {
@@ -83,11 +87,6 @@ abstract public class SkillBase
         ResetCoolTime();
     }
 
-    public void UpdateSkill()
-    {
-
-    }
-
     private void FinishSkill()
     {
         
@@ -99,7 +98,19 @@ abstract public class SkillBase
         _currentSkillCnt = 0;
     }
 
-    abstract protected void UseImmediateSkill();
+    public void UpdateBase()
+    {
+        if (_skillProto.IsNormalAttack)
+            return;
+
+        if (_isReadySkill)
+            return;
+        
+        //스킬 실행중일 때만
+        UpdateSkill();
+    }
+    abstract protected void UpdateSkill();
+    abstract protected void ApplySkill();
 
 
 

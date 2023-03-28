@@ -38,6 +38,7 @@ public class InputManager :IManager, IManagerUpdatable
         _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.Alpha2 });
         _action2keyMappings.Add(EInputAction.SKILL3, new List<KeyCode>() { KeyCode.Alpha3 });
         _action2keyMappings.Add(EInputAction.ULT_SKILL, new List<KeyCode>() { KeyCode.Alpha4 });
+        _action2keyMappings.Add(EInputAction.DODGE, new List<KeyCode>() { KeyCode.Alpha5 });
 
         foreach (EInputAction inputAction in Enum.GetValues(typeof(EInputAction)))
         {

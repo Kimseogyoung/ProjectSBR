@@ -90,6 +90,7 @@ public enum EInputAction
     TAB,
     FAST_MODE,
     ATTACK,
+    DODGE,
     SKILL1,
     SKILL2,
     SKILL3,

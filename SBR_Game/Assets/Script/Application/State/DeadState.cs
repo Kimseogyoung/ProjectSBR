@@ -21,6 +21,7 @@ public class DeadState : CharacterState<CharacterBase>
             APP.InputManager.RemoveInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL3, _stateMachine.UseSkill3);
             APP.InputManager.RemoveInputAction(EInputAction.ULT_SKILL, _stateMachine.UseUltSkill);
+            APP.InputManager.RemoveInputAction(EInputAction.DODGE, _stateMachine.UseDodgeSkill);
 
         }
 

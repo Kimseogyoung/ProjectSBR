@@ -737,6 +737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillClipList:
   - {fileID: 7400000, guid: ad9f01fad9922864abb130cccee44b43, type: 2}
+  - {fileID: 7400000, guid: 2fbc560066887e84485d31b008f56f14, type: 2}
   - {fileID: 7400000, guid: 2aaf94b20a99574429c21895ee9e642c, type: 2}
   - {fileID: 7400000, guid: 1369317b9f597c8498e1909e80f00941, type: 2}
   - {fileID: 7400000, guid: 0b9f4298be0b67c4290fe99b8978e145, type: 2}

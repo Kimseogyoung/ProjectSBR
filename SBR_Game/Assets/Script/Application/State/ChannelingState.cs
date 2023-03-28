@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ChannelingState : CharacterState<CharacterBase>
 {
-    public ChannelingState(float time)
+    private bool _canCancel = false;
+    public ChannelingState(float time, bool canCancel)
     {
+        _canCancel = canCancel;
         TimeHelper.AddTimeEvent(time, ()=> { _stateMachine.SetState(new playerNormalState()); });
     }
 
@@ -20,8 +22,10 @@ public class ChannelingState : CharacterState<CharacterBase>
             APP.InputManager.RemoveInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL3, _stateMachine.UseSkill3);
             APP.InputManager.RemoveInputAction(EInputAction.ULT_SKILL, _stateMachine.UseUltSkill);
+            APP.InputManager.RemoveInputAction(EInputAction.DODGE, _stateMachine.UseDodgeSkill);
 
-            APP.InputManager.AddInputAction(EInputAction.MOVE, Exit);
+            if(_canCancel)
+                APP.InputManager.AddInputAction(EInputAction.MOVE, Exit);
         }
     }
 
@@ -29,7 +33,8 @@ public class ChannelingState : CharacterState<CharacterBase>
     {
         if (_character.CharacterType == ECharacterType.PLAYER)
         {
-            APP.InputManager.RemoveInputAction(EInputAction.MOVE, Exit);
+            if (_canCancel)
+                APP.InputManager.RemoveInputAction(EInputAction.MOVE, Exit);
 
             APP.InputManager.AddInputAction(EInputAction.MOVE, _stateMachine.MoveCharacterPos);
             APP.InputManager.AddInputAction(EInputAction.ATTACK, _stateMachine.Attack);
@@ -37,6 +42,7 @@ public class ChannelingState : CharacterState<CharacterBase>
             APP.InputManager.AddInputAction(EInputAction.SKILL2, _stateMachine.UseSkill2);
             APP.InputManager.AddInputAction(EInputAction.SKILL3, _stateMachine.UseSkill3);
             APP.InputManager.AddInputAction(EInputAction.ULT_SKILL, _stateMachine.UseUltSkill);
+            APP.InputManager.AddInputAction(EInputAction.DODGE, _stateMachine.UseDodgeSkill);
         }
 
     }

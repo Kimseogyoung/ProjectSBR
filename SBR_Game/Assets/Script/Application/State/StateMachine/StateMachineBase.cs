@@ -55,14 +55,17 @@ public class StateMachineBase : MonoBehaviour
     {
         if (_currentState == null) return;
 
+        _transform.position = _character.CurPos;
+
         _currentAtkCoolTime -= Time.fixedDeltaTime;
 
         _currentState.UpdateBase();
-        _character.GetSkill(EInputAction.SKILL1).UpdateSkill();
-        _character.GetSkill(EInputAction.SKILL2).UpdateSkill();
-        _character.GetSkill(EInputAction.SKILL3).UpdateSkill();
-        _character.GetSkill(EInputAction.ULT_SKILL).UpdateSkill();
-       
+        _character.GetSkill(EInputAction.SKILL1).UpdateBase();
+        _character.GetSkill(EInputAction.SKILL2).UpdateBase();
+        _character.GetSkill(EInputAction.SKILL3).UpdateBase();
+        _character.GetSkill(EInputAction.ULT_SKILL).UpdateBase();
+        _character.GetSkill(EInputAction.DODGE).UpdateBase();
+
     }
 
     public void Initialize(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
@@ -104,27 +107,17 @@ public class StateMachineBase : MonoBehaviour
 
         if(_cEventHandler != null)
             _cEventHandler.Move(_character.CurDir);
-
-        SyncCharacterPos();
     }
 
     public void MoveCharacterPos(Vector3 vector3)
     {
         if (!CanMove(_character.CurPos + vector3)) return;
         _character.CurPos += vector3;
-        SyncCharacterPos();
     }
     public void SetCharacterPos(Vector3 vector3)
     {
         if (!CanMove(vector3)) return;
         _character.CurPos = vector3;
-        SyncCharacterPos();
-    }
-
-    public void SyncCharacterPos()
-    {
-        
-        _transform.position = _character.CurPos;
     }
 
     public void Attack()
@@ -164,6 +157,7 @@ public class StateMachineBase : MonoBehaviour
     public void UseSkill2() => UseSkill(EInputAction.SKILL2); 
     public void UseSkill3() => UseSkill(EInputAction.SKILL3);
     public void UseUltSkill() => UseSkill(EInputAction.ULT_SKILL);
+    public void UseDodgeSkill() => UseSkill(EInputAction.DODGE);
 
     private void UseSkill(EInputAction inputAction)
     {
@@ -186,9 +180,9 @@ public class StateMachineBase : MonoBehaviour
         _cEventHandler.PlayAttackAnim(inputAction);
         skill.StartSkill(_currentTarget);
 
-        if (!skill._skillProto.CanMove)//시전시간동안 움직일 수 있는가? (캔슬될 수 있음)
+        if (skill._skillProto.CanNotMoveTime > 0)// 못움직이는 시간
         {
-            SetState(new ChannelingState(applyTiming));
+            SetState(new ChannelingState(skill._skillProto.CanNotMoveTime, skill._skillProto.CanCancel));
         }
 
         _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming,

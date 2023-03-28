@@ -91,6 +91,7 @@ public partial class CharacterBase
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
         AddSkill(EInputAction.ATTACK, charProto.AttackSkill);
+        AddSkill(EInputAction.DODGE, charProto.DodgeSkill);
         AddSkill(EInputAction.SKILL1, charProto.Skill1);
         AddSkill(EInputAction.SKILL2, charProto.Skill2);
         AddSkill(EInputAction.SKILL3, charProto.Skill3);

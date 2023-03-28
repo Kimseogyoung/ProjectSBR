@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class NormalProjectileSkill : SkillBase
 {
+    protected override void UpdateSkill()
+    {
+    }
 
-    protected override void UseImmediateSkill()
+    protected override void ApplySkill()
     {
         CharacterBase target = null;
 
@@ -19,7 +22,7 @@ public class NormalProjectileSkill : SkillBase
 
         APP.Bullet.InstantiateBullet(OnFoundTarget, _character,
             _skillProto.ProjectilePrefab, _character.CurDir, 
-            _skillProto.ProjectileSpeed, _skillProto.Range, _skillProto.TargetTeam, target);
+            _skillProto.Speed, _skillProto.Range, _skillProto.TargetTeam, target);
     }
 
     private void OnFoundTarget(Vector3 pos, CharacterBase victim)

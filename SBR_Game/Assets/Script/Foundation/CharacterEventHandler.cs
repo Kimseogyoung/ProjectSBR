@@ -102,6 +102,7 @@ public class CharacterEventHandler : MonoBehaviour
             case EInputAction.SKILL2:
             case EInputAction.SKILL3:
             case EInputAction.ULT_SKILL:
+            case EInputAction.DODGE:
                 _animator.Play(inputAction.ToString(),0,0);
                 _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length, OnFinishSkill);
                 _isPlayingSkill = true;
