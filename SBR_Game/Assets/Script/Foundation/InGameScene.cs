@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InGameScene : SceneBase
 {
-    private CharacterManager _characterManager;
+    private InGameManager _characterManager;
     private BulletManager _bulletManager;
     private UI_InGameScene _inGameScene;
     public InGameScene(string sceneName)
@@ -19,7 +19,7 @@ public class InGameScene : SceneBase
 
         SpawnMap(APP.CurrentStage);
 
-        _characterManager = new CharacterManager();
+        _characterManager = new InGameManager();
         _characterManager.Init();
 
         _bulletManager = new BulletManager();

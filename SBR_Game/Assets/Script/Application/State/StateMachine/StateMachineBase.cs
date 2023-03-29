@@ -99,25 +99,15 @@ public class StateMachineBase : MonoBehaviour
     //Character
     public void MoveCharacterPos(Vector2 dir)
     {
-        _character.CurDir = new Vector3(dir.x, 0, dir.y);
+        _character.SetDir(new Vector3(dir.x, 0, dir.y));
         dir = dir * _character.SPD.Value * Time.fixedDeltaTime;
 
+        //TODO : ÃßÈÄ Á¦ÇÑ ±¸¿ª ½Ì±ÛÅæÀ¸·Î »©±â
         if (!CanMove(_character.CurPos + new Vector3(dir.x, 0, dir.y))) return;
-        _character.CurPos += new Vector3(dir.x, 0, dir.y);
+        _character.TranslateDir( new Vector3(dir.x, 0, dir.y));
 
         if(_cEventHandler != null)
             _cEventHandler.Move(_character.CurDir);
-    }
-
-    public void MoveCharacterPos(Vector3 vector3)
-    {
-        if (!CanMove(_character.CurPos + vector3)) return;
-        _character.CurPos += vector3;
-    }
-    public void SetCharacterPos(Vector3 vector3)
-    {
-        if (!CanMove(vector3)) return;
-        _character.CurPos = vector3;
     }
 
     public void Attack()

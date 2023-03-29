@@ -13,8 +13,8 @@ public partial class CharacterBase
     
     public string Name;
 
-    public Vector3 CurDir = Vector3.zero;
-    public Vector3 CurPos = Vector3.zero;
+    public Vector3 CurDir { get; private set; } = Vector3.zero;
+    public Vector3 CurPos { get; private set; } = Vector3.zero;
 
 
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
@@ -24,6 +24,26 @@ public partial class CharacterBase
         Id = characterId;
         CharacterType= characterType;
         InitCharacterSetting();
+    }
+
+    public void TranslatePos(Vector3 pos)
+    {
+        CurPos += pos; 
+    }
+
+    public void SetPos(Vector3 pos)
+    {
+        CurPos = pos;
+    }
+
+    public void TranslateDir(Vector3 dir)
+    {
+        CurPos += dir;
+    }
+
+    public void SetDir(Vector3 dir)
+    {
+        CurDir = dir;
     }
 
     private float AccumulateDamage(CharacterBase attacker, CharacterBase victim, EAttack atk ,float multiplier =1f)//공격자, 피격자, 공격력 종류, 데미지 계수
@@ -36,6 +56,15 @@ public partial class CharacterBase
         return damage;
 
     }
+
+    public void ApplySkillDamage(CharacterBase attacker, SkillProto skillProto)
+    {
+        ApplyDamage(attacker, EAttack.ATK, skillProto.MultiplierValue);
+
+        if (skillProto.PushSpeed > 0)
+            InGameManager.Skill.AddPushAction(this, skillProto.PushSpeed, skillProto.PushDistance, (CurPos - attacker.CurPos).normalized);
+    }
+
 
     public float ApplyDamage(CharacterBase attacker, EAttack attackType, float multiply)
     {

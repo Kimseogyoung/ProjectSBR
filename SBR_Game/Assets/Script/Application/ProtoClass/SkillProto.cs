@@ -27,7 +27,8 @@ public class SkillProto : ProtoItem
     public float Range { get; set; }
     public float HitWidth { get; set; }
     public float HitHeight { get; set; }
-    public float PushPower { get; set; }
+    public float PushSpeed { get; set; }
+    public float PushDistance { get; set; }
     public float Speed { get; set; }
     public int ParentSkillId { get; set; }
     public bool IsNormalAttack { get; set; }

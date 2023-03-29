@@ -30,7 +30,7 @@ public class NormalProjectileSkill : SkillBase
         GameLogger.Info("{0}이 맞음!", victim.Name);
         if (_skillProto.HitShapeType == EHitShapeType.NONE)
         {
-            victim.ApplyDamage(_character, EAttack.ATK, _skillProto.MultiplierValue);
+            victim.ApplySkillDamage(_character, _skillProto);
             return;
         }
 

@@ -12,6 +12,7 @@ static public class APP
     static public IBullet Bullet { get; set; }
     static public InputManager InputManager { get; set; }
     static public SceneManager SceneManager { get; set; }
+
     static public UIManager UI { get; set; }
 
 }

@@ -22,8 +22,12 @@ public interface ICharacters
 
 }
 
-public class CharacterManager : IManager, IManagerUpdatable, ICharacters
+//Manager재 정비 필요.  현재 문제 - Init하기전  Update됨
+public class InGameManager : IManager, IManagerUpdatable, ICharacters
 {
+    public static SkillSystem Skill { get { Debug.Assert(_skillSystem != null); return _skillSystem; } }
+    private static SkillSystem _skillSystem;
+
     private float _gameTime;
 
     private List<StateMachineBase> _stateMachines = new List<StateMachineBase>();
@@ -36,6 +40,8 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
     private Vector2 _maximumMapPos;
     public void Init()
     {
+        _skillSystem = new SkillSystem();
+
         APP.Characters = this;
 
         _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
@@ -81,6 +87,8 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         {
             _stateMachines[i].UpdateStateMachine();
         }
+
+        Skill.UpdateSkill();
     }
     public void UpdatePausedManager()
     {
@@ -137,7 +145,7 @@ public class CharacterManager : IManager, IManagerUpdatable, ICharacters
         {
             characterObj.layer = LayerMask.NameToLayer("Hero");
             _heroList.Add(character);
-            stateMachine.SetCharacterPos(new Vector3(2, 0, 0));
+            character.SetPos(new Vector3(2, 0, 0));
         }
         else
         {
