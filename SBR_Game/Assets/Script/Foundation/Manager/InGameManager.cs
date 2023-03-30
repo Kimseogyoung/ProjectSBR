@@ -42,7 +42,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     {
         _skillSystem = new SkillSystem();
 
-        APP.Characters = this;
+        APP.InGame = this;
 
         _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
@@ -163,9 +163,9 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         List<CharacterBase> enemyList;
 
         if (attacker.CharacterType == ECharacterType.BOSS || attacker.CharacterType == ECharacterType.ZZOL)
-            enemyList = APP.Characters.GetHeroList();
+            enemyList = APP.InGame.GetHeroList();
         else
-            enemyList = APP.Characters.GetLivedEnemyList();
+            enemyList = APP.InGame.GetLivedEnemyList();
 
         for (int i = 0; i < enemyList.Count; i++)
         {

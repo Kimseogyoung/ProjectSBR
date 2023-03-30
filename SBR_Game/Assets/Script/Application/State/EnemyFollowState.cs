@@ -12,7 +12,7 @@ public class EnemyFollowState : CharacterState<CharacterBase>
     private Action<EventBase> _handlerInstance;
     protected override void OnEnter()
     {
-        List<CharacterBase> heroList = APP.Characters.GetLivedHeroList();
+        List<CharacterBase> heroList = APP.InGame.GetLivedHeroList();
         _target = heroList.OrderBy(h => (h.CurPos - _character.CurPos).magnitude).FirstOrDefault();
         _attackerDamageDict.Add(_target.Id, 0);
 

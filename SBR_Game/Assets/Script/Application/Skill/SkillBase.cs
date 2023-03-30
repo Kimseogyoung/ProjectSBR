@@ -20,6 +20,7 @@ abstract public class SkillBase
     
 
     private bool _isReadySkill = true;
+    private bool _isPlayingSkill = false;
 
 
     private TimeHelper.TimeAction _resetTimeEvent;
@@ -52,6 +53,8 @@ abstract public class SkillBase
     //스킬 실행 (취소될 수 있음) 취소되면 재사용 대기시간 초기화
     public void StartSkill(CharacterBase target = null)
     {
+        ResetSkill();
+
         _target = target;
 
         _firstSkillPos = _character.CurPos;
@@ -60,6 +63,7 @@ abstract public class SkillBase
         if (!_skillProto.IsNormalAttack)
         {
             _isReadySkill = false;
+            _isPlayingSkill = true;
             _resetTimeEvent = TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
         }
     }
@@ -89,11 +93,12 @@ abstract public class SkillBase
 
     private void FinishSkill()
     {
-        
+        _isPlayingSkill = false;
     }
 
     private void ResetCoolTime()
     {
+        _isPlayingSkill = false;
         _isReadySkill = true;
         _currentSkillCnt = 0;
     }
@@ -105,10 +110,14 @@ abstract public class SkillBase
 
         if (_isReadySkill)
             return;
+
+        if (!_isPlayingSkill)
+            return;
         
         //스킬 실행중일 때만
         UpdateSkill();
     }
+    abstract protected void ResetSkill();
     abstract protected void UpdateSkill();
     abstract protected void ApplySkill();
 

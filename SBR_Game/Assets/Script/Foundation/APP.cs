@@ -8,7 +8,7 @@ static public class APP
 
     //Manager
     static public GameManager GameManager { get; set; }
-    static public ICharacters Characters { get; set; }
+    static public ICharacters InGame { get; set; }
     static public IBullet Bullet { get; set; }
     static public InputManager InputManager { get; set; }
     static public SceneManager SceneManager { get; set; }

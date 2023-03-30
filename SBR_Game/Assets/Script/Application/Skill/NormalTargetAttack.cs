@@ -22,5 +22,9 @@ public class NormalTargetAttack : SkillBase
 
         _target.ApplyDamage(_character, EAttack.ATK, 1);
     }
+    protected override void ResetSkill()
+    {
+       
+    }
 }
 

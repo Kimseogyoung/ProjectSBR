@@ -27,10 +27,16 @@ public class MovingSkill : SkillBase
 
     protected override void ApplySkill()
     {
-        _isMoving = true;
-        _attackTargetCnt = 0;
+
     }
 
+
+    protected override void ResetSkill()
+    {
+        _isMoving = true;
+        _attackTargetCnt = 0;
+
+    }
     private void FindFrontTarget()
     {
         if (_attackTargetCnt >= _skillProto.TargetCnt)

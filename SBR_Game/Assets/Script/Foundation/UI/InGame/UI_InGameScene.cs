@@ -50,7 +50,7 @@ public class UI_InGameScene : UI_Scene
                 break;
             case EEventActionType.ENEMY_HP_CHANGE:
                 {
-                    if(APP.Characters.GetBoss().Id == evt.CharacterId)
+                    if(APP.InGame.GetBoss().Id == evt.CharacterId)
                     {
                         Get<Slider>(UI.BossHPSlider.ToString()).value = value;
                         return;

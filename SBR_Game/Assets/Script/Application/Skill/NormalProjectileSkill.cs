@@ -13,7 +13,7 @@ public class NormalProjectileSkill : SkillBase
 
         if (_skillProto.HitTargetType == EHitSKillType.NONTARGET)
         {
-            target = APP.Characters.GetBoss();
+            target = APP.InGame.GetBoss();
             if ((target.CurPos - _character.CurPos).magnitude > _skillProto.Range)
             {//범위 밖이면 논타겟
                 target = null;
@@ -25,6 +25,11 @@ public class NormalProjectileSkill : SkillBase
             _skillProto.Speed, _skillProto.Range, _skillProto.TargetTeam, target);
     }
 
+    protected override void ResetSkill()
+    {
+        throw new NotImplementedException();
+    }
+
     private void OnFoundTarget(Vector3 pos, CharacterBase victim)
     {
         GameLogger.Info("{0}이 맞음!", victim.Name);
@@ -34,7 +39,7 @@ public class NormalProjectileSkill : SkillBase
             return;
         }
 
-        APP.Characters.FindTargetAndApplyDamage(_character,
+        APP.InGame.FindTargetAndApplyDamage(_character,
             new HitBox(_skillProto.HitShapeType, pos, _skillProto.HitWidth), _skillProto.TargetTeam,
             _skillProto.HitTargetType, _skillProto.HitTargetSelectType, EAttack.ATK, _skillProto.TargetCnt, _skillProto.MultiplierValue);
 

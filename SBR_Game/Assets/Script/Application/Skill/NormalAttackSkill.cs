@@ -15,8 +15,12 @@ public class NormalAttackSkill : SkillBase
     protected override void ApplySkill()
     {
         _hitBox = new HitBox(_skillProto.HitShapeType, _skillProto.Range, _skillProto.Angle, _character.CurPos, _character.CurDir);
-        APP.Characters.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
+        APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
             _skillProto.HitTargetType, _skillProto.HitTargetSelectType ,_attackType,  _skillProto.TargetCnt ,_skillProto.MultiplierValue);
+    }
+
+    protected override void ResetSkill()
+    {
     }
 }
 
