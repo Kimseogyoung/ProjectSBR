@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: AnimatorContollerInfo
   m_EditorClassIdentifier: Assembly-CSharp-Editor:SBRAnimator:AnimControllerData
+  TestString: 
+  _animDataList: []
+  _idList: 

@@ -55,17 +55,17 @@ public class StateMachineBase : MonoBehaviour
 
         _currentState.UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateBase();
+        _character.GetSkill(EInputAction.SKILL2).UpdateBase();
         _character.GetSkill(EInputAction.SKILL3).UpdateBase();
         _character.GetSkill(EInputAction.SKILL4).UpdateBase();
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateBase();
-        _character.GetSkill(EInputAction.SKILL2).UpdateBase();
 
     }
 
     public void Initialize(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
     {
         _cEventHandler = GetComponentInChildren<CharacterEventHandler>();
-        _cEventHandler.Initialize();
+        _cEventHandler.Initialize(character.Proto.Id, character.Proto.TeamType.ToString());
 
         _character = character;
         _transform.position = _character.CurPos;
@@ -138,10 +138,10 @@ public class StateMachineBase : MonoBehaviour
 
     public void UseNormalAttck() => UseSkill(EInputAction.ATTACK);
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);
-    public void UseSkill2() => UseSkill(EInputAction.SKILL3); 
-    public void UseSkill3() => UseSkill(EInputAction.SKILL4);
+    public void UseSkill3() => UseSkill(EInputAction.SKILL2); 
+    public void UseSkill4() => UseSkill(EInputAction.SKILL3);
     public void UseUltSkill() => UseSkill(EInputAction.ULT_SKILL);
-    public void UseDodgeSkill() => UseSkill(EInputAction.SKILL2);
+    public void UseSkill2() => UseSkill(EInputAction.SKILL4);
 
     private void UseSkill(EInputAction inputAction)
     {

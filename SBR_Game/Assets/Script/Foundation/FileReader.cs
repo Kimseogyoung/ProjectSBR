@@ -7,7 +7,6 @@ public class FileReader
 {
     public string ReadFile(string path)
     {
-        path = Application.dataPath + path;
         string result = File.ReadAllText(path);
 
         if(result == null || result == string.Empty)

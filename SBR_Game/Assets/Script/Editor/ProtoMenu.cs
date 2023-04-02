@@ -12,7 +12,7 @@ public class ProtoMenu : MonoBehaviour
     {
         ProtoReader reader = new ProtoReader();
         FileReader fReader = new FileReader();
-        string dirPath =  Path.Join(Application.dataPath, "Data/Proto/Csv");
+        string dirPath =  Path.Join(Application.dataPath, "Resources/Data/Proto/Csv");
         string scriptsPath = Path.Join(Application.dataPath, "Script/Application/ProtoClass");
 
         string[] filePaths = Directory.GetFiles(dirPath, "*.csv");

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
@@ -32,6 +33,13 @@ namespace SBRAnimator{
         private static CharacterProto[] _characterProtos ;
         private static string[] _options;
 
+        public void OnEnable()
+        {
+            _animations = new List<AnimData>();
+            _reorderableList = new UnityEditorInternal.ReorderableList(_animations, typeof(AnimData), true, true, true, true);
+            _reorderableList.drawElementCallback = DrawElementCallback;
+            _reorderableList.drawHeaderCallback = DrawHeaderCallback;
+        }
 
         [MenuItem("SBR Animator/Show Generator")]
         public static void ShowWindow()
@@ -76,7 +84,14 @@ namespace SBRAnimator{
             if (GUILayout.Button("Animator Contoller Generator"))
             {
                 Debug.Log($"Character: {_characterProtos[_characterIdx].Name} CopyCharacter {(_isCopy? _characterProtos[_copyCharacterIdx].Name :"")}");
-                _controller = AnimatorController.CreateAnimatorControllerAtPath($"Assets/Resources/Character/Controller/{_characterProtos[_characterIdx].TeamType}_{_characterProtos[_characterIdx].Id}.controller");
+                string controllerPath = $"Assets/Resources/Character/Controller/{_characterProtos[_characterIdx].TeamType}_{_characterProtos[_characterIdx].Id}.controller";
+
+                if (File.Exists(controllerPath))
+                {
+                    File.Delete(controllerPath);
+                }
+
+                _controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
 
                 if (_isCopy)
                 {
@@ -137,10 +152,6 @@ namespace SBRAnimator{
                 _animDict.Add(anims[i].Type, anims[i].AnimationClip);
             }
             
-
-            _controller.AddMotion(_animDict[ECharacterActionType.START]);
-            _controller.AddMotion(_animDict[ECharacterActionType.DIE]);
-
             // 파라미터 추가
             AnimatorControllerParameter movingParam = new AnimatorControllerParameter();
             movingParam.type = AnimatorControllerParameterType.Bool;
@@ -181,78 +192,29 @@ namespace SBRAnimator{
                 {
                     case ECharacterActionType.NONE:
                     case ECharacterActionType.IDLE:
-                    case ECharacterActionType.START:
-                    case ECharacterActionType.DIE:
                     case ECharacterActionType.RUN:
                         continue;
+                    case ECharacterActionType.START:
+                    case ECharacterActionType.DIE:
+                        AnimatorState skillState = _controller.layers[0].stateMachine.AddState(clip.Key.ToString());
+                        skillState.motion = clip.Value;
+                        break;
+                    case ECharacterActionType.ATTACK:
+                    case ECharacterActionType.SKILL1:
+                    case ECharacterActionType.SKILL2:
+                    case ECharacterActionType.SKILL3:
+                    case ECharacterActionType.SKILL4:
+                    case ECharacterActionType.ULT_SKILL:
+                        AnimatorState skillState2 = _controller.layers[0].stateMachine.AddState(clip.Key.ToString());
+                        skillState2.motion = clip.Value;
+                        AnimatorStateTransition skillToIdle = skillState2.AddTransition(idleState);
+                        skillToIdle.hasExitTime = true;
+                        break;
                 }
-                AnimatorState skillState = _controller.layers[0].stateMachine.AddState(clip.Key.ToString());
-                skillState.motion = clip.Value;
-            
-                AnimatorStateTransition skillToIdle = skillState.AddTransition(idleState);
-                skillToIdle.hasExitTime = true;
 
-                
             }
         }
 
-    }
-
-    // 스크립터블 오브젝트 클래스
-    [System.Serializable]
-    [CreateAssetMenu(fileName = "AnimatorContollerInfo", menuName = "SBR Animator/AnimControllerData")]
-    public class AnimControllerData : ScriptableObject
-    {
-        public string TestString = "";
-
-        [SerializeField] private List<CharIdAnimData> _animDataList = new List<CharIdAnimData> ();
-        [SerializeField] private List<int> _idList = new List<int>();
-
-        public void SetCharacterAnims(int id, List<AnimData> list)
-        {
-            if (!_idList.Contains(id))
-            {
-                _idList.Add(id);
-                _animDataList.Add(new CharIdAnimData { Id = id, AnimList = list });
-                return;
-            }
-
-            int idx = _idList.IndexOf(id);
-            _animDataList[idx] = new CharIdAnimData { Id = id, AnimList = list };
-        }
-
-        public bool TryGetCharacterAnims(int id, out List<AnimData> animDatas)
-        {
-            int idx = _idList.IndexOf(id);
-            if (idx == -1)
-            {
-                animDatas = null;
-                return false;
-            }
-
-            animDatas = _animDataList[idx].AnimList;
-            return true;
-        }
-
-        public void ClearList()
-        {
-            _idList.Clear();
-            _animDataList.Clear();
-        }
-
-        [Serializable]
-        public class CharIdAnimData
-        {
-            public int Id;
-            public List<AnimData> AnimList = new List<AnimData>();
-        }
-    }
-
-    [Serializable]
-    public class AnimData
-    {
-        public ECharacterActionType Type;
-        public AnimationClip AnimationClip;
     }
 
 }

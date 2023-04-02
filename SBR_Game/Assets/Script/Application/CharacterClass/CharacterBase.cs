@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,13 +17,14 @@ public partial class CharacterBase
     public Vector3 CurDir { get; private set; } = Vector3.zero;
     public Vector3 CurPos { get; private set; } = Vector3.zero;
 
-
+    public CharacterProto Proto { get; private set; }
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
-    public CharacterBase(int characterId, ECharacterType characterType)
+    public CharacterBase(int characterId, ECharacterType type)
     {
         Id = characterId;
-        CharacterType= characterType;
+        Proto = ProtoHelper.Get<CharacterProto, int>(characterId);
+        CharacterType = type;
         InitCharacterSetting();
     }
 
@@ -120,10 +122,10 @@ public partial class CharacterBase
         HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
 
         AddSkill(EInputAction.ATTACK, charProto.AttackSkill);
-        AddSkill(EInputAction.SKILL2, charProto.DodgeSkill);
         AddSkill(EInputAction.SKILL1, charProto.Skill1);
-        AddSkill(EInputAction.SKILL3, charProto.Skill2);
-        AddSkill(EInputAction.SKILL4, charProto.Skill3);
+        AddSkill(EInputAction.SKILL2, charProto.Skill2);
+        AddSkill(EInputAction.SKILL3, charProto.Skill3);
+        AddSkill(EInputAction.SKILL4, charProto.Skill4);
         AddSkill(EInputAction.ULT_SKILL, charProto.UltSkill);
     }
     
