@@ -35,10 +35,10 @@ public class InputManager :IManager, IManagerUpdatable
         _action2keyMappings.Add(EInputAction.FAST_MODE, new List<KeyCode>() { KeyCode.LeftControl, KeyCode.RightControl });
         _action2keyMappings.Add(EInputAction.ATTACK, new List<KeyCode>() { KeyCode.Q });
         _action2keyMappings.Add(EInputAction.SKILL1, new List<KeyCode>() { KeyCode.Alpha1 });
-        _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.Alpha2 });
-        _action2keyMappings.Add(EInputAction.SKILL3, new List<KeyCode>() { KeyCode.Alpha3 });
+        _action2keyMappings.Add(EInputAction.SKILL3, new List<KeyCode>() { KeyCode.Alpha2 });
+        _action2keyMappings.Add(EInputAction.SKILL4, new List<KeyCode>() { KeyCode.Alpha3 });
         _action2keyMappings.Add(EInputAction.ULT_SKILL, new List<KeyCode>() { KeyCode.Alpha4 });
-        _action2keyMappings.Add(EInputAction.DODGE, new List<KeyCode>() { KeyCode.Alpha5 });
+        _action2keyMappings.Add(EInputAction.SKILL2, new List<KeyCode>() { KeyCode.Alpha5 });
 
         foreach (EInputAction inputAction in Enum.GetValues(typeof(EInputAction)))
         {
@@ -64,7 +64,7 @@ public class InputManager :IManager, IManagerUpdatable
     public void RemoveInputAction(EInputAction inputAction, Action<Vector2> action) { _moveAction -= action; }
     public void ClearInputAction(EInputAction inputAction) 
     {
-        if (inputAction == EInputAction.MOVE)
+        if (inputAction == EInputAction.RUN)
             _moveAction = null;
         else
             _actions[inputAction] = null; 
@@ -111,10 +111,10 @@ public class InputManager :IManager, IManagerUpdatable
     }
     public void InvokeMoveKeyAction(Vector2 dir)
     {
-        if (!CanInvokeAction(EInputAction.MOVE)) return;
+        if (!CanInvokeAction(EInputAction.RUN)) return;
 
         _moveAction?.Invoke(dir);
-        _lastPlayedActionTime[EInputAction.MOVE] = _time;
+        _lastPlayedActionTime[EInputAction.RUN] = _time;
     }
 
     private bool CanInvokeAction(EInputAction action)
@@ -123,7 +123,7 @@ public class InputManager :IManager, IManagerUpdatable
         if (_isStopped)
             if (!_actionsCanUsePause.Contains(action)) return false;
 
-        if(action == EInputAction.MOVE)
+        if(action == EInputAction.RUN)
             return true;
         
 

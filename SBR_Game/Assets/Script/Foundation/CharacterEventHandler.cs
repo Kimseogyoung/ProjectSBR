@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
-public enum ECharacterAnim
-{
-    NONE,
-    IDLE,
-    RUN,
-    ATTACK,
-    START,
-    DIE
-}
 
 public class CharacterEventHandler : MonoBehaviour
 {
@@ -99,10 +90,10 @@ public class CharacterEventHandler : MonoBehaviour
                 _isPlayingSkill = true;
                 break;
             case EInputAction.SKILL1:
-            case EInputAction.SKILL2:
             case EInputAction.SKILL3:
+            case EInputAction.SKILL4:
             case EInputAction.ULT_SKILL:
-            case EInputAction.DODGE:
+            case EInputAction.SKILL2:
                 _animator.Play(inputAction.ToString(),0,0);
                 _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction].length, OnFinishSkill);
                 _isPlayingSkill = true;

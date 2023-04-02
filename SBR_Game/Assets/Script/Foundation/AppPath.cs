@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AppPath 
 {
-    static public string ConfigDir { get; private set; } = "/Data/Config";
-    static public string GameConfig { get; private set; } = "/Game.yaml";
-    static public string DebugConfig { get; private set; } = "/Debug.yaml";
+    static public string ConfigDir { get; private set; } = "Data/Config";
+    static public string GameConfig { get; private set; } = "/Game";
+    static public string DebugConfig { get; private set; } = "/Debug";
     static public string StageButton { get; private set; } = "UI/Scene/Lobby/StageButton";
     static public string StageStar { get; private set; } = "UI/Scene/Lobby/StageStars";
 

@@ -1,11 +1,5 @@
 using Newtonsoft.Json.Bson;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static TimeHelper;
@@ -61,10 +55,10 @@ public class StateMachineBase : MonoBehaviour
 
         _currentState.UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateBase();
-        _character.GetSkill(EInputAction.SKILL2).UpdateBase();
         _character.GetSkill(EInputAction.SKILL3).UpdateBase();
+        _character.GetSkill(EInputAction.SKILL4).UpdateBase();
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateBase();
-        _character.GetSkill(EInputAction.DODGE).UpdateBase();
+        _character.GetSkill(EInputAction.SKILL2).UpdateBase();
 
     }
 
@@ -144,10 +138,10 @@ public class StateMachineBase : MonoBehaviour
 
     public void UseNormalAttck() => UseSkill(EInputAction.ATTACK);
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);
-    public void UseSkill2() => UseSkill(EInputAction.SKILL2); 
-    public void UseSkill3() => UseSkill(EInputAction.SKILL3);
+    public void UseSkill2() => UseSkill(EInputAction.SKILL3); 
+    public void UseSkill3() => UseSkill(EInputAction.SKILL4);
     public void UseUltSkill() => UseSkill(EInputAction.ULT_SKILL);
-    public void UseDodgeSkill() => UseSkill(EInputAction.DODGE);
+    public void UseDodgeSkill() => UseSkill(EInputAction.SKILL2);
 
     private void UseSkill(EInputAction inputAction)
     {

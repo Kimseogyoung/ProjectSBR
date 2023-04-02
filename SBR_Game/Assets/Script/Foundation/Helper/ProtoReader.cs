@@ -4,7 +4,6 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEditor.Experimental.GraphView;
 using System;
 using System.ComponentModel;
 
@@ -103,20 +102,6 @@ public class ProtoReader
             GameLogger.Error(e.Message);
             return false;
         }
-    }
-
-    public string ReadCsv(string filePath)
-    {
-        string text = string.Empty;
-        try
-        {
-            text = File.ReadAllText(filePath);
-        }
-        catch (FileNotFoundException e)
-        {
-            Debug.LogError(e.Message);
-        }
-        return text;
     }
 
     private void RegisterType()

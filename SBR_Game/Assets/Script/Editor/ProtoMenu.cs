@@ -11,6 +11,7 @@ public class ProtoMenu : MonoBehaviour
     static void GenerateProtoClass()
     {
         ProtoReader reader = new ProtoReader();
+        FileReader fReader = new FileReader();
         string dirPath =  Path.Join(Application.dataPath, "Data/Proto/Csv");
         string scriptsPath = Path.Join(Application.dataPath, "Script/Application/ProtoClass");
 
@@ -20,7 +21,8 @@ public class ProtoMenu : MonoBehaviour
         for(int i=0; i<filePaths.Length; i++)
         {
             string fileName = Path.GetFileName(filePaths[i]).Replace(".csv", "");
-            if(!reader.LoadCsvField(out string pkName, out List<string> names, out List<string> types, reader.ReadCsv(filePaths[i])))
+
+            if(!reader.LoadCsvField(out string pkName, out List<string> names, out List<string> types, fReader.ReadFile(filePaths[i])))
             {
                 continue;
             }

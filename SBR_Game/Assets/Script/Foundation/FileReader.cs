@@ -17,4 +17,17 @@ public class FileReader
         }
         return result;
     }
+    public string ReadTextAsset(string path)
+    {
+        Debug.Log(path);
+        TextAsset textAsset = Resources.Load<TextAsset>(path);
+        string result = textAsset.text;
+
+        if (result == null || result == string.Empty)
+        {
+            Debug.Log($"{path} is Null");
+            return string.Empty;
+        }
+        return result;
+    }
 }

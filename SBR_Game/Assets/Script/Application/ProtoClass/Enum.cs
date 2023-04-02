@@ -83,17 +83,34 @@ public enum EGamePropertyType//네이밍 수정 (속성 공격에 해당)
 public enum EInputAction
 {
     NONE = 0,
-    MOVE,
     PAUSE,
     PLAY,
     ESC,
     TAB,
     FAST_MODE,
+
+    //CharacterActionType과 이름이 같아야함.
+    RUN = 100,
     ATTACK,
-    DODGE,
     SKILL1,
     SKILL2,
     SKILL3,
+    SKILL4,
+    ULT_SKILL
+}
+
+public enum ECharacterActionType
+{
+    NONE = 0,
+    IDLE,
+    START,
+    DIE,
+    RUN = 100,
+    ATTACK,
+    SKILL1,
+    SKILL2,
+    SKILL3,
+    SKILL4,
     ULT_SKILL
 }
 
