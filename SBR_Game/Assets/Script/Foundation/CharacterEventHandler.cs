@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class CharacterEventHandler : MonoBehaviour
 {
+    [SerializeField] public List<SBRAnimator.AnimData> AnimList = new List<SBRAnimator.AnimData>();
+    [SerializeField][HideInInspector] public int protoIndex = 0;
+
     private Dictionary<string, AnimationClip> _skillClipDict = new Dictionary<string, AnimationClip>();
     private Animator _animator;
     private Transform _transform;
@@ -21,7 +21,7 @@ public class CharacterEventHandler : MonoBehaviour
     public bool _isMoving = false;
     private string _isMovingKey = "IsMoving";
     private string _atkSpdKey = "AtkSpd";
-    private AnimatorState _attackState;
+    private AnimationClip _attackClip;
 
     private TimeHelper.TimeAction _finishTimeAction;
 
@@ -29,20 +29,18 @@ public class CharacterEventHandler : MonoBehaviour
     {
 
         // 货 局聪皋捞磐 积己
-        _animator = gameObject.AddComponent<Animator>();
+        _animator = gameObject.GetComponent<Animator>();
         _animator.applyRootMotion = true;
-        _animator.runtimeAnimatorController = Util.Resource.Load<RuntimeAnimatorController>($"Character/Controller/{type}_{id}");
-
+       
         _transform = gameObject.transform;
         _leftQuaternion = Quaternion.Euler(_transform.rotation.eulerAngles);
         _rightQuaternion = Quaternion.Euler(new Vector3(-_leftQuaternion.eulerAngles.x, 180, _leftQuaternion.eulerAngles.z));
 
-        AnimatorController controller = _animator.runtimeAnimatorController as AnimatorController;
-        foreach (var state in controller.layers[0].stateMachine.states)
+        foreach (var anim in AnimList)
         {
-            if (state.state.name == ECharacterActionType.ATTACK.ToString())
-                _attackState = state.state;
-            _skillClipDict.Add(state.state.name, (AnimationClip)state.state.motion);
+            if (anim.Type == ECharacterActionType.ATTACK)
+                _attackClip = anim.AnimationClip;
+            _skillClipDict.Add(anim.Type.ToString(), anim.AnimationClip);
             //Debug.Log($"State Name: {((AnimationClip)state.state.motion).length}");
         }
 
@@ -70,7 +68,7 @@ public class CharacterEventHandler : MonoBehaviour
 
     public void SetAttackSpeed(float spd)
     {
-        _attackState.speed= spd;
+        //_attackClip.speed= spd;
         //_attackAnimState.speed = spd;
         //_animator.SetFloat(_atkSpdKey, spd);
     }
@@ -84,7 +82,7 @@ public class CharacterEventHandler : MonoBehaviour
         {       
             case EInputAction.ATTACK:
                 _animator.Play(inputAction.ToString(), 0,0);
-                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction.ToString()].length/ _attackState.speed, OnFinishSkill);
+                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction.ToString()].length/1/* _attackClip.speed*/, OnFinishSkill);
                 _isPlayingSkill = true;
                 break;
             case EInputAction.SKILL1:

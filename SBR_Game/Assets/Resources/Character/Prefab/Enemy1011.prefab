@@ -308,17 +308,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeaf302c83f686245978a9bbda23b3b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillClipList:
-  - {fileID: 7400000, guid: 8975e5241330182489509604ca49c27f, type: 2}
-  - {fileID: 7400000, guid: 8b22965690959dd48b96461dbda4e073, type: 2}
-  - {fileID: 7400000, guid: a4d5bfc65d325f247a7e36ebba3e1676, type: 2}
-  - {fileID: 7400000, guid: 0d1321801d454f446a7d274b2009e424, type: 2}
-  - {fileID: 7400000, guid: e3a50756dc2b31a47aecb36c3f073dfd, type: 2}
-  _idleClip: {fileID: 7400000, guid: 156e4d794c4414f4c8a78b3be1821a2f, type: 2}
-  _runClip: {fileID: 7400000, guid: 6569861c80816ba46975936c1c3915e8, type: 2}
-  _startClip: {fileID: 7400000, guid: f01a47c53985e0b48b2a40a764004cef, type: 2}
-  _dieClip: {fileID: 7400000, guid: 7577a81b58f17a04193e1799ac87cbf3, type: 2}
+  AnimList:
+  - Type: 1
+    AnimationClip: {fileID: 7400000, guid: 25e9722adad1dd041a14080cd34ac976, type: 2}
+  - Type: 2
+    AnimationClip: {fileID: 7400000, guid: 41028a4d65d35c349989e1f705186662, type: 2}
+  - Type: 3
+    AnimationClip: {fileID: 7400000, guid: 91a6194723972c4458643dd1149bd0af, type: 2}
+  - Type: 100
+    AnimationClip: {fileID: 7400000, guid: d308d8497cd2aee458eb4c145f5b83f2, type: 2}
+  - Type: 101
+    AnimationClip: {fileID: 7400000, guid: ad9f01fad9922864abb130cccee44b43, type: 2}
+  - Type: 102
+    AnimationClip: {fileID: 7400000, guid: 2aaf94b20a99574429c21895ee9e642c, type: 2}
+  - Type: 103
+    AnimationClip: {fileID: 7400000, guid: 0b9f4298be0b67c4290fe99b8978e145, type: 2}
+  - Type: 104
+    AnimationClip: {fileID: 7400000, guid: 1369317b9f597c8498e1909e80f00941, type: 2}
+  - Type: 105
+    AnimationClip: {fileID: 7400000, guid: b1525896f8532084196fc7c183c1f03d, type: 2}
+  - Type: 106
+    AnimationClip: {fileID: 7400000, guid: 2fbc560066887e84485d31b008f56f14, type: 2}
+  protoIndex: 4
   _isMoving: 0
+--- !u!95 &2868077660823625491
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623161288605928025}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bd258e2d5308c9541a81bdbe79266cec, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!4 &3796339459719615034 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 29b397b7be9ee1a42847a71009e604d6, type: 3}

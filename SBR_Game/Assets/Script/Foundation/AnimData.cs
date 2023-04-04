@@ -60,7 +60,7 @@ namespace SBRAnimator
     [Serializable]
     public class AnimData
     {
-        public ECharacterActionType Type;
-        public AnimationClip AnimationClip;
+        [SerializeField] public ECharacterActionType Type;
+        [SerializeField] public AnimationClip AnimationClip;
     }
 }

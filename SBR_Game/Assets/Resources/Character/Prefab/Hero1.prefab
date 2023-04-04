@@ -721,6 +721,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: 71ffaf57dab1eb44a8b5a0c0b84f1a78, type: 3}
   m_PrefabInstance: {fileID: 811395544515424265}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &3285352392521307959
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911249042794844596}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 936f2c9b67b1e6249b4b241fd6318162, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!210 &8480365410829120772
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -744,17 +764,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeaf302c83f686245978a9bbda23b3b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillClipList:
-  - {fileID: 7400000, guid: ad9f01fad9922864abb130cccee44b43, type: 2}
-  - {fileID: 7400000, guid: 2fbc560066887e84485d31b008f56f14, type: 2}
-  - {fileID: 7400000, guid: 2aaf94b20a99574429c21895ee9e642c, type: 2}
-  - {fileID: 7400000, guid: 1369317b9f597c8498e1909e80f00941, type: 2}
-  - {fileID: 7400000, guid: 0b9f4298be0b67c4290fe99b8978e145, type: 2}
-  - {fileID: 7400000, guid: b1525896f8532084196fc7c183c1f03d, type: 2}
-  _idleClip: {fileID: 7400000, guid: 25e9722adad1dd041a14080cd34ac976, type: 2}
-  _runClip: {fileID: 7400000, guid: d308d8497cd2aee458eb4c145f5b83f2, type: 2}
-  _startClip: {fileID: 7400000, guid: 41028a4d65d35c349989e1f705186662, type: 2}
-  _dieClip: {fileID: 7400000, guid: 91a6194723972c4458643dd1149bd0af, type: 2}
+  AnimList:
+  - Type: 1
+    AnimationClip: {fileID: 7400000, guid: 25e9722adad1dd041a14080cd34ac976, type: 2}
+  - Type: 2
+    AnimationClip: {fileID: 7400000, guid: 41028a4d65d35c349989e1f705186662, type: 2}
+  - Type: 3
+    AnimationClip: {fileID: 7400000, guid: 91a6194723972c4458643dd1149bd0af, type: 2}
+  - Type: 100
+    AnimationClip: {fileID: 7400000, guid: d308d8497cd2aee458eb4c145f5b83f2, type: 2}
+  - Type: 101
+    AnimationClip: {fileID: 7400000, guid: ad9f01fad9922864abb130cccee44b43, type: 2}
+  - Type: 102
+    AnimationClip: {fileID: 7400000, guid: 2aaf94b20a99574429c21895ee9e642c, type: 2}
+  - Type: 103
+    AnimationClip: {fileID: 7400000, guid: 0b9f4298be0b67c4290fe99b8978e145, type: 2}
+  - Type: 104
+    AnimationClip: {fileID: 7400000, guid: 1369317b9f597c8498e1909e80f00941, type: 2}
+  - Type: 105
+    AnimationClip: {fileID: 7400000, guid: b1525896f8532084196fc7c183c1f03d, type: 2}
+  - Type: 106
+    AnimationClip: {fileID: 7400000, guid: 2fbc560066887e84485d31b008f56f14, type: 2}
+  protoIndex: 0
   _isMoving: 0
 --- !u!4 &2048418724032596439 stripped
 Transform:
