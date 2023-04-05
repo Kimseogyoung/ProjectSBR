@@ -26,16 +26,10 @@ public class UI_InGameScene : UI_Scene
         EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
     }
 
-    private void Update()
-    {
-        
-    }
-
     public void ShowFinishPopup(CharacterDeadEvent characterDeadEvent)
     {
         APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
     }
-
 
 
     private void UpdateHpBar(HPEvent evt)
@@ -68,6 +62,7 @@ public class UI_InGameScene : UI_Scene
 
     }
 
+    
     private void OnDestroy()
     {
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_HP_CHANGE);
@@ -95,4 +90,5 @@ public class UI_InGameScene : UI_Scene
         NormalEnemyHPPanel,
         GameHUD,
     }
+
 }

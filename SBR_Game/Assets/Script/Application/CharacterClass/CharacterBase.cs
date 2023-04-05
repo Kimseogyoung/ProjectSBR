@@ -72,6 +72,9 @@ public partial class CharacterBase
     {
         float damage = AccumulateDamage(attacker, this, attackType, multiply);
 
+        GameLogger.Strong($"{attacker.Name}¿Ã {Name}  ∂ß∏≤");
+        EventQueue.PushEvent<ShowDamageTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowDamageTextEvent(damage, CurPos, (attacker.CurPos - CurPos).normalized));
+
         HP.Value -= damage;
         if (HP.Value <= 0)
         {

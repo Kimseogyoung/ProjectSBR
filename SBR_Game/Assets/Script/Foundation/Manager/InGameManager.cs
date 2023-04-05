@@ -23,7 +23,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 {
     public static SkillSystem Skill { get { Debug.Assert(_skillSystem != null); return _skillSystem; } }
     private static SkillSystem _skillSystem;
-
+    private DamageTextSystem _damageTextSystem;
     private float _gameTime;
 
     private List<StateMachineBase> _stateMachines = new List<StateMachineBase>();
@@ -37,6 +37,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     public void Init()
     {
         _skillSystem = new SkillSystem();
+        _damageTextSystem = new DamageTextSystem();
 
         APP.InGame = this;
 
@@ -60,6 +61,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         // 3초 후 시작
         TimeHelper.AddTimeEvent(3.0f, () =>
         {
+            
             _gameTime = 0;
             for (int i = 0; i < _stateMachines.Count; i++)
             {
@@ -83,7 +85,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         {
             _stateMachines[i].UpdateStateMachine();
         }
-
+        _damageTextSystem.Update();
         Skill.UpdateSkill();
     }
     public void UpdatePausedManager()
@@ -105,6 +107,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         _stateMachines.Clear();
         _heroList.Clear();
         _enemyList.Clear();
+        _damageTextSystem.Destroy();
     }
 
     public CharacterBase Spawn(int id, bool isPlayer = false)

@@ -132,6 +132,7 @@ public enum EEventActionType
     LOAD_INGAME,
 
     //UI
+    SHOW_DAMAGE_TEXT,
     PLAYER_HP_CHANGE,
     PLAYER_MP_CHANGE,
     ENEMY_HP_CHANGE,

@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+
+public class ShowDamageTextEvent : EventBase
+{
+    public float Damage;
+    public Vector3 Pos;
+    public Vector3 Dir;
+
+    public ShowDamageTextEvent(float damage, Vector3 pos, Vector3? dir = null)
+    {
+        Damage = damage;
+        Pos = pos;        Dir = dir ?? Vector3.zero;
+
+    }
+}
 
 public class HPEvent : EventBase
 {
