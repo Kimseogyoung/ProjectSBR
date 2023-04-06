@@ -33,10 +33,9 @@ public class EventQueue : MonoBehaviour
     {
         Action<EventBase> act = (e) => { action.Invoke((T)e); };
         if (!_actions.ContainsKey(eventActionType))
-        {
             _actions.Add(eventActionType, act);
-        }
-        _actions[eventActionType] += act;
+        else
+            _actions[eventActionType] += act;
 
         return act;
     }
@@ -68,7 +67,7 @@ public class EventQueue : MonoBehaviour
             {
                 return;
             }
-            //GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
+            GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
             action.Invoke(dequeueAction);
         }
 
