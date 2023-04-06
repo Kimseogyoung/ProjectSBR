@@ -46,8 +46,8 @@ public class DamageTextSystem
     }
     private void CreateDamageText(ShowDamageTextEvent evt)
     {
-        evt.Pos += new Vector3(0, 0, 0.7f);
-        var tmpObj = Util.Resource.Instantiate<TMP_Text>("Effect/DamageText", evt.Pos + evt.Dir * _random.Next(1000)/1000f, _effectRoot);
+        evt.Pos += new Vector3(0, 0, 0.6f);
+        var tmpObj = Util.Resource.Instantiate<TMP_Text>("Effect/DamageText", evt.Pos + new Vector3(_random.Next(5)/10f, _random.Next(5) / 10f, _random.Next(5) / 10f), _effectRoot);
         tmpObj.SetText(evt.Damage.ToString());
         _damageTextTransformList.Enqueue(new DamageText { FinishTime = APP.InGame.GetGameTime() + 0.3f, Transform = tmpObj.gameObject.transform });
     }
