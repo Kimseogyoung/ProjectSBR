@@ -49,6 +49,7 @@ public class TimeHelper : MonoBehaviour
             if (_timeActionList[i].Time < _currentTime) 
             {
                 _timeActionList[i].Action.Invoke();
+                _timeActionList[i] = null;
                 _timeActionList.RemoveAt(i);
                 i--;
             }

@@ -54,11 +54,12 @@ public enum EHitTargetSelectType
 
 }
 
-public enum EHitStyleType
+public enum ESkillType
 {
     NONE = 0,
     IMMEDIATE,
     PROJECTILE,
+    BUFF
 }
 public enum EHitShapeType
 {
@@ -75,6 +76,12 @@ public enum EGamePropertyType//네이밍 수정 (속성 공격에 해당)
     LIGHT,
     DARK,
     NATURE
+}
+public enum EBuffType
+{
+    NONE = 0,
+    BUFF,
+    DEBUFF
 }
 
 

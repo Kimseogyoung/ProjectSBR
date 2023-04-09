@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using static TimeHelper;
 
 
-public class StateMachineBase : MonoBehaviour 
+public partial class StateMachineBase : MonoBehaviour
 {
     public CharacterBase _currentTarget = null;
     [SerializeField] protected CharacterBase _character;
@@ -217,5 +217,4 @@ public class StateMachineBase : MonoBehaviour
     {
 
     }
-
 }
