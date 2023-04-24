@@ -7,6 +7,10 @@ public class BuffProto : ProtoItem
     public EBuffType BuffType { get; set; }
     public float TickInterval { get; set; }
     public float Duration { get; set; }
+    public int TickHp { get; set; }
+    public int TickMp { get; set; }
+    public int TickHpPer { get; set; }
+    public int TickMpPer { get; set; }
     public int HPInc { get; set; }
     public int MPInc { get; set; }
     public int SPDInc { get; set; }

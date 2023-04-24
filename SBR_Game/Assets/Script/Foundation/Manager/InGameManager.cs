@@ -6,6 +6,8 @@ using UnityEngine;
 public interface ICharacters
 {
     public float GetGameTime();
+    public void FindTarget(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
+        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt);
     public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType, int targetCnt, float multiply = 1);
     public List<CharacterBase> GetLivedEnemyList();
@@ -154,6 +156,10 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
         return character;
     }
+    public void FindTarget(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt)
+    {
+        throw new NotImplementedException();
+    }
 
     public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType , int targetCnt, float multiply)
@@ -181,7 +187,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         {
             for(int i=0; i< targetList.Count; i++)
             {
-                targetList[i].ApplyDamage(attacker, attackPowerType, multiply);
+                targetList[i].ApplyDamageWithMuliply(attacker, multiply);
             }
             return;
         }
@@ -201,7 +207,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
                 distanceList = distanceList.OrderBy(x => x.Distance).ToList();
                 for(int i=0; i<targetCnt; i++)
                 {
-                    distanceList[i].Character.ApplyDamage(attacker, attackPowerType, multiply);
+                    distanceList[i].Character.ApplyDamageWithMuliply(attacker, multiply);
                 }
                 break;
             case EHitTargetSelectType.DIR:
@@ -219,7 +225,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
                 distanceAngleList = distanceAngleList.OrderBy(x => x.Angle).ThenBy(x => x.Distance).ToList();
                 for (int i = 0; i < targetCnt; i++)
                 {
-                    distanceAngleList[i].Character.ApplyDamage(attacker, attackPowerType, multiply);
+                    distanceAngleList[i].Character.ApplyDamageWithMuliply(attacker, multiply);
                 }
                 break;
             case EHitTargetSelectType.RANDOM:
@@ -228,7 +234,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
                 for(int i=0; i<targetCnt; i++)
                 {
                     int targetIdx = random.Next(targetList.Count - 1);
-                    targetList[targetIdx].ApplyDamage(attacker, attackPowerType, multiply);
+                    targetList[targetIdx].ApplyDamageWithMuliply(attacker, multiply);
                     targetList.RemoveAt(targetIdx);
                 }
 
@@ -270,6 +276,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     public List<CharacterBase> GetEnemyList() { return _enemyList; }
     public List<CharacterBase> GetHeroList() { return _heroList; }
     public List<CharacterBase> GetAllCharacterList() { return (List<CharacterBase>)_enemyList.Concat(_heroList); }
+
     //public List<StateMachineBase<CharacterBase>> GetAllStateMachine() { return _stateMachines; }
 }
 

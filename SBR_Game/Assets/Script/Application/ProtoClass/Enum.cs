@@ -50,6 +50,8 @@ public enum EHitTargetSelectType
     DIR,
     RANDOM,
 
+    SELF,
+
     ALL
 
 }
@@ -140,6 +142,7 @@ public enum EEventActionType
 
     //UI
     SHOW_DAMAGE_TEXT,
+    SHOW_HEAL_TEXT,
     PLAYER_HP_CHANGE,
     PLAYER_MP_CHANGE,
     ENEMY_HP_CHANGE,

@@ -60,6 +60,8 @@ public partial class StateMachineBase : MonoBehaviour
         _character.GetSkill(EInputAction.SKILL4).UpdateBase();
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateBase();
 
+        UpdateBuff();
+
     }
 
     public void Initialize(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)

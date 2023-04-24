@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ShowDamageTextEvent : EventBase
+public class ShowTextEvent : EventBase
 {
-    public float Damage;
+    public float Value;
     public Vector3 Pos;
     public Vector3 Dir;
 
-    public ShowDamageTextEvent(float damage, Vector3 pos, Vector3? dir = null)
+    public ShowTextEvent(float damage, Vector3 pos, Vector3? dir = null)
     {
-        Damage = damage;
+        Value = damage;
         Pos = pos;        Dir = dir ?? Vector3.zero;
 
     }

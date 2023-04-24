@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -46,48 +47,6 @@ public partial class CharacterBase
     public void SetDir(Vector3 dir)
     {
         CurDir = dir;
-    }
-
-    private float AccumulateDamage(CharacterBase attacker, CharacterBase victim, EAttack atk ,float multiplier =1f)//공격자, 피격자, 공격력 종류, 데미지 계수
-    {
-        float damage = atk == EAttack.ATK ? attacker.ATK.Value : attacker.MATK.Value;
-        damage = attacker.CheckCritical() ? damage * 2 : damage;//크리티컬 적용
-
-        damage *= (100 - victim.DEF.Value) / 100f;//피격자 방어력 적용 (ex 1% 감소)
-
-        return damage;
-
-    }
-
-    public void ApplySkillDamage(CharacterBase attacker, SkillProto skillProto)
-    {
-        ApplyDamage(attacker, EAttack.ATK, skillProto.MultiplierValue);
-
-        if (skillProto.PushSpeed > 0)
-            InGameManager.Skill.AddPushAction(this, skillProto.PushSpeed, skillProto.PushDistance, (CurPos - attacker.CurPos).normalized);
-    }
-
-
-    public float ApplyDamage(CharacterBase attacker, EAttack attackType, float multiply)
-    {
-        float damage = AccumulateDamage(attacker, this, attackType, multiply);
-
-        GameLogger.Strong($"{attacker.Name}이 {Name}  때림");
-        EventQueue.PushEvent<ShowDamageTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowDamageTextEvent(damage, CurPos, (attacker.CurPos - CurPos).normalized));
-
-        HP.Value -= damage;
-        if (HP.Value <= 0)
-        {
-            //죽음
-            GameLogger.Strong("{0}는 죽었다.", Name);
-        }
-
-        
-        EventQueue.PushEvent<HPEvent>(
-            CharacterType == ECharacterType.PLAYER? EEventActionType.PLAYER_HP_CHANGE: EEventActionType.ENEMY_HP_CHANGE,
-            new HPEvent(Id, damage, HP.FullValue, HP.Value, true, attacker));
-
-        return damage;
     }
 
     public bool IsDead()

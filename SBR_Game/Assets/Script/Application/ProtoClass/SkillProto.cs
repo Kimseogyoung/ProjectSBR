@@ -10,6 +10,7 @@ public class SkillProto : ProtoItem
     public int TargetCnt { get; set; }
     public EHitTargetSelectType HitTargetSelectType { get; set; }
     public ESkillType HitStyleType { get; set; }
+    public int BuffNum { get; set; }
     public string ProjectilePrefab { get; set; }
     public float CoolTime { get; set; }
     public bool CanCancel { get; set; }

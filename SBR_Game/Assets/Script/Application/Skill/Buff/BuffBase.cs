@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 public interface IBuffAppliable
 {
     void ApplyBuff(BuffBase buff);
+    void ApplyTickBuff(BuffBase buff);
     void FinishBuff(BuffBase buff);
 }
 
@@ -19,6 +20,11 @@ abstract public class BuffBase
     private TimeHelper.TimeAction _timeAction;
 
     public BuffBase(IBuffAppliable target, BuffProto proto)
+    {
+        Init(target, proto);
+    }
+
+    public void Init(IBuffAppliable target, BuffProto proto)
     {
         _target = target;
         Proto = proto;

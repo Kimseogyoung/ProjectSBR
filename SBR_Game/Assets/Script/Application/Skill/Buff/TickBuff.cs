@@ -25,7 +25,8 @@ public class TickBuff : BuffBase
         _tickTime += Time.fixedTime;
         if (_tickTime >= Proto.TickInterval)
         {
-            ApplyBase();
+            _tickTime = 0;
+            _target.ApplyTickBuff(this);
         }
         
     }

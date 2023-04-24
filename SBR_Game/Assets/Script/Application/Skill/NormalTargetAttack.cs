@@ -20,7 +20,7 @@ public class NormalTargetAttack : SkillBase
             return;
         }
 
-        _target.ApplyDamage(_character, EAttack.ATK, 1);
+        _target.ApplyDamageWithMuliply(_character, 1);
     }
     protected override void ResetSkill()
     {

@@ -55,6 +55,9 @@ public class EnemyFollowState : CharacterState<CharacterBase>
         if (evt.CharacterId != _character.Id)
             return;
 
+        if (evt.Attacker == null)
+            return;
+
         if (!_attackerDamageDict.ContainsKey(evt.Attacker.Id))
         {
             _attackerDamageDict.Add(evt.Attacker.Id, evt.DeltaHP);
