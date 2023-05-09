@@ -119,6 +119,7 @@ public class ProtoReader
         _typeMappingDict.Add($"enum:{nameof(ECharacterTeamType)}", typeof(ECharacterTeamType));
         _typeMappingDict.Add($"enum:{nameof(ESkillType)}", typeof(ESkillType));
         _typeMappingDict.Add($"enum:{nameof(EHitTargetSelectType)}", typeof(EHitTargetSelectType));
+        _typeMappingDict.Add($"enum:{nameof(EBuffType)}", typeof(EBuffType));
 
     }
 

@@ -19,8 +19,14 @@ public class BuffSkill : SkillBase
         {
             if(_skillProto.HitTargetSelectType == EHitTargetSelectType.SELF)
             {
-                var buffInstance = Activator.CreateInstance(Type.GetType(prtBuff.Class));
-                SkillBase skill = (SkillBase)buffInstance;
+                BuffBase buff = new BuffBase(_character, prtBuff);
+                buff.Apply();
+            }
+            else
+            {
+                _hitBox = new HitBox(_skillProto.HitShapeType, _skillProto.Range, _skillProto.Angle, _character.CurPos, _character.CurDir);
+                APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
+                    _skillProto.HitTargetType, _skillProto.HitTargetSelectType, _attackType, _skillProto.TargetCnt, _skillProto.MultiplierValue);
             }
 
         }

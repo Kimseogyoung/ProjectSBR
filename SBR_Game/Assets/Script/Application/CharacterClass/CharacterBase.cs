@@ -5,16 +5,18 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 [Serializable]
-public partial class CharacterBase 
+public partial class CharacterBase : IBuffAppliable
 {
     public ECharacterType CharacterType;
     public int Id;
     
     public string Name;
 
+    public List<BuffBase> BuffList { get; private set; } =  new List<BuffBase>();
     public Vector3 CurDir { get; private set; } = Vector3.zero;
     public Vector3 CurPos { get; private set; } = Vector3.zero;
 
@@ -93,9 +95,81 @@ public partial class CharacterBase
     
     private void AddSkill(EInputAction action, int skillId)
     {
-        var skillInstance = Activator.CreateInstance(Type.GetType(ProtoHelper.Get<SkillProto, int>(skillId).ClassType));
+        var prtSkill = ProtoHelper.Get<SkillProto, int>(skillId);
+        GameLogger.Info($"{Name} 캐릭터에게 스킬 {prtSkill.Name} 등록. Action({action.ToString()})");
+
+        var skillInstance = Activator.CreateInstance(Type.GetType(prtSkill.ClassType));
         SkillBase skill = (SkillBase)skillInstance;
         skill.Init(this, skillId);
         _skillList.Add(action, skill);
+    }
+
+    public void ApplyBuff(BuffBase buff)
+    {
+        BuffList.Add(buff);
+
+        ApplyBuffStatToTarget(buff.Proto, true);
+    }
+
+    public void FinishBuff(BuffBase buff)
+    {
+
+        if (!BuffList.Contains(buff))
+        {
+            GameLogger.Error("buff 이미 종료됨.");
+            return;
+        }
+
+        BuffList.Remove(buff);
+        ApplyBuffStatToTarget(buff.Proto, false);
+    }
+
+    public void ApplyTickBuff(BuffBase buff)
+    {
+        var prtBuff = buff.Proto;
+
+        if (prtBuff.TickHp < 0)
+            ApplyDamagePure(-prtBuff.TickHp);
+        else if (prtBuff.TickHp > 0)
+            ApplyHealPure(prtBuff.TickHp);
+
+        if (prtBuff.TickHpPer < 0)
+            ApplyDamagePercent(-prtBuff.TickHpPer);
+        else if (prtBuff.TickHpPer > 0)
+            ApplyHealPercent(prtBuff.TickHpPer);
+
+        if (prtBuff.TickMp != 0)
+            ApplyMpPure(prtBuff.TickMp);
+
+        if (prtBuff.TickMpPer != 0)
+            ApplyMpPercent(prtBuff.TickMpPer);
+    }
+
+    private void ApplyBuffStatToTarget(BuffProto prtBuff, bool start)
+    {
+        int mul = start ? 1 : -1;
+        HP.ChangePlusStat(prtBuff.HPInc * mul);
+        MP.ChangePlusStat(prtBuff.MPInc * mul);
+        SPD.ChangePlusStat(prtBuff.SPDInc * mul);
+        ATKSPD.ChangePlusStat(prtBuff.ATKSPDInc * mul);
+        ATK.ChangePlusStat(prtBuff.ATKInc * mul);
+        DEF.ChangePlusStat(prtBuff.DEFInc * mul);
+        CDR.ChangePlusStat(prtBuff.CDRInc * mul);
+        HPGEN.ChangePlusStat(prtBuff.HPGENInc * mul);
+        CRT.ChangePlusStat(prtBuff.CRTInc * mul);
+        RANGE.ChangePlusStat(prtBuff.RANGEInc * mul);
+        DRAIN.ChangePlusStat(prtBuff.DRAINInc * mul);
+
+        HP.ChangePercentStat(prtBuff.HPPer * mul);
+        MP.ChangePercentStat(prtBuff.MPPer * mul);
+        SPD.ChangePercentStat(prtBuff.SPDPer * mul);
+        ATKSPD.ChangePercentStat(prtBuff.ATKSPDPer * mul);
+        ATK.ChangePercentStat(prtBuff.ATKPer * mul);
+        DEF.ChangePercentStat(prtBuff.DEFPer * mul);
+        CDR.ChangePercentStat(prtBuff.CDRPer * mul);
+        HPGEN.ChangePercentStat(prtBuff.HPGENPer * mul);
+        CRT.ChangePercentStat(prtBuff.CRTPer * mul);
+        RANGE.ChangePercentStat(prtBuff.RANGEPer * mul);
+        DRAIN.ChangePercentStat(prtBuff.DRAINPer * mul);
     }
 }

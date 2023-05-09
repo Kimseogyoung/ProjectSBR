@@ -25,16 +25,18 @@ public class Stat
     public void ChangePlusStat(float stat)
     {
         PlusStat += stat;
+        ApplyCurrentValue();
     }
 
     public void ChangePercentStat(float stat)
     {
         PercentStat += stat;
+        ApplyCurrentValue();
     }
 
     public float FullValue
     {
-        get { return (BaseStat + PlusStat) + ((BaseStat + PlusStat) * Mathf.Min(PercentStat,100) / 100f); }
+        get { return (BaseStat + PlusStat) + ((BaseStat + PlusStat) * PercentStat); }
     }
 
     public float Value
@@ -52,6 +54,16 @@ public class Stat
                 _currentStat = FullValue;
             }
         }
+    }
+
+    private void ApplyCurrentValue()
+    {
+        if (StatType == EStat.HP || StatType == EStat.MP)
+        {
+            return;
+        }
+
+        _currentStat = FullValue;
     }
 
 

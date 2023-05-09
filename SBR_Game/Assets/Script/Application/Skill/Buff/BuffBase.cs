@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using UnityEngine;
 
 public interface IBuffAppliable
 {
@@ -12,19 +13,22 @@ public interface IBuffAppliable
     void FinishBuff(BuffBase buff);
 }
 
-abstract public class BuffBase
+public class BuffBase
 {
     public BuffProto Proto { get; private set; }
+
     protected IBuffAppliable _target;
+
     private float _duration;
     private TimeHelper.TimeAction _timeAction;
+    private float _tickTime;
 
     public BuffBase(IBuffAppliable target, BuffProto proto)
     {
         Init(target, proto);
     }
 
-    public void Init(IBuffAppliable target, BuffProto proto)
+    private void Init(IBuffAppliable target, BuffProto proto)
     {
         _target = target;
         Proto = proto;
@@ -33,13 +37,22 @@ abstract public class BuffBase
 
     public void Apply()
     {
+        GameLogger.Info($"{Proto.Name} 버프 적용.");
         _timeAction = TimeHelper.AddTimeEvent(_duration, () => _target.FinishBuff(this));
-        ApplyBase();
+
+        _tickTime = 0;
+        _target.ApplyBuff(this);
     }
 
     public void Update()
     {
-        UpdateBase();
+        _tickTime -= Time.fixedDeltaTime;
+        if (_tickTime < 0)
+        {
+            _tickTime = Proto.TickInterval;
+            _target.ApplyTickBuff(this);
+            GameLogger.Info($"{Proto.Name} 버프 틱 효과 적용.  다음 틱 적용시간 {_tickTime}");
+        }
     }
 
     public void Cancel()
@@ -48,7 +61,6 @@ abstract public class BuffBase
         _target.FinishBuff(this);
     }
 
-    abstract protected void ApplyBase();
-    virtual protected void UpdateBase() { }
+    virtual protected void UpdateBase() { } // LEGACY
 }
 

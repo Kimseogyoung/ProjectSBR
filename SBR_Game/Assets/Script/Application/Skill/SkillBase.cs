@@ -8,22 +8,22 @@ using UnityEngine;
 
 abstract public class SkillBase
 {
+    public SkillProto _skillProto { get; private set; }
+
     protected Vector3 _firstSkillPos;
     protected Vector3 _firstSkillDir;
     protected CharacterBase _target;
     protected HitBox _hitBox;
     protected CharacterBase _character;
     protected EAttack _attackType;
-
-    public SkillProto _skillProto { get; private set; }
     private int _currentSkillCnt;
     
-
-    private bool _isReadySkill = true;
     private bool _isPlayingSkill = false;
 
-
     private TimeHelper.TimeAction _resetTimeEvent;
+
+    public float CurCoolTime = 0;
+
     private float CoolTime
     {
         get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
@@ -46,7 +46,7 @@ abstract public class SkillBase
     }
     public bool CanUseSkill()
     {
-        return _isReadySkill;
+        return CurCoolTime <= 0;
     }
 
 
@@ -62,10 +62,11 @@ abstract public class SkillBase
 
         if (!_skillProto.IsNormalAttack)
         {
-            _isReadySkill = false;
             _isPlayingSkill = true;
             _resetTimeEvent = TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
         }
+
+        CurCoolTime = CoolTime;
     }
 
     // 스킬 완전 실행
@@ -99,8 +100,9 @@ abstract public class SkillBase
     private void ResetCoolTime()
     {
         _isPlayingSkill = false;
-        _isReadySkill = true;
         _currentSkillCnt = 0;
+
+        CurCoolTime = 0;
     }
 
     public void UpdateBase()
@@ -108,8 +110,10 @@ abstract public class SkillBase
         if (_skillProto.IsNormalAttack)
             return;
 
-        if (_isReadySkill)
+        if (CanUseSkill())
             return;
+
+        CurCoolTime -= Time.fixedDeltaTime;
 
         if (!_isPlayingSkill)
             return;

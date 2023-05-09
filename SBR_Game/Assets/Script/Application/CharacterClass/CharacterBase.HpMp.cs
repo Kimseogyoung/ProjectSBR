@@ -11,12 +11,12 @@ using UnityEngine.UIElements;
 public partial class CharacterBase 
 {
 
-    private float AccumulateDamage(CharacterBase attacker, CharacterBase victim, float multiplier =1f)//°ø°ÝÀÚ, ÇÇ°ÝÀÚ, °ø°Ý·Â Á¾·ù, µ¥¹ÌÁö °è¼ö
+    private float AccumulateDamage(CharacterBase attacker, CharacterBase victim, float multiplier =1f)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç°ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     {
         float damage = attacker.ATK.Value;
-        damage = attacker.CheckCritical() ? damage * 2 : damage;//Å©¸®Æ¼ÄÃ Àû¿ë
+        damage = attacker.CheckCritical() ? damage * 2 : damage;//Å©ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        damage *= (100 - victim.DEF.Value) / 100f;//ÇÇ°ÝÀÚ ¹æ¾î·Â Àû¿ë (ex 1% °¨¼Ò)
+        damage *= (100 - victim.DEF.Value) / 100f;//ï¿½Ç°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ex 1% ï¿½ï¿½ï¿½ï¿½)
 
         return damage;
 
@@ -51,16 +51,16 @@ public partial class CharacterBase
 
         if(attacker != null)
         {
-            GameLogger.Strong($"{attacker.Name}ÀÌ {Name}  ¶§¸²");
+            GameLogger.Strong($"{attacker.Name}ï¿½ï¿½ {Name}  ï¿½ï¿½ï¿½ï¿½");
         }
-
-        EventQueue.PushEvent<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowTextEvent(damage, CurPos, (attacker.CurPos - CurPos).normalized));
+        Vector3 AttackerPos = attacker == null? Vector3.zero : attacker.CurPos;
+        EventQueue.PushEvent<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowTextEvent(damage, CurPos, (AttackerPos - CurPos).normalized));
 
         HP.Value -= damage;
         if (HP.Value <= 0)
         {
-            //Á×À½
-            GameLogger.Strong("{0}´Â Á×¾ú´Ù.", Name);
+            //ï¿½ï¿½ï¿½ï¿½
+            GameLogger.Strong("{0}ï¿½ï¿½ ï¿½×¾ï¿½ï¿½ï¿½.", Name);
         }
 
         EventQueue.PushEvent<HPEvent>(

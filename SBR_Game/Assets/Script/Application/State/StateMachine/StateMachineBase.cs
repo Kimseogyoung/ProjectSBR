@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Bson;
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static TimeHelper;
@@ -60,7 +61,7 @@ public partial class StateMachineBase : MonoBehaviour
         _character.GetSkill(EInputAction.SKILL4).UpdateBase();
         _character.GetSkill(EInputAction.ULT_SKILL).UpdateBase();
 
-        UpdateBuff();
+        UpdateBuffList();
 
     }
 
@@ -140,19 +141,22 @@ public partial class StateMachineBase : MonoBehaviour
 
     public void UseNormalAttck() => UseSkill(EInputAction.ATTACK);
     public void UseSkill1() => UseSkill(EInputAction.SKILL1);
-    public void UseSkill3() => UseSkill(EInputAction.SKILL2); 
-    public void UseSkill4() => UseSkill(EInputAction.SKILL3);
+    public void UseSkill2() => UseSkill(EInputAction.SKILL2);
+    public void UseSkill3() => UseSkill(EInputAction.SKILL3); 
+    public void UseSkill4() => UseSkill(EInputAction.SKILL4);
     public void UseUltSkill() => UseSkill(EInputAction.ULT_SKILL);
-    public void UseSkill2() => UseSkill(EInputAction.SKILL4);
 
     private void UseSkill(EInputAction inputAction)
     {
+        
         SkillBase skill= _character.GetSkill(inputAction);
         if(skill == null)
             return;
 
-        if(_cEventHandler._isPlayingSkill || !skill.CanUseSkill())
+        if (_cEventHandler._isPlayingSkill || !skill.CanUseSkill())
             return;
+
+        GameLogger.Info($"{inputAction} {skill._skillProto.Name}");
 
         float applyTiming = skill._skillProto.ApplyPointTime;
         if (inputAction == EInputAction.ATTACK)
@@ -171,8 +175,7 @@ public partial class StateMachineBase : MonoBehaviour
             SetState(new ChannelingState(skill._skillProto.CanNotMoveTime, skill._skillProto.CanCancel));
         }
 
-        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming,
-            ApplyCurrentSkill, skill._skillProto.Name);
+        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming, ApplyCurrentSkill, skill._skillProto.Name);
     }
 
     //현재 시전중인 스킬 효과 시전
@@ -213,6 +216,14 @@ public partial class StateMachineBase : MonoBehaviour
     private bool IsReadyToAttack()
     {
         return _currentAtkCoolTime <= 0;
+    }
+    
+    private void UpdateBuffList()
+    {
+        for (int i = 0; i < _character.BuffList.Count; i++)
+        {
+            _character.BuffList[i].Update();
+        }
     }
 
     virtual protected void Init()
