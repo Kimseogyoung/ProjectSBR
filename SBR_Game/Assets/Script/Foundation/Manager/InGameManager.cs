@@ -136,7 +136,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         else
         {
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
-            character = new CharacterBase(id, ECharacterType.HERO);
+            character = new CharacterBase(id, characterType);
         }
 
         stateMachine.Initialize(character, characterType, _minimumMapPos, _maximumMapPos);
