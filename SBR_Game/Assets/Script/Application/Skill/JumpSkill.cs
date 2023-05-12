@@ -11,9 +11,9 @@ public class JumpSkill : SkillBase
     protected override void ApplySkill()
     {
         isJumpFinish = false;
-        _hitBox = new HitBox(_skillProto.HitShapeType, _character.CurPos, _skillProto.HitWidth);
-        APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
-            _skillProto.HitTargetType, _skillProto.HitTargetSelectType, _attackType, _skillProto.TargetCnt, _skillProto.MultiplierValue);
+        _hitBox = new HitBox(Prt.HitShapeType, _character.CurPos, Prt.HitWidth);
+        APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, Prt.TargetTeam,
+            Prt.HitTargetType, Prt.HitTargetSelectType, Prt.TargetCnt, Prt.MultiplierValue);
     }
 
     protected override void ResetSkill()
@@ -26,8 +26,8 @@ public class JumpSkill : SkillBase
         if (isJumpFinish)
             return;
 
-        _character.TranslatePos(_firstSkillDir * _skillProto.Speed * Time.fixedDeltaTime);
-        if ((_firstSkillPos - _character.CurPos).magnitude > _skillProto.Range)
+        _character.TranslatePos(_firstSkillDir * Prt.Speed * Time.fixedDeltaTime);
+        if ((_firstSkillPos - _character.CurPos).magnitude > Prt.Range)
         {
             OnFinishedJump();
         }
@@ -36,9 +36,9 @@ public class JumpSkill : SkillBase
     private void OnFinishedJump()
     {
         isJumpFinish = true;
-        _hitBox = new HitBox(_skillProto.HitShapeType, _character.CurPos, _skillProto.HitWidth);
-        APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
-            _skillProto.HitTargetType, _skillProto.HitTargetSelectType, _attackType, _skillProto.TargetCnt, _skillProto.MultiplierValue);
+        _hitBox = new HitBox(Prt.HitShapeType, _character.CurPos, Prt.HitWidth);
+        APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, Prt.TargetTeam,
+            Prt.HitTargetType, Prt.HitTargetSelectType, Prt.TargetCnt, Prt.MultiplierValue);
     }
 }
 

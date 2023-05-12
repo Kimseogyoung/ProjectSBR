@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UI_Popup : UI_Base
 {
     //팝업 UI 의 조상, 팝업 UI 캔버스들의 공통적인 부분들.
-    public override void Init()
+    protected override void InitImp()
     {
         APP.UI.SetCanvas(gameObject, true);
         if(Bind<Button>(_exitButton) != null)

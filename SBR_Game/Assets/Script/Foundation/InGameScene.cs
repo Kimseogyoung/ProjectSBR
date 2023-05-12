@@ -6,7 +6,7 @@ public class InGameScene : SceneBase
 {
     private InGameManager _characterManager;
     private BulletManager _bulletManager;
-    private UI_InGameScene _inGameScene;
+    private UI_InGameScene _inGameSceneUI;
     public InGameScene(string sceneName)
     {
         _sceneName = sceneName;
@@ -14,12 +14,19 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
-        _inGameScene = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
+        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
 
         SpawnMap(APP.CurrentStage);
 
         _characterManager = new InGameManager();
         _characterManager.Init();
+
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.ATTACK));
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL1));
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL2));
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL3));
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL4));
+        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.ULT_SKILL));
 
         _bulletManager = new BulletManager();
         _bulletManager.Init();
@@ -35,13 +42,13 @@ public class InGameScene : SceneBase
     private void SuccessGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameScene.ShowFinishPopup(deadEvent);
+        _inGameSceneUI.ShowFinishPopup(deadEvent);
     }
 
     private void FailGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameScene.ShowFinishPopup(deadEvent);
+        _inGameSceneUI.ShowFinishPopup(deadEvent);
     }
 
     private void SpawnMap(StageProto currentStage)
@@ -74,7 +81,7 @@ public class InGameScene : SceneBase
 
     protected override void Update()
     {
-
+        _inGameSceneUI.Refresh();
     }
 
     

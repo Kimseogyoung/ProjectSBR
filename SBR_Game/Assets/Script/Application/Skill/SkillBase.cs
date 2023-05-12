@@ -8,38 +8,38 @@ using UnityEngine;
 
 abstract public class SkillBase
 {
-    public SkillProto _skillProto { get; private set; }
+    public SkillProto Prt { get; private set; }
+    public EInputAction MatchedInputAction { get; private set; }
+    public float CurCoolTime { get; private set; }
+    public float FullCoolTime
+    {
+        get { return Prt.CoolTime * ((100 - _character.CDR.Value) / 100); }
+    }
+
 
     protected Vector3 _firstSkillPos;
     protected Vector3 _firstSkillDir;
     protected CharacterBase _target;
     protected HitBox _hitBox;
     protected CharacterBase _character;
-    protected EAttack _attackType;
+
     private int _currentSkillCnt;
-    
     private bool _isPlayingSkill = false;
-
     private TimeHelper.TimeAction _resetTimeEvent;
-
-    public float CurCoolTime = 0;
-
-    private float CoolTime
-    {
-        get { return _skillProto.CoolTime * ((100 - _character.CDR.Value) / 100); }
-    }
 
     public SkillBase() { }
 
-    public void Init(CharacterBase characterBase, int skillNum)
+    public void Init(CharacterBase characterBase, int skillNum, EInputAction inputAction)
     {
         _character = characterBase;
-        _skillProto = ProtoHelper.Get<SkillProto, int>(skillNum);
+        
+        Prt = ProtoHelper.Get<SkillProto, int>(skillNum);
+        MatchedInputAction = inputAction;
 
-        if (_skillProto.IsNormalAttack)
+        if (Prt.IsNormalAttack)
         {
-            _skillProto.StartTime = 0;
-            _skillProto.DurationTime = 0;
+            Prt.StartTime = 0;
+            Prt.DurationTime = 0;
         }
         //_cEventHandler = cHandler;
 
@@ -60,30 +60,30 @@ abstract public class SkillBase
         _firstSkillPos = _character.CurPos;
         _firstSkillDir = _character.CurDir;
 
-        if (!_skillProto.IsNormalAttack)
+        if (!Prt.IsNormalAttack)
         {
             _isPlayingSkill = true;
-            _resetTimeEvent = TimeHelper.AddTimeEvent(CoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
+            _resetTimeEvent = TimeHelper.AddTimeEvent(FullCoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
         }
 
-        CurCoolTime = CoolTime;
+        CurCoolTime = FullCoolTime;
     }
 
     // 스킬 완전 실행
     public void UseSkill()
     {
-        GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, _skillProto.Name);
+        GameLogger.Info("{0}가 {1} 시전 성공", _character.Name, Prt.Name);
 
         _currentSkillCnt++;
         ApplySkill();
 
-        if (_skillProto.Cnt > _currentSkillCnt && _skillProto.DurationTime >= _skillProto.PeriodTime * _currentSkillCnt)
+        if (Prt.Cnt > _currentSkillCnt && Prt.DurationTime >= Prt.PeriodTime * _currentSkillCnt)
         {
-            TimeHelper.AddTimeEvent(_skillProto.PeriodTime, UseSkill);
+            TimeHelper.AddTimeEvent(Prt.PeriodTime, UseSkill);
         }
 
         //지속시간
-        TimeHelper.AddTimeEvent(_skillProto.DurationTime, FinishSkill);
+        TimeHelper.AddTimeEvent(Prt.DurationTime, FinishSkill);
     }
 
     public void CancelSkill()
@@ -107,7 +107,7 @@ abstract public class SkillBase
 
     public void UpdateBase()
     {
-        if (_skillProto.IsNormalAttack)
+        if (Prt.IsNormalAttack)
             return;
 
         if (CanUseSkill())

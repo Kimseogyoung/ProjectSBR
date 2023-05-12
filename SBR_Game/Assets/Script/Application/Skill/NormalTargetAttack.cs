@@ -14,9 +14,9 @@ public class NormalTargetAttack : SkillBase
 
     protected override void ApplySkill()
     {
-        if ((_target.CurPos - _character.CurPos).magnitude > _skillProto.Range)
+        if ((_target.CurPos - _character.CurPos).magnitude > Prt.Range)
         {
-            GameLogger.Info($"{_character.Name}의 스킬 : {_skillProto.Name} 실행 취소");
+            GameLogger.Info($"{_character.Name}의 스킬 : {Prt.Name} 실행 취소");
             return;
         }
 

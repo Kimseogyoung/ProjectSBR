@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class JoyStick : UI_Panel, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class JoyStickPad : UI_Base, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private bool _isDragging = false;
     private float radius;
     private RectTransform _joyStickTransfrom;
     private Vector2 _currentClickPos;
 
-    private void Awake()
+
+    protected override void InitImp()
     {
-        radius = Bind<RectTransform>(UI.Pad.ToString()).rect.width * 0.3f;
+        radius = Bind<RectTransform>(UI.JoyStickPad.ToString()).rect.width * 0.3f;
         _joyStickTransfrom = Bind<RectTransform>(UI.JoyStick.ToString());
 
     }
 
-    private void Update()
+    public void Refresh()
     {
         if (!_isDragging)
             return;
@@ -27,7 +28,7 @@ public class JoyStick : UI_Panel, IBeginDragHandler, IEndDragHandler, IDragHandl
 
     public void SetJoyStickPos(Vector2 clickPos)
     {
-        Vector2 padPos = Get<RectTransform>(UI.Pad.ToString()).position;
+        Vector2 padPos = Get<RectTransform>(UI.JoyStickPad.ToString()).position;
 
         Vector2 dir = clickPos - padPos;
         
@@ -63,12 +64,12 @@ public class JoyStick : UI_Panel, IBeginDragHandler, IEndDragHandler, IDragHandl
         _isDragging = isDraging;
         if (!_isDragging)
         {
-            _joyStickTransfrom.position = Get<RectTransform>(UI.Pad.ToString()).position;
+            _joyStickTransfrom.position = Get<RectTransform>(UI.JoyStickPad.ToString()).position;
         }
     }
     enum UI
     {
         JoyStick,
-        Pad
+        JoyStickPad
     }
 }

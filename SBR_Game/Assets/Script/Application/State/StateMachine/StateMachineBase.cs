@@ -156,9 +156,9 @@ public partial class StateMachineBase : MonoBehaviour
         if (_cEventHandler._isPlayingSkill || !skill.CanUseSkill())
             return;
 
-        GameLogger.Info($"{inputAction} {skill._skillProto.Name}");
+        GameLogger.Info($"{inputAction} {skill.Prt.Name}");
 
-        float applyTiming = skill._skillProto.ApplyPointTime;
+        float applyTiming = skill.Prt.ApplyPointTime;
         if (inputAction == EInputAction.ATTACK)
         {//기본 공격 속도 조정
             applyTiming /= _character.ATKSPD.Value;
@@ -170,12 +170,12 @@ public partial class StateMachineBase : MonoBehaviour
         _cEventHandler.PlayAttackAnim(inputAction);
         skill.StartSkill(_currentTarget);
 
-        if (skill._skillProto.CanNotMoveTime > 0)// 못움직이는 시간
+        if (skill.Prt.CanNotMoveTime > 0)// 못움직이는 시간
         {
-            SetState(new ChannelingState(skill._skillProto.CanNotMoveTime, skill._skillProto.CanCancel));
+            SetState(new ChannelingState(skill.Prt.CanNotMoveTime, skill.Prt.CanCancel));
         }
 
-        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming, ApplyCurrentSkill, skill._skillProto.Name);
+        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming, ApplyCurrentSkill, skill.Prt.Name);
     }
 
     //현재 시전중인 스킬 효과 시전

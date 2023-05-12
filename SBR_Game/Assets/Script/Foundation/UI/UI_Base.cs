@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -9,6 +10,34 @@ abstract public class UI_Base : MonoBehaviour
 	protected string _exitButton = "ExitButton";
 	private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
     private Dictionary<string, Object[]> _objectLists = new Dictionary<string, Object[]>();
+    private bool _isInit = false;
+
+    public void Init()
+    {
+        if (_isInit)
+        {
+            GameLogger.Info("Already Init");
+            return;
+        }
+        
+        _isInit = true;
+
+        InitImp();
+    }
+
+    protected T BindComponent<T>(string name) where T : Component
+    {
+        Object obj = Util.GameObj.FindChild(gameObject, name, true);
+
+        if (obj == null)
+        {
+            //GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
+            return null;
+        }
+        GameObject newGameObject = obj as GameObject;
+        _objects.Add(name, newGameObject.AddComponent<T>());
+        return Get<T>(name);
+    }
 
     //Bind UI 오브젝트 이름으로 찾아 바인딩해주기
     protected T Bind<T>(string name) where T : UnityEngine.Object
@@ -30,7 +59,29 @@ abstract public class UI_Base : MonoBehaviour
 
     }
 
-	protected List<T> BindMany<T>(string name) where T : UnityEngine.Object
+    protected List<T> BindManyComponent<T>(string name) where T : Component
+    {
+        Object[] objs= Util.GameObj.FindChildAll(gameObject, name);
+
+        if (objs == null)
+        {
+            GameLogger.Error($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            return null;
+        }
+
+        Object[] componentArr = new T[objs.Length];
+        for (int i=0; i < objs.Length; i++)
+        {
+            GameObject newGameObject = objs[i] as GameObject;
+            componentArr[i] = newGameObject.AddComponent<T>();
+        }
+        _objectLists.Add(name, componentArr);
+        return GetMany<T>(name);
+
+    }
+
+
+    protected List<T> BindMany<T>(string name) where T : UnityEngine.Object
 	{
 		Object[] objs;
         if (typeof(T) == typeof(GameObject))
@@ -96,10 +147,19 @@ abstract public class UI_Base : MonoBehaviour
 		}
 	}
 	*/
+
+
     private void OnDestroy()
     {
-		_objects.Clear();
+        _isInit = false;
+        OnDestroyed();
+
+        _objects.Clear();
         _objectLists.Clear();
     }
-    public abstract void Init();
+
+
+    protected virtual void OnDestroyed() { }
+    protected abstract void InitImp();
+   
 }

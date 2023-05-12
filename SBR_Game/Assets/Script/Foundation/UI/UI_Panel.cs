@@ -6,7 +6,7 @@ public class UI_Panel : UI_Base
 {
 
 
-    public override void Init()
+    protected override void InitImp()
     {
     }
 }

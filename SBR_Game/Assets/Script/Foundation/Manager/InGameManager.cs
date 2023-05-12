@@ -9,7 +9,7 @@ public interface ICharacters
     public void FindTarget(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt);
     public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
-        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType, int targetCnt, float multiply = 1);
+        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt, float multiply = 1);
     public List<CharacterBase> GetLivedEnemyList();
     public List<CharacterBase> GetLivedHeroList();
     public List<CharacterBase> GetEnemyList();
@@ -90,6 +90,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         _damageTextSystem.Update();
         Skill.UpdateSkill();
     }
+
     public void UpdatePausedManager()
     {
        
@@ -162,7 +163,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     }
 
     public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
-        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, EAttack attackPowerType , int targetCnt, float multiply)
+        EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt, float multiply)
     {
         List<CharacterBase> targetList = new List<CharacterBase>();
         List<CharacterBase> enemyList;

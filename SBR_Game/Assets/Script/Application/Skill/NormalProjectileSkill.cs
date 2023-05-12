@@ -11,18 +11,18 @@ public class NormalProjectileSkill : SkillBase
     {
         CharacterBase target = null;
 
-        if (_skillProto.HitTargetType == EHitSKillType.NONTARGET)
+        if (Prt.HitTargetType == EHitSKillType.NONTARGET)
         {
             target = APP.InGame.GetBoss();
-            if ((target.CurPos - _character.CurPos).magnitude > _skillProto.Range)
+            if ((target.CurPos - _character.CurPos).magnitude > Prt.Range)
             {//범위 밖이면 논타겟
                 target = null;
             }
         }
 
         APP.Bullet.InstantiateBullet(OnFoundTarget, _character,
-            _skillProto.ProjectilePrefab, _character.CurDir, 
-            _skillProto.Speed, _skillProto.Range, _skillProto.TargetTeam, target);
+            Prt.ProjectilePrefab, _character.CurDir, 
+            Prt.Speed, Prt.Range, Prt.TargetTeam, target);
     }
 
     protected override void ResetSkill()
@@ -33,15 +33,15 @@ public class NormalProjectileSkill : SkillBase
     private void OnFoundTarget(Vector3 pos, CharacterBase victim)
     {
         GameLogger.Info("{0}이 맞음!", victim.Name);
-        if (_skillProto.HitShapeType == EHitShapeType.NONE)
+        if (Prt.HitShapeType == EHitShapeType.NONE)
         {
-            victim.ApplySkillDamage(_character, _skillProto);
+            victim.ApplySkillDamage(_character, Prt);
             return;
         }
 
         APP.InGame.FindTargetAndApplyDamage(_character,
-            new HitBox(_skillProto.HitShapeType, pos, _skillProto.HitWidth), _skillProto.TargetTeam,
-            _skillProto.HitTargetType, _skillProto.HitTargetSelectType, EAttack.ATK, _skillProto.TargetCnt, _skillProto.MultiplierValue);
+            new HitBox(Prt.HitShapeType, pos, Prt.HitWidth), Prt.TargetTeam,
+            Prt.HitTargetType, Prt.HitTargetSelectType, Prt.TargetCnt, Prt.MultiplierValue);
 
     }
 }

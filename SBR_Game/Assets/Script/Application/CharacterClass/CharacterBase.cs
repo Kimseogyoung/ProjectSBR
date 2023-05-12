@@ -99,8 +99,9 @@ public partial class CharacterBase : IBuffAppliable
         GameLogger.Info($"{Name} 캐릭터에게 스킬 {prtSkill.Name} 등록. Action({action.ToString()})");
 
         var skillInstance = Activator.CreateInstance(Type.GetType(prtSkill.ClassType));
+
         SkillBase skill = (SkillBase)skillInstance;
-        skill.Init(this, skillId);
+        skill.Init(this, skillId, action);
         _skillList.Add(action, skill);
     }
 

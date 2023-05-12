@@ -10,23 +10,23 @@ public class BuffSkill : SkillBase
 
     protected override void ApplySkill()
     {
-        BuffProto prtBuff = ProtoHelper.Get<BuffProto, int>(_skillProto.BuffNum);
-        if(_skillProto.TargetTeam == ECharacterTeamType.ENEMY)
+        BuffProto prtBuff = ProtoHelper.Get<BuffProto, int>(Prt.BuffNum);
+        if(Prt.TargetTeam == ECharacterTeamType.ENEMY)
         {
             GameLogger.Info("Enemy 대상 버프 스킬 미구현");
         }
         else//HERO
         {
-            if(_skillProto.HitTargetSelectType == EHitTargetSelectType.SELF)
+            if(Prt.HitTargetSelectType == EHitTargetSelectType.SELF)
             {
                 BuffBase buff = new BuffBase(_character, prtBuff);
                 buff.Apply();
             }
             else
             {
-                _hitBox = new HitBox(_skillProto.HitShapeType, _skillProto.Range, _skillProto.Angle, _character.CurPos, _character.CurDir);
-                APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, _skillProto.TargetTeam,
-                    _skillProto.HitTargetType, _skillProto.HitTargetSelectType, _attackType, _skillProto.TargetCnt, _skillProto.MultiplierValue);
+                _hitBox = new HitBox(Prt.HitShapeType, Prt.Range, Prt.Angle, _character.CurPos, _character.CurDir);
+                APP.InGame.FindTargetAndApplyDamage(_character, _hitBox, Prt.TargetTeam,
+                    Prt.HitTargetType, Prt.HitTargetSelectType,  Prt.TargetCnt, Prt.MultiplierValue);
             }
 
         }
