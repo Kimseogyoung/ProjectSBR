@@ -15,7 +15,6 @@ namespace SBRAnimator{
     public class CharacterEventHandlerInspector : Editor
 
     {
-        private int _currentCharacterIdx = 0;
         private int _copyCharacterIdx = 0;
         private static string[] _options;
         private static CharacterProto[] _characterProtos;
