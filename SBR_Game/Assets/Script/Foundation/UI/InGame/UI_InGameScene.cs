@@ -72,6 +72,7 @@ public class UI_InGameScene : UI_Scene
             return;
         }
 
+        _activeHpBarList.Remove(hpBar);
         _hpBarPool.Enqueue(hpBar.gameObject);
     }
 
@@ -139,6 +140,10 @@ public class UI_InGameScene : UI_Scene
 
     protected override void OnDestroyed()
     {
+        _activeHpBarList.Clear();
+        _skillButtonDict.Clear();
+        _hpBarPool.Destroy();
+
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_HP_CHANGE);
         EventQueue.RemoveAllEventListener(EEventActionType.ENEMY_HP_CHANGE);
     }

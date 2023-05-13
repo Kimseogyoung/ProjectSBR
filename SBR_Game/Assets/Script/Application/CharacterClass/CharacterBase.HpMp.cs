@@ -53,8 +53,7 @@ public partial class CharacterBase
         {
             GameLogger.Strong($"{attacker.Name}�� {Name}  ����");
         }
-        Vector3 AttackerPos = attacker == null? Vector3.zero : attacker.CurPos;
-        EventQueue.PushEvent<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowTextEvent(damage, CurPos, (AttackerPos - CurPos).normalized));
+        EventQueue.PushEvent<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowTextEvent(damage, CurPos, (CurPos).normalized));
 
         HP.Value -= damage;
         if (HP.Value <= 0)
