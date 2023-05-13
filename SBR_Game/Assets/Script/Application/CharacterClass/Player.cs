@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class Player : CharacterBase
 {
-    public Player(int characterId) : base(characterId, ECharacterType.PLAYER)
+    public Player(int characterId, int createNum) : base(characterId, ECharacterType.PLAYER, createNum)
     {
     }
 

@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class UI_InGameScene : UI_Scene
 {
+    private ObjectPool<HpBar> _hpBarPool;
+    private List<HpBar> _activeHpBarList = new List<HpBar>();
+
     private Dictionary<EInputAction, SkillButton> _skillButtonDict = new();
 
     protected override void InitImp()
     {
-        GameLogger.Strong("Init!!!!!!!!!!!!!!!!!!!");
-
         Bind<Button>(UI.PauseButton.ToString()).onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_InGamePausePopup>(); });
         Bind<Image>(UI.PlayerIconImage.ToString());
         Bind<Image>(UI.StageIconImage.ToString());
@@ -36,6 +37,8 @@ public class UI_InGameScene : UI_Scene
             _skillButtonDict.Add(EInputAction.SKILL1 + i, skillBtnList[i]);
         }
 
+        _hpBarPool = new ObjectPool<HpBar>(10, Bind<GameObject>(UI.HpHUD.ToString()).transform, Resources.Load<GameObject>("UI/Object/HpSlider"));
+
         EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
         EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
     }
@@ -45,15 +48,38 @@ public class UI_InGameScene : UI_Scene
         APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
     }
 
-    public void SetSkill(SkillBase skill)
+    public void SetSkillToButton(SkillBase skill)
     {
         _skillButtonDict[skill.MatchedInputAction].SetSkill(skill);
+    }
+
+    public void SetCharacterToHpBar(CharacterBase character)
+    {
+        var hpBar = _hpBarPool.Dequeue();
+        
+        hpBar.component.Init();
+        hpBar.component.SetCharacter(character);
+
+        _activeHpBarList.Add(hpBar.component);
+    }
+
+    public void RemoveHpBar(int characterCreateNum)
+    {
+        var hpBar = _activeHpBarList.Find(x => x.CharacterCreateNum == characterCreateNum);
+        if(hpBar == null)
+        {
+            GameLogger.Error($"Can not Found HpBar. CreateNum({characterCreateNum})");
+            return;
+        }
+
+        _hpBarPool.Enqueue(hpBar.gameObject);
     }
 
     public void Refresh()
     {
         Get<JoyStickPad>(UI.JoyStickPad.ToString()).Refresh();
         RefreshSkillBtn();
+        RefreshHpBar();
     }
 
     private void RefreshSkillBtn()
@@ -61,6 +87,23 @@ public class UI_InGameScene : UI_Scene
         foreach(var skillButton in _skillButtonDict.Values)
         {
             skillButton.Refresh();
+        }
+    }
+
+    private void RefreshHpBar()
+    {
+        for(int i=0; i<_activeHpBarList.Count; i++)
+        {
+            if (_activeHpBarList[i].gameObject.activeSelf && _activeHpBarList[i].IsFar())
+            {
+                _activeHpBarList[i].gameObject.SetActive(false);
+            }
+            else if(!_activeHpBarList[i].gameObject.activeSelf && !_activeHpBarList[i].IsFar())
+            {
+                _activeHpBarList[i].gameObject.SetActive(true);
+            }
+
+            _activeHpBarList[i].Refresh();
         }
     }
 
@@ -121,6 +164,7 @@ public class UI_InGameScene : UI_Scene
         //GameObject
         NormalEnemyHPPanel,
         GameHUD,
+        HpHUD,
 
         //Button
         AttackButton,
@@ -128,6 +172,7 @@ public class UI_InGameScene : UI_Scene
 
         //Pad
         JoyStickPad,
+       
 
 
     }

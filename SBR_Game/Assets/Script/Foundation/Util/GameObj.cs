@@ -4,6 +4,7 @@ namespace Util
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using YamlDotNet.Core.Tokens;
     using UnityGameObject = UnityEngine.GameObject;
     static public class GameObj 
     {
@@ -32,23 +33,43 @@ namespace Util
 
         static public T FindChild<T>(UnityGameObject gameObject, string name = null, bool recursive = false) where T : UnityEngine.Object
         {
+            const string cloneString = "(Clone)";
+            var list = new List<T>();
             if (recursive)
             {
-                foreach(T value in gameObject.GetComponentsInChildren<T>())
+                foreach (T value in gameObject.GetComponentsInChildren<T>())
                 {
-                    if (value.name == name)
-                        return value;
-                }  
+                    list.Add(value);
+                }
             }
             else
             {
-                for(int i=0; i<gameObject.transform.childCount; i++)
+                for (int i = 0; i < gameObject.transform.childCount; i++)
                 {
                     T value = GetComponent<T>(gameObject.transform.GetChild(i).gameObject);
-                    if (value != null && value.name == name)
-                        return value;
+
+                    if (value == null)
+                    {
+                        continue;
+                    }
+                    list.Add(value);
                 }
             }
+
+            if(name == null)
+            {
+                return list.FirstOrDefault();
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+               
+                if (list[i].name == name || list[i].name == name + cloneString)
+                {
+                    return list[i];
+                }
+            }
+
             return null;
         }
 

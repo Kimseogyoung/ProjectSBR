@@ -25,8 +25,8 @@ public class DamageTextSystem
         _effectRoot = new GameObject().transform;
         _effectRoot.name = "EffectRoot";
 ;
-        _damageObjectPool = new ObjectPool<TMP_Text>(15 , _effectRoot, Resources.Load<GameObject>("Effect/DamageText"));
-        _healTextPool = new ObjectPool<TMP_Text>(15, _effectRoot, Resources.Load<GameObject>("Effect/HealText"));
+        _damageObjectPool = new ObjectPool<TMP_Text>(15 , _effectRoot, Resources.Load<GameObject>("UI/Object/DamageText"));
+        _healTextPool = new ObjectPool<TMP_Text>(15, _effectRoot, Resources.Load<GameObject>("UI/Object/HealText"));
 
         EventQueue.AddEventListener<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, CreateDamageText);
         EventQueue.AddEventListener<ShowTextEvent>(EEventActionType.SHOW_HEAL_TEXT, CreateHealText);

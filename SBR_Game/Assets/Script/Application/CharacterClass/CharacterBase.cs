@@ -11,10 +11,11 @@ using UnityEngine.UIElements;
 [Serializable]
 public partial class CharacterBase : IBuffAppliable
 {
-    public ECharacterType CharacterType;
-    public int Id;
-    
-    public string Name;
+    public Action<CharacterBase> OnDieCharacter { get; set; }
+    public ECharacterType CharacterType { get; private set; }
+    public int Id { get; private set; }
+    public int CreateNum { get; private set; }
+    public string Name { get; private set; }
 
     public List<BuffBase> BuffList { get; private set; } =  new List<BuffBase>();
     public Vector3 CurDir { get; private set; } = Vector3.zero;
@@ -23,12 +24,13 @@ public partial class CharacterBase : IBuffAppliable
     public CharacterProto Proto { get; private set; }
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
-    public CharacterBase(int characterId, ECharacterType type)
+    public CharacterBase(int characterId, ECharacterType type, int createNum)
     {
         Id = characterId;
         Proto = ProtoHelper.Get<CharacterProto, int>(characterId);
         CharacterType = type;
         InitCharacterSetting();
+        CreateNum = createNum;
     }
 
     public void TranslatePos(Vector3 pos)

@@ -7,6 +7,7 @@ public class DeadState : CharacterState<CharacterBase>
     protected override void OnEnter()
     {
         _stateMachine.PlayDieAnim();
+        _character.OnDieCharacter(_character);
 
         //Dead¿Ã∫•∆Æ Push
         EventQueue.PushEvent(_character.CharacterType == ECharacterType.PLAYER?

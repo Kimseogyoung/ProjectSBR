@@ -23,6 +23,9 @@ public interface ICharacters
 //Manager재 정비 필요.  현재 문제 - Init하기전  Update됨
 public class InGameManager : IManager, IManagerUpdatable, ICharacters
 {
+    public Action<CharacterBase> OnCreateCharacter { get; set; }
+    public Action<int> OnDieCharacter { private get; set; }
+
     public static SkillSystem Skill { get { Debug.Assert(_skillSystem != null); return _skillSystem; } }
     private static SkillSystem _skillSystem;
     private DamageTextSystem _damageTextSystem;
@@ -36,8 +39,12 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
     private Vector2 _minimumMapPos;
     private Vector2 _maximumMapPos;
+    private int createNum = 1;
+
     public void Init()
     {
+        createNum = 1;
+
         _skillSystem = new SkillSystem();
         _damageTextSystem = new DamageTextSystem();
 
@@ -132,12 +139,12 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         if (isPlayer)
         {
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
-            character = new Player(id);
+            character = new Player(id, createNum++);
         }
         else
         {
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
-            character = new CharacterBase(id, characterType);
+            character = new CharacterBase(id, characterType, createNum++);
         }
 
         stateMachine.Initialize(character, characterType, _minimumMapPos, _maximumMapPos);
@@ -154,6 +161,10 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
             characterObj.layer = LayerMask.NameToLayer("Enemy");
             _enemyList.Add(character);
         }
+
+        // 생성 이벤트, 죽음 이벤트
+        OnCreateCharacter.Invoke(character);
+        character.OnDieCharacter = (character) => { OnDieCharacter.Invoke(character.CreateNum); };
 
         return character;
     }

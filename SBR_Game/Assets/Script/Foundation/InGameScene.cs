@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InGameScene : SceneBase
 {
-    private InGameManager _characterManager;
+    private InGameManager _inGameManager;
     private BulletManager _bulletManager;
     private UI_InGameScene _inGameSceneUI;
     public InGameScene(string sceneName)
@@ -18,20 +18,24 @@ public class InGameScene : SceneBase
 
         SpawnMap(APP.CurrentStage);
 
-        _characterManager = new InGameManager();
-        _characterManager.Init();
+        _inGameManager = new InGameManager();
+        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
+        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
 
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.ATTACK));
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL1));
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL2));
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL3));
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.SKILL4));
-        _inGameSceneUI.SetSkill(_characterManager.GetPlayer().GetSkill(EInputAction.ULT_SKILL));
+        _inGameManager.Init();
 
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ATTACK));
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL1));
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL2));
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL3));
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL4));
+        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ULT_SKILL));
+
+       
         _bulletManager = new BulletManager();
         _bulletManager.Init();
 
-        APP.GameManager.AddUpdatablePublicManager(_characterManager);
+        APP.GameManager.AddUpdatablePublicManager(_inGameManager);
         APP.GameManager.AddUpdatablePublicManager(_bulletManager);
 
 
@@ -70,13 +74,13 @@ public class InGameScene : SceneBase
         EventQueue.RemoveAllEventListener(EEventActionType.BOSS_DEAD);
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_DEAD);
 
-        APP.GameManager.RemoveUpdatablePublicManager(_characterManager);
-        _characterManager.FinishManager();
+        APP.GameManager.RemoveUpdatablePublicManager(_inGameManager);
+        _inGameManager.FinishManager();
     }
 
     protected override void Start()
     {
-        TimeHelper.AddTimeEvent(1, () => { _characterManager.StartManager(); });
+        TimeHelper.AddTimeEvent(1, () => { _inGameManager.StartManager(); });
     }
 
     protected override void Update()

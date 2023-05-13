@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,7 +51,7 @@ abstract public class UI_Base : MonoBehaviour
 
 		if (obj == null)
 		{
-            //GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
+            GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
 			return null;
         }
 
