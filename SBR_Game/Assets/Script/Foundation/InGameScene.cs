@@ -14,16 +14,16 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
-        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
-
+      
         SpawnMap(APP.CurrentStage);
 
         _inGameManager = new InGameManager();
-        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
-        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
-
         _inGameManager.Init();
 
+        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
+        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
+        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
+       
         _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ATTACK));
         _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL1));
         _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL2));
@@ -80,7 +80,7 @@ public class InGameScene : SceneBase
 
     protected override void Start()
     {
-        TimeHelper.AddTimeEvent(1, () => { _inGameManager.StartManager(); });
+        TimeHelper.AddTimeEvent("ingame-scene", 1, () => { _inGameManager.StartManager(); });
     }
 
     protected override void Update()

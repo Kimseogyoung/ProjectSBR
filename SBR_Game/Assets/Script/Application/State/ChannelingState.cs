@@ -8,7 +8,7 @@ public class ChannelingState : CharacterState<CharacterBase>
     public ChannelingState(float time, bool canCancel)
     {
         _canCancel = canCancel;
-        TimeHelper.AddTimeEvent(time, ()=> { _stateMachine.SetState(new playerNormalState()); });
+        TimeHelper.AddTimeEvent("channeling-state", time, ()=> { _stateMachine.SetState(new playerNormalState()); });
     }
 
     protected override void OnEnter()

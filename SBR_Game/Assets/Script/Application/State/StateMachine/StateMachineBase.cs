@@ -175,7 +175,7 @@ public partial class StateMachineBase : MonoBehaviour
             SetState(new ChannelingState(skill.Prt.CanNotMoveTime, skill.Prt.CanCancel));
         }
 
-        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(applyTiming, ApplyCurrentSkill, skill.Prt.Name);
+        _currentSkillTimeEvent = TimeHelper.AddTimeEvent(skill.Prt.Name+name, applyTiming, ApplyCurrentSkill);
     }
 
     //현재 시전중인 스킬 효과 시전

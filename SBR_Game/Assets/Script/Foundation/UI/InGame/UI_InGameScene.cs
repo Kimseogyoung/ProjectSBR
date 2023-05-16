@@ -37,6 +37,10 @@ public class UI_InGameScene : UI_Scene
             _skillButtonDict.Add(EInputAction.SKILL1 + i, skillBtnList[i]);
         }
 
+        var playerBuffView = Bind<BuffView>(UI.BuffView.ToString());
+        playerBuffView.Init();
+        playerBuffView.AttachCharacter(APP.InGame.GetPlayer());
+
         _hpBarPool = new ObjectPool<HpBar>(10, Bind<GameObject>(UI.HpHUD.ToString()).transform, Resources.Load<GameObject>("UI/Object/HpSlider"));
 
         EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
@@ -78,6 +82,7 @@ public class UI_InGameScene : UI_Scene
 
     public void Refresh()
     {
+        Get<BuffView>(UI.BuffView.ToString()).Refresh();
         Get<JoyStickPad>(UI.JoyStickPad.ToString()).Refresh();
         RefreshSkillBtn();
         RefreshHpBar();
@@ -142,7 +147,11 @@ public class UI_InGameScene : UI_Scene
     {
         _activeHpBarList.Clear();
         _skillButtonDict.Clear();
-        _hpBarPool.Destroy();
+
+        if(_hpBarPool != null)
+        {
+            _hpBarPool.Destroy();
+        }
 
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_HP_CHANGE);
         EventQueue.RemoveAllEventListener(EEventActionType.ENEMY_HP_CHANGE);
@@ -178,7 +187,8 @@ public class UI_InGameScene : UI_Scene
         //Pad
         JoyStickPad,
        
-
+        BuffView,
+        BuffContent,
 
     }
 

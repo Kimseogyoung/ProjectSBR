@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public interface IBuffAppliable
     void ApplyBuff(BuffBase buff);
     void ApplyTickBuff(BuffBase buff);
     void FinishBuff(BuffBase buff);
+
+    public List<BuffBase> GetBuffList();
 }
 
 public class BuffBase
@@ -22,7 +25,7 @@ public class BuffBase
     private float _duration;
     private TimeHelper.TimeAction _timeAction;
     private float _tickTime;
-
+    private static readonly string _durationTimeEventName = "buff-duration";
     public BuffBase(IBuffAppliable target, BuffProto proto)
     {
         Init(target, proto);
@@ -38,7 +41,7 @@ public class BuffBase
     public void Apply()
     {
         GameLogger.Info($"{Proto.Name} 버프 적용.");
-        _timeAction = TimeHelper.AddTimeEvent(_duration, () => _target.FinishBuff(this));
+        _timeAction = TimeHelper.AddTimeEvent(_durationTimeEventName, _duration, () => { Cancel(); });
 
         _tickTime = 0;
         _target.ApplyBuff(this);
@@ -59,6 +62,21 @@ public class BuffBase
     {
         TimeHelper.RemoveTimeEvent(_timeAction);
         _target.FinishBuff(this);
+    }
+
+    public float GetCurDuration()
+    {
+        if(_timeAction == null)
+        {
+            GameLogger.Error("TimeAction Null");
+            return 0;
+        }
+        return TimeHelper.GetTimeEventRemainingTime(_timeAction);
+    }
+
+    public float GetDuration()
+    {
+        return _duration;
     }
 
     virtual protected void UpdateBase() { } // LEGACY

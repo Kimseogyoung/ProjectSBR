@@ -63,7 +63,7 @@ abstract public class SkillBase
         if (!Prt.IsNormalAttack)
         {
             _isPlayingSkill = true;
-            _resetTimeEvent = TimeHelper.AddTimeEvent(FullCoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
+            _resetTimeEvent = TimeHelper.AddTimeEvent("skill-cool-time", FullCoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
         }
 
         CurCoolTime = FullCoolTime;
@@ -79,11 +79,11 @@ abstract public class SkillBase
 
         if (Prt.Cnt > _currentSkillCnt && Prt.DurationTime >= Prt.PeriodTime * _currentSkillCnt)
         {
-            TimeHelper.AddTimeEvent(Prt.PeriodTime, UseSkill);
+            TimeHelper.AddTimeEvent("skill-period-time", Prt.PeriodTime, UseSkill);
         }
 
         //지속시간
-        TimeHelper.AddTimeEvent(Prt.DurationTime, FinishSkill);
+        TimeHelper.AddTimeEvent("skill-duration-time", Prt.DurationTime, FinishSkill);
     }
 
     public void CancelSkill()

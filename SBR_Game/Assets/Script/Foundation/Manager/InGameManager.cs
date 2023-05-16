@@ -68,7 +68,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         }
 
         // 3초 후 시작
-        TimeHelper.AddTimeEvent(3.0f, () =>
+        TimeHelper.AddTimeEvent("ingame-wait-time", 3.0f, () =>
         {
             
             _gameTime = 0;
@@ -163,8 +163,8 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         }
 
         // 생성 이벤트, 죽음 이벤트
-        OnCreateCharacter.Invoke(character);
-        character.OnDieCharacter = (character) => { OnDieCharacter.Invoke(character.CreateNum); };
+        OnCreateCharacter?.Invoke(character);
+        character.OnDieCharacter = (character) => { OnDieCharacter?.Invoke(character.CreateNum); };
 
         return character;
     }

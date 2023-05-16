@@ -12,6 +12,9 @@ using UnityEngine.UIElements;
 public partial class CharacterBase : IBuffAppliable
 {
     public Action<CharacterBase> OnDieCharacter { get; set; }
+    public Action<BuffBase> OnAddBuff { get; set; }
+
+
     public ECharacterType CharacterType { get; private set; }
     public int Id { get; private set; }
     public int CreateNum { get; private set; }
@@ -23,6 +26,7 @@ public partial class CharacterBase : IBuffAppliable
 
     public CharacterProto Proto { get; private set; }
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
+
 
     public CharacterBase(int characterId, ECharacterType type, int createNum)
     {
@@ -110,8 +114,8 @@ public partial class CharacterBase : IBuffAppliable
     public void ApplyBuff(BuffBase buff)
     {
         BuffList.Add(buff);
-
         ApplyBuffStatToTarget(buff.Proto, true);
+        OnAddBuff?.Invoke(buff);
     }
 
     public void FinishBuff(BuffBase buff)
@@ -174,5 +178,10 @@ public partial class CharacterBase : IBuffAppliable
         CRT.ChangePercentStat(prtBuff.CRTPer * mul);
         RANGE.ChangePercentStat(prtBuff.RANGEPer * mul);
         DRAIN.ChangePercentStat(prtBuff.DRAINPer * mul);
+    }
+
+    public List<BuffBase> GetBuffList()
+    {
+        return BuffList;
     }
 }
