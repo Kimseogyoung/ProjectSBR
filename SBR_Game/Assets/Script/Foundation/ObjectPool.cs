@@ -39,10 +39,9 @@ public class ObjectPool<T> where T : Component
             GameObject.Destroy(queueObj);
         }
 
-        GameObject.Destroy(_defaultGameObject);
-
         _queue.Clear();
         _activeList.Clear();
+
         _parentTransform = null;
         _defaultGameObject = null;
     }

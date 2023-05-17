@@ -18,9 +18,14 @@ public class SkillButton : UI_Base
     protected override void InitImp()
     {
         _btn = GetComponent<Button>();
-        _coolDownImage = Bind<Image>("CoolDown");
+        _coolDownImage = Bind<Image>(UI.CoolDown.ToString());
 
         _btn.onClick.AddListener(OnClick);
+    }
+
+    protected override void OnDestroyed()
+    {
+        _btn.onClick.RemoveAllListeners();
     }
 
     public void SetSkill(SkillBase skill)
@@ -64,6 +69,11 @@ public class SkillButton : UI_Base
         _fullCoolTime = _skill.FullCoolTime;
 
         Refresh();
+    }
+
+    enum UI
+    {
+        CoolDown = 0,
     }
 
 }

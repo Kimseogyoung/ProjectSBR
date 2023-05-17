@@ -52,15 +52,15 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
         _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
-
-        _player = (Player)Spawn(1, true);
-        _boss = Spawn(1010);
-        Spawn(1011);
     }
 
 
     public void StartManager()
     {
+        _player = (Player)Spawn(1, true);
+        _boss = Spawn(1010);
+        Spawn(1011);
+
         for (int i = 0; i < _stateMachines.Count; i++)
         {
             _stateMachines[i].SetState(new IdleState());

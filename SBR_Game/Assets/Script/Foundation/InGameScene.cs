@@ -24,14 +24,6 @@ public class InGameScene : SceneBase
         _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
         _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
        
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ATTACK));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL1));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL2));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL3));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL4));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ULT_SKILL));
-
-       
         _bulletManager = new BulletManager();
         _bulletManager.Init();
 
@@ -80,7 +72,12 @@ public class InGameScene : SceneBase
 
     protected override void Start()
     {
-        TimeHelper.AddTimeEvent("ingame-scene", 1, () => { _inGameManager.StartManager(); });
+        TimeHelper.AddTimeEvent("ingame-scene", 1, () => 
+        { 
+            _inGameManager.StartManager();
+
+            _inGameSceneUI.SetPlayer(_inGameManager.GetPlayer());
+        });
     }
 
     protected override void Update()
