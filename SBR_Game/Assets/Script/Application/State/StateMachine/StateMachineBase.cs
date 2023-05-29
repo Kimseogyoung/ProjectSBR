@@ -15,7 +15,6 @@ public partial class StateMachineBase : MonoBehaviour
     [SerializeField] private string _currentStateName;
 
     private Transform _transform;//현재 캐릭터 위치
-    private float _currentAtkCoolTime = 0;
 
     private Vector2 _mapRangeStartPos;
     private Vector2 _mapRangeEndPos;
@@ -52,9 +51,8 @@ public partial class StateMachineBase : MonoBehaviour
 
         _transform.position = _character.CurPos;
 
-        _currentAtkCoolTime -= Time.fixedDeltaTime;
-
         _currentState.UpdateBase();
+        _character.GetSkill(EInputAction.ATTACK).UpdateBase();
         _character.GetSkill(EInputAction.SKILL1).UpdateBase();
         _character.GetSkill(EInputAction.SKILL2).UpdateBase();
         _character.GetSkill(EInputAction.SKILL3).UpdateBase();
@@ -109,17 +107,13 @@ public partial class StateMachineBase : MonoBehaviour
 
     public void Attack()
     {
-        if (!IsReadyToAttack()) return;
-
-        //때리기
-        _currentAtkCoolTime = 1 / _character.ATKSPD.Value ;
+        //if (!IsReadyToAttack()) return;
         UseNormalAttck();
     }
 
     public void NonTargetingDirAttack(Vector3 dir)
     {
-        if (!IsReadyToAttack()) return;
-        _currentAtkCoolTime = _character.ATKSPD.Value;
+        //if (!IsReadyToAttack()) return;
         //APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShapeType.CORN, _character.RANGE.Value, dir, _character.AttackRangeAngle)
         //    , EHitSKillType.ALONE
         //    , EAttack.ATK);
@@ -127,8 +121,7 @@ public partial class StateMachineBase : MonoBehaviour
 
     public void TargetingDirAttack(CharacterBase target)
     {
-        if (!IsReadyToAttack()) return;
-        _currentAtkCoolTime = _character.ATKSPD.Value;
+       // if (!IsReadyToAttack()) return;
         // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)
         //    , EHitType.ALONE
         //    , EAttack.ATK);
@@ -158,17 +151,19 @@ public partial class StateMachineBase : MonoBehaviour
 
         GameLogger.Info($"{inputAction} {skill.Prt.Name}");
 
-        float applyTiming = skill.Prt.ApplyPointTime;
+        float skillCoolDownValue = (1f / _character.CDR.Value);
         if (inputAction == EInputAction.ATTACK)
         {//기본 공격 속도 조정
-            applyTiming /= _character.ATKSPD.Value;
+            skillCoolDownValue = 1f / _character.ATKSPD.Value ;
             _cEventHandler.SetAttackSpeed(_character.ATKSPD.Value);
         }
+
+        float applyTiming = skill.Prt.ApplyPointTime * skillCoolDownValue;
         _currentPlaySkill = skill;
 
         //스킬 애니메이션 재생
         _cEventHandler.PlayAttackAnim(inputAction);
-        skill.StartSkill(_currentTarget);
+        skill.StartSkill(skillCoolDownValue, _currentTarget);
 
         if (skill.Prt.CanNotMoveTime > 0)// 못움직이는 시간
         {
@@ -213,11 +208,6 @@ public partial class StateMachineBase : MonoBehaviour
             && nextPos.z > _mapRangeStartPos.y && nextPos.z < _mapRangeEndPos.y;
     }
 
-    private bool IsReadyToAttack()
-    {
-        return _currentAtkCoolTime <= 0;
-    }
-    
     private void UpdateBuffList()
     {
         for (int i = 0; i < _character.BuffList.Count; i++)

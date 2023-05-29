@@ -11,10 +11,7 @@ abstract public class SkillBase
     public SkillProto Prt { get; private set; }
     public EInputAction MatchedInputAction { get; private set; }
     public float CurCoolTime { get; private set; }
-    public float FullCoolTime
-    {
-        get { return Prt.CoolTime * ((100 - _character.CDR.Value) / 100); }
-    }
+    public float FullCoolTime { get; private set; }
 
 
     protected Vector3 _firstSkillPos;
@@ -41,6 +38,8 @@ abstract public class SkillBase
             Prt.StartTime = 0;
             Prt.DurationTime = 0;
         }
+
+        FullCoolTime = Prt.CoolTime;
         //_cEventHandler = cHandler;
 
     }
@@ -51,7 +50,7 @@ abstract public class SkillBase
 
 
     //스킬 실행 (취소될 수 있음) 취소되면 재사용 대기시간 초기화
-    public void StartSkill(CharacterBase target = null)
+    public void StartSkill(float coolDownValue, CharacterBase target = null)
     {
         ResetSkill();
 
@@ -59,14 +58,20 @@ abstract public class SkillBase
 
         _firstSkillPos = _character.CurPos;
         _firstSkillDir = _character.CurDir;
-
+        
         if (!Prt.IsNormalAttack)
         {
-            _isPlayingSkill = true;
-            _resetTimeEvent = TimeHelper.AddTimeEvent("skill-cool-time", FullCoolTime, ResetCoolTime); //TODO 쿨타임 감소 스탯 적용
-        }
 
-        CurCoolTime = FullCoolTime;
+            FullCoolTime = Prt.CoolTime * coolDownValue;
+            CurCoolTime = FullCoolTime;
+            _isPlayingSkill = true;
+            _resetTimeEvent = TimeHelper.AddTimeEvent("skill-cool-time", FullCoolTime, ResetCoolTime);
+        }
+        else
+        {
+            FullCoolTime = coolDownValue;
+            CurCoolTime = FullCoolTime;
+        }
     }
 
     // 스킬 완전 실행
@@ -107,13 +112,13 @@ abstract public class SkillBase
 
     public void UpdateBase()
     {
-        if (Prt.IsNormalAttack)
-            return;
-
         if (CanUseSkill())
             return;
 
         CurCoolTime -= Time.fixedDeltaTime;
+
+        if (Prt.IsNormalAttack)
+            return;
 
         if (!_isPlayingSkill)
             return;
