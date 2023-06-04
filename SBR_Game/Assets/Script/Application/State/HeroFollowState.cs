@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class HeroFollowState : CharacterState<CharacterBase>
+public class HeroFollowState : CharacterState<Character>
 {
-    private CharacterBase _player;
+    private Character _player;
     protected override void OnEnter()
     {
         _player = APP.InGame.GetPlayer();

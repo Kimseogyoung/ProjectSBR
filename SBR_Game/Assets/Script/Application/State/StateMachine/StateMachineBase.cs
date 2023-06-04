@@ -8,10 +8,10 @@ using static TimeHelper;
 
 public partial class StateMachineBase : MonoBehaviour
 {
-    public CharacterBase _currentTarget = null;
-    [SerializeField] protected CharacterBase _character;
+    public Character _currentTarget = null;
+    [SerializeField] protected Character _character;
 
-    private CharacterState<CharacterBase> _currentState;
+    private CharacterState<Character> _currentState;
     [SerializeField] private string _currentStateName;
 
     private Transform _transform;//현재 캐릭터 위치
@@ -40,7 +40,7 @@ public partial class StateMachineBase : MonoBehaviour
         _cEventHandler = null;
     }
 
-    public CharacterBase GetCharacter()
+    public Character GetCharacter()
     {
         return _character;
     }
@@ -63,7 +63,7 @@ public partial class StateMachineBase : MonoBehaviour
 
     }
 
-    public void Initialize(CharacterBase character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
+    public void Initialize(Character character, ECharacterType characterType, Vector2 mapPos1, Vector2 mapPos2)
     {
         _cEventHandler = GetComponentInChildren<CharacterEventHandler>();
         _cEventHandler.Initialize(character.Proto.Id, character.Proto.TeamType.ToString());
@@ -75,7 +75,7 @@ public partial class StateMachineBase : MonoBehaviour
         SetState(new IdleState());
     }
 
-    public void SetState(CharacterState<CharacterBase> nextState)
+    public void SetState(CharacterState<Character> nextState)
     {
         if (_currentState != null)
         {
@@ -119,7 +119,7 @@ public partial class StateMachineBase : MonoBehaviour
         //    , EAttack.ATK);
     }
 
-    public void TargetingDirAttack(CharacterBase target)
+    public void TargetingDirAttack(Character target)
     {
        // if (!IsReadyToAttack()) return;
         // APP.Characters.FindTargetAndApplyDamage(_character, new HitBox(EHitShape.Corn, _character.AttackRangeRadius, dir, _character.AttackRangeAngle)

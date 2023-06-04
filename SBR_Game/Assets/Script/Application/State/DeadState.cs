@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeadState : CharacterState<CharacterBase>
+public class DeadState : CharacterState<Character>
 {
     protected override void OnEnter()
     {

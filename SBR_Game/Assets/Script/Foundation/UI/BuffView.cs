@@ -5,7 +5,7 @@ using UnityEngine;
 public class BuffView : UI_Base
 {
 
-    private CharacterBase _character;
+    private Character _character;
     private ObjectPool<BuffImage> _buffImagePool;
 
 
@@ -34,7 +34,7 @@ public class BuffView : UI_Base
         _buffImagePool.Destroy();
     }
 
-    public void AttachCharacter(CharacterBase character)
+    public void AttachCharacter(Character character)
     {
         _character = character;
         _character.OnAddBuff = AddBuff;

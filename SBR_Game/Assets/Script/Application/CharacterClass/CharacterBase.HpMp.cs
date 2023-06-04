@@ -8,10 +8,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-public partial class CharacterBase 
+public partial class Character 
 {
 
-    private float AccumulateDamage(CharacterBase attacker, CharacterBase victim, float multiplier =1f)//������, �ǰ���, ���ݷ� ����, ������ ���
+    private float AccumulateDamage(Character attacker, Character victim, float multiplier =1f)//������, �ǰ���, ���ݷ� ����, ������ ���
     {
         float damage = attacker.ATK.Value;
         damage = attacker.CheckCritical() ? damage * 2 : damage;//ũ��Ƽ�� ����
@@ -22,7 +22,7 @@ public partial class CharacterBase
 
     }
 
-    public void ApplySkillDamage(CharacterBase attacker, SkillProto skillProto)
+    public void ApplySkillDamage(Character attacker, SkillProto skillProto)
     {
         ApplyDamageWithMuliply(attacker, skillProto.MultiplierValue);
 
@@ -30,19 +30,19 @@ public partial class CharacterBase
             InGameManager.Skill.AddPushAction(this, skillProto.PushSpeed, skillProto.PushDistance, (CurPos - attacker.CurPos).normalized);
     }
 
-    public float ApplyDamageWithMuliply(CharacterBase attacker, float multiply)
+    public float ApplyDamageWithMuliply(Character attacker, float multiply)
     {
         float damage = AccumulateDamage(attacker, this, multiply);
         return ApplyDamagePure(damage, attacker);
     }
 
-    public float ApplyDamagePercent(float damagePercent, CharacterBase attacker = null)
+    public float ApplyDamagePercent(float damagePercent, Character attacker = null)
     {
         float damage = HP.FullValue * damagePercent / 100f;
         return ApplyDamagePure(damage, attacker);
     }
 
-    public float ApplyDamagePure(float damage, CharacterBase attacker = null)
+    public float ApplyDamagePure(float damage, Character attacker = null)
     {
         if(damage <= 0)
         {

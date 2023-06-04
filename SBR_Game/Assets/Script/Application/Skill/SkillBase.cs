@@ -16,9 +16,9 @@ abstract public class SkillBase
 
     protected Vector3 _firstSkillPos;
     protected Vector3 _firstSkillDir;
-    protected CharacterBase _target;
+    protected Character _target;
     protected HitBox _hitBox;
-    protected CharacterBase _character;
+    protected Character _character;
 
     private int _currentSkillCnt;
     private bool _isPlayingSkill = false;
@@ -26,7 +26,7 @@ abstract public class SkillBase
 
     public SkillBase() { }
 
-    public void Init(CharacterBase characterBase, int skillNum, EInputAction inputAction)
+    public void Init(Character characterBase, int skillNum, EInputAction inputAction)
     {
         _character = characterBase;
         
@@ -50,7 +50,7 @@ abstract public class SkillBase
 
 
     //스킬 실행 (취소될 수 있음) 취소되면 재사용 대기시간 초기화
-    public void StartSkill(float coolDownValue, CharacterBase target = null)
+    public void StartSkill(float coolDownValue, Character target = null)
     {
         ResetSkill();
 

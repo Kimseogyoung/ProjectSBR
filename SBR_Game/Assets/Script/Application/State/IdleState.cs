@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 //모든 캐릭터 공통 아무것도 안하는 상태 == Stop
-public class IdleState : CharacterState<CharacterBase>
+public class IdleState : CharacterState<Character>
 {
     protected override void OnEnter()
     {

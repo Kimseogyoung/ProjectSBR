@@ -9,9 +9,9 @@ using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 [Serializable]
-public partial class CharacterBase : IBuffAppliable
+public partial class Character : IBuffAppliable
 {
-    public Action<CharacterBase> OnDieCharacter { get; set; }
+    public Action<Character> OnDieCharacter { get; set; }
     public Action<BuffBase> OnAddBuff { get; set; }
 
 
@@ -28,7 +28,7 @@ public partial class CharacterBase : IBuffAppliable
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
 
-    public CharacterBase(int characterId, ECharacterType type, int createNum)
+    public Character(int characterId, ECharacterType type, int createNum)
     {
         Id = characterId;
         Proto = ProtoHelper.Get<CharacterProto, int>(characterId);

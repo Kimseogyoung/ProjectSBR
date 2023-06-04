@@ -6,24 +6,24 @@ using UnityEngine;
 public interface ICharacters
 {
     public float GetGameTime();
-    public void FindTarget(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
+    public void FindTarget(Character attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt);
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
+    public void FindTargetAndApplyDamage(Character attacker, HitBox hitBox, ECharacterTeamType targetTeamType, 
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt, float multiply = 1);
-    public List<CharacterBase> GetLivedEnemyList();
-    public List<CharacterBase> GetLivedHeroList();
-    public List<CharacterBase> GetEnemyList();
-    public List<CharacterBase> GetHeroList();
-    public List<CharacterBase> GetAllCharacterList();
-    public CharacterBase GetBoss();
-    public CharacterBase GetPlayer();
+    public List<Character> GetLivedEnemyList();
+    public List<Character> GetLivedHeroList();
+    public List<Character> GetEnemyList();
+    public List<Character> GetHeroList();
+    public List<Character> GetAllCharacterList();
+    public Character GetBoss();
+    public Character GetPlayer();
 
 }
 
 //Manager재 정비 필요.  현재 문제 - Init하기전  Update됨
 public class InGameManager : IManager, IManagerUpdatable, ICharacters
 {
-    public Action<CharacterBase> OnCreateCharacter { get; set; }
+    public Action<Character> OnCreateCharacter { get; set; }
     public Action<int> OnDieCharacter { private get; set; }
 
     public static SkillSystem Skill { get { Debug.Assert(_skillSystem != null); return _skillSystem; } }
@@ -32,10 +32,10 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     private float _gameTime;
 
     private List<StateMachineBase> _stateMachines = new List<StateMachineBase>();
-    private List<CharacterBase> _enemyList = new List<CharacterBase>();
-    private List<CharacterBase> _heroList = new List<CharacterBase>();
-    private Player _player;
-    private CharacterBase _boss;
+    private List<Character> _enemyList = new List<Character>();
+    private List<Character> _heroList = new List<Character>();
+    private Character _player;
+    private Character _boss;
 
     private Vector2 _minimumMapPos;
     private Vector2 _maximumMapPos;
@@ -57,7 +57,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
     public void StartManager()
     {
-        _player = (Player)Spawn(1, true);
+        _player = Spawn(1, true);
         _boss = Spawn(1010);
         Spawn(1011);
 
@@ -120,9 +120,9 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         _damageTextSystem.Destroy();
     }
 
-    public CharacterBase Spawn(int id, bool isPlayer = false)
+    public Character Spawn(int id, bool isPlayer = false)
     {
-        CharacterBase character;
+        Character character;
         GameObject characterObj;
         StateMachineBase stateMachine;
         CharacterProto characterProto = ProtoHelper.Get<CharacterProto, int>(id);
@@ -139,12 +139,12 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         if (isPlayer)
         {
             stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
-            character = new Player(id, createNum++);
+            character = new Character(id, ECharacterType.PLAYER, createNum++);
         }
         else
         {
             stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
-            character = new CharacterBase(id, characterType, createNum++);
+            character = new Character(id, characterType, createNum++);
         }
 
         stateMachine.Initialize(character, characterType, _minimumMapPos, _maximumMapPos);
@@ -168,16 +168,16 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
         return character;
     }
-    public void FindTarget(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType, EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt)
+    public void FindTarget(Character attacker, HitBox hitBox, ECharacterTeamType targetTeamType, EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt)
     {
         throw new NotImplementedException();
     }
 
-    public void FindTargetAndApplyDamage(CharacterBase attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
+    public void FindTargetAndApplyDamage(Character attacker, HitBox hitBox, ECharacterTeamType targetTeamType,
         EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt, float multiply)
     {
-        List<CharacterBase> targetList = new List<CharacterBase>();
-        List<CharacterBase> enemyList;
+        List<Character> targetList = new List<Character>();
+        List<Character> enemyList;
 
         if (attacker.CharacterType == ECharacterType.BOSS || attacker.CharacterType == ECharacterType.ZZOL)
             enemyList = APP.InGame.GetHeroList();
@@ -281,13 +281,13 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     }
 
     public float GetGameTime() { return _gameTime; }
-    public CharacterBase GetPlayer() { return _player; }
-    public CharacterBase GetBoss() { return _boss; }
-    public List<CharacterBase> GetLivedHeroList() { return _heroList.FindAll((hero) => hero.IsDead() == false); }
-    public List<CharacterBase> GetLivedEnemyList() { return _enemyList.FindAll((enemy) => enemy.IsDead() == false); }
-    public List<CharacterBase> GetEnemyList() { return _enemyList; }
-    public List<CharacterBase> GetHeroList() { return _heroList; }
-    public List<CharacterBase> GetAllCharacterList() { return (List<CharacterBase>)_enemyList.Concat(_heroList); }
+    public Character GetPlayer() { return _player; }
+    public Character GetBoss() { return _boss; }
+    public List<Character> GetLivedHeroList() { return _heroList.FindAll((hero) => hero.IsDead() == false); }
+    public List<Character> GetLivedEnemyList() { return _enemyList.FindAll((enemy) => enemy.IsDead() == false); }
+    public List<Character> GetEnemyList() { return _enemyList; }
+    public List<Character> GetHeroList() { return _heroList; }
+    public List<Character> GetAllCharacterList() { return (List<Character>)_enemyList.Concat(_heroList); }
 
     //public List<StateMachineBase<CharacterBase>> GetAllStateMachine() { return _stateMachines; }
 }
@@ -295,5 +295,5 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 class CharacterDistance{
     public float Angle;
     public float Distance;
-    public CharacterBase Character;
+    public Character Character;
 }

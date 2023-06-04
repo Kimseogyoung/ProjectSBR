@@ -25,10 +25,10 @@ public class HPEvent : EventBase
     public float FullHP;
     public float CurHP;
     public float DeltaHP;
-    public CharacterBase Attacker;
+    public Character Attacker;
 
     public bool IsAttacked;
-    public HPEvent(int characterId, float deltaHP, float fullHP, float curHP, bool isAttacked, CharacterBase attacker)
+    public HPEvent(int characterId, float deltaHP, float fullHP, float curHP, bool isAttacked, Character attacker)
     {
         CharacterId = characterId;
         FullHP = fullHP;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HpBar : UI_Panel
 {
-    [SerializeField] private CharacterBase _character;
+    [SerializeField] private Character _character;
     private Vector3 _offset = new Vector3(0,150,0);
     public int CharacterCreateNum { get { return _character== null ? 0: _character.CreateNum; } }
 
@@ -20,7 +20,7 @@ public class HpBar : UI_Panel
         _character = null;
     }
 
-    public void SetCharacter(CharacterBase character)
+    public void SetCharacter(Character character)
     {
         _character = character;
         RefreshHp();

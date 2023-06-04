@@ -34,7 +34,7 @@ public class UI_InGameScene : UI_Scene
         EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
     }
 
-    public void SetPlayer(CharacterBase player)
+    public void SetPlayer(Character player)
     {
         var playerBuffView = Get<BuffView>(UI.BuffView.ToString());
         playerBuffView.Init();
@@ -58,7 +58,7 @@ public class UI_InGameScene : UI_Scene
         _skillButtonDict[skill.MatchedInputAction].SetSkill(skill);
     }
 
-    public void SetCharacterToHpBar(CharacterBase character)
+    public void SetCharacterToHpBar(Character character)
     {
         var hpBar = _hpBarPool.Dequeue();
         

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class ChannelingState : CharacterState<CharacterBase>
+public class ChannelingState : CharacterState<Character>
 {
     private bool _canCancel = false;
     public ChannelingState(float time, bool canCancel)

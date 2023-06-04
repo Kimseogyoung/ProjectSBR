@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreateState : CharacterState<CharacterBase>
+public class CreateState : CharacterState<Character>
 {
     protected override void OnEnter()
     {
