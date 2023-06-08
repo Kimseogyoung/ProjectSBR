@@ -17,12 +17,15 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void Init()
     {
-       
+        string startScene = APP.GameConf.StartScene;
+        //Sync
+        UnitySceneManager.LoadScene(startScene);
+        InvokeNextScene(startScene);
     }
 
     public void StartManager()
     {
-        Util.CoroutineHelper.StartCoroutine(CoLoadScene(APP.GameConf.StartScene));
+
     }
 
     public void ChangeScene(string nextSceneName)
@@ -72,7 +75,12 @@ public class SceneManager : IManager, IManagerUpdatable
             }
 
         }
+        InvokeNextScene(nextSceneName);
+       
+    }
 
+    private void InvokeNextScene(string nextSceneName)
+    {
         switch (nextSceneName)
         {
             case "IntroScene":
@@ -87,7 +95,7 @@ public class SceneManager : IManager, IManagerUpdatable
             default:
                 break;
         }
-        _currentScene.EnterBase(); 
+        _currentScene.EnterBase();
         _currentScene.StartBase();
     }
 }

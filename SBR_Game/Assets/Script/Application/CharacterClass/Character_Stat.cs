@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public partial class CharacterBase
+public partial class Character
 {
     //기본공격 관련 스탯
     public float AttackRangeAngle = 90;//부채꼴의 각도//TODO....사거리 증가 아이템이 있을 수 있음...

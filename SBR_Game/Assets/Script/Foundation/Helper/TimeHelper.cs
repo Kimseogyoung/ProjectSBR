@@ -12,7 +12,7 @@ public class TimeHelper : MonoBehaviour
     private static float _currentTime = 0;
     private static List<TimeAction> _timeActionList = new List<TimeAction>();
 
-    public static TimeAction AddTimeEvent(float time, Action action, string name = "")
+    public static TimeAction AddTimeEvent(string name, float time, Action action)
     {
         if(time <= 0)
         {
@@ -35,6 +35,18 @@ public class TimeHelper : MonoBehaviour
             return;
 
         _timeActionList.Remove(action);
+    }
+
+    public static float GetTimeEventRemainingTime(TimeAction action)
+    {
+        var foundTimeAction = _timeActionList.Find(x => x.Name == action.Name);
+
+        if(foundTimeAction == null)
+        {
+            GameLogger.Error($"Can not Found Time Action. Return 0. Name({action.Name})");
+            return 0;
+        }
+        return foundTimeAction.Time - _currentTime;
     }
 
     private void FixedUpdate()

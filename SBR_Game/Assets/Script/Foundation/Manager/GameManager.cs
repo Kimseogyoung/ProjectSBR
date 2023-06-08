@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GameManager: MonoBehaviour
 {
+    public Player Player { get { if (_player == null) { GameLogger.Error("Player Is Null"); } return _player; } }
+
     private List<IManagerUpdatable> _managerUpdatables = new List<IManagerUpdatable>();
     private List<IManager> _managers = new List<IManager>();
-
     private DataManager _dataManager;
     private SceneManager _sceneManager;
     private InputManager _inputManager;
 
     private bool _isStopped = false;
+    private Player _player;
 
     public T AddUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
     {
@@ -69,6 +71,7 @@ public class GameManager: MonoBehaviour
 
     void Start()
     {
+        CreatePlayer();
 
         foreach (IManager manager in _managers)
         {
@@ -86,9 +89,15 @@ public class GameManager: MonoBehaviour
             return;
         }
 
-        for (int i=0; i<_managerUpdatables.Count; i++)
+        for (int i = 0; i < _managerUpdatables.Count; i++)
             _managerUpdatables[i].UpdateManager();
-        
+
+    }
+
+    private void CreatePlayer()
+    {
+        _player = new Player();
+        _player.Create();
     }
 
     private void Pause(PauseEvent pause)

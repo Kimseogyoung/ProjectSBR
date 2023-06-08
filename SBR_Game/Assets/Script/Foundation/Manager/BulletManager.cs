@@ -5,8 +5,8 @@ using static BulletManager;
 
 public interface IBullet
 {
-    public void InstantiateBullet(Action<Vector3, CharacterBase> onFoundAction, CharacterBase owner, string bulletPrefab, Vector3 dir,
-        float speed, float maximumDistance, ECharacterTeamType teamType, CharacterBase target = null);
+    public void InstantiateBullet(Action<Vector3, Character> onFoundAction, Character owner, string bulletPrefab, Vector3 dir,
+        float speed, float maximumDistance, ECharacterTeamType teamType, Character target = null);
 }
 
 public class BulletManager : IManager, IManagerUpdatable, IBullet
@@ -17,8 +17,8 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
 
     private const float _bulletTime = 5; //유지시간
 
-    public void InstantiateBullet(Action<Vector3, CharacterBase> onFoundAction, CharacterBase owner, string bulletPrefab, Vector3 dir, 
-        float speed, float maximumDistance, ECharacterTeamType teamType, CharacterBase target = null)
+    public void InstantiateBullet(Action<Vector3, Character> onFoundAction, Character owner, string bulletPrefab, Vector3 dir, 
+        float speed, float maximumDistance, ECharacterTeamType teamType, Character target = null)
     {
         GameObject bulletObj = Util.Resource.Instantiate(bulletPrefab);
         bulletObj.transform.SetParent(_parent);
@@ -98,7 +98,7 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
             Debug.DrawRay(bullet.BulletTransform.position, normalizedDir, Color.red, 0.1f);
             if (Physics.Raycast(bullet.BulletTransform.position, normalizedDir, out hit, bullet.BulletHalfSize, bullet.LayerMask))
             {
-                CharacterBase victim = hit.collider.GetComponent<StateMachineBase>().GetCharacter();
+                Character victim = hit.collider.GetComponent<StateMachineBase>().GetCharacter();
                 RemoveBullet(bullet, victim);
             }
 
@@ -106,7 +106,7 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
         
     }
 
-    private void RemoveBullet(Bullet bullet, CharacterBase victim)
+    private void RemoveBullet(Bullet bullet, Character victim)
     {
         _removedBulletQueue.Enqueue(bullet);
         bullet.OnFoundAction(bullet.BulletTransform.position, victim); 
@@ -114,18 +114,18 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
 
     public class Bullet
     {
-        public CharacterBase Owner { get; private set; }
-        public CharacterBase Target { get; private set; }
+        public Character Owner { get; private set; }
+        public Character Target { get; private set; }
         public Transform BulletTransform { get; private set; }
         public float BulletHalfSize { get; private set; }
         public Vector3 Dir { get; private set; }
         public float Speed { get; private set; }
         public LayerMask LayerMask { get; private set; }
-        public Action<Vector3, CharacterBase> OnFoundAction { get; private set; }
+        public Action<Vector3, Character> OnFoundAction { get; private set; }
         public float MaximumDistance { get; private set; }
         public Vector3 StartPosition { get; private set; }
 
-        public Bullet(Action<Vector3, CharacterBase> onFoundAction, CharacterBase owner, CharacterBase target, Transform bulletTransform, Vector3 dir, float speed, float maximumDistance,  ECharacterTeamType targetTeamType)
+        public Bullet(Action<Vector3, Character> onFoundAction, Character owner, Character target, Transform bulletTransform, Vector3 dir, float speed, float maximumDistance,  ECharacterTeamType targetTeamType)
         {
             OnFoundAction= onFoundAction;
             Owner = owner;

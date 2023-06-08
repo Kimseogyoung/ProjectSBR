@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class EnemyAttackState : CharacterState<CharacterBase>
+public class EnemyAttackState : CharacterState<Character>
 {
-    private CharacterBase _target;
-    public EnemyAttackState(CharacterBase target)
+    private Character _target;
+    public EnemyAttackState(Character target)
     {
         _target = target;
     }

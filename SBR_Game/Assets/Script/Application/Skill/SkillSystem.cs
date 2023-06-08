@@ -34,14 +34,14 @@ public class SkillSystem
         }
     }
 
-    public void AddPushAction(CharacterBase victim, float pushSpeed, float pushDistance, Vector3 pushDir)
+    public void AddPushAction(Character victim, float pushSpeed, float pushDistance, Vector3 pushDir)
     {
         _pushActionQueue.Enqueue(new PushAction(victim, pushSpeed, pushDistance, pushDir));
     }
 
     public class BufAction
     {
-        public CharacterBase Character { get; private set; }
+        public Character Character { get; private set; }
 
         public BufAction()
         {
@@ -53,12 +53,12 @@ public class SkillSystem
     public class PushAction
     {
         public float Distance { get; set; } = 0;
-        public CharacterBase Character { get; private set; }
+        public Character Character { get; private set; }
         public float PushSpeed { get; private set; }
         public float PushDistance { get; private set; }
         public Vector3 PushDir { get; private set; }
 
-        public PushAction(CharacterBase character, float pushSpeed, float pushDistance, Vector3 pushDir)
+        public PushAction(Character character, float pushSpeed, float pushDistance, Vector3 pushDir)
         {
             Character = character;
             PushSpeed = pushSpeed;

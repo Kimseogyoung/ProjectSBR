@@ -47,7 +47,7 @@ public class MovingSkill : SkillBase
         if (Physics.Raycast(_character.CurPos, _firstSkillDir, out hit, 0.1f, Prt.TargetTeam== ECharacterTeamType.ENEMY? LayerMask.GetMask("Enemy"):LayerMask.GetMask("Hero")))
         {
             _attackTargetCnt++;
-            CharacterBase victim = hit.collider.GetComponent<StateMachineBase>().GetCharacter();
+            Character victim = hit.collider.GetComponent<StateMachineBase>().GetCharacter();
             victim.ApplySkillDamage(_character, Prt);
             GameLogger.Info($"{victim.Name}을 밀음");
             _attackTargetCnt++;

@@ -82,7 +82,7 @@ public class CharacterEventHandler : MonoBehaviour
         {       
             case EInputAction.ATTACK:
                 _animator.Play(inputAction.ToString(), 0,0);
-                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction.ToString()].length/1/* _attackClip.speed*/, OnFinishSkill);
+                _finishTimeAction = TimeHelper.AddTimeEvent("character-attack-finish-time", _skillClipDict[inputAction.ToString()].length/1/* _attackClip.speed*/, OnFinishSkill);
                 _isPlayingSkill = true;
                 break;
             case EInputAction.SKILL1:
@@ -91,7 +91,7 @@ public class CharacterEventHandler : MonoBehaviour
             case EInputAction.ULT_SKILL:
             case EInputAction.SKILL2:
                 _animator.Play(inputAction.ToString(),0,0);
-                _finishTimeAction = TimeHelper.AddTimeEvent(_skillClipDict[inputAction.ToString()].length, OnFinishSkill);
+                _finishTimeAction = TimeHelper.AddTimeEvent("character-attack-finish-time", _skillClipDict[inputAction.ToString()].length, OnFinishSkill);
                 _isPlayingSkill = true;
                 break;
             default:

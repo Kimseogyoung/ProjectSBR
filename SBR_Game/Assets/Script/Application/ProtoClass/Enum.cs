@@ -1,4 +1,6 @@
 ﻿//------------------------------------------------------------------- Excel
+
+
 public enum EStat
 {
     NONE = 0,
@@ -30,6 +32,39 @@ public enum ECharacterTeamType
     NONE = 0,
     HERO,
     ENEMY
+}
+public enum EEquipType
+{
+    NONE = 0,
+    // 착용 아이템 부위
+    SWORD = 1,
+    HEAD = 2,
+    BODY = 3,
+    GLAVE = 4,
+    SHOE = 5,
+    ACC = 6,
+    ETC = 7,
+}
+
+public enum EItemType
+{
+    NONE = 0,
+
+    // 착용 아이템
+    EQUIP = 1,
+    SWORD = 1,
+    HEAD = 2,
+    BODY = 3,
+    GLAVE = 4,
+    SHOE = 5,
+    ACC = 6,
+
+    //보유 아이템
+    NORMAL = 10,
+
+    // 일회용 아이템
+    ONCE = 11,
+    PORTION = 11,
 }
 
 //ref Skill Proto

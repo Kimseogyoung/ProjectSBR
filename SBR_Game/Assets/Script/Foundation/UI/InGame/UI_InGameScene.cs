@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class UI_InGameScene : UI_Scene
 {
     private ObjectPool<HpBar> _hpBarPool;
-    private List<HpBar> _activeHpBarList = new List<HpBar>();
 
     private Dictionary<EInputAction, SkillButton> _skillButtonDict = new();
 
@@ -25,7 +24,78 @@ public class UI_InGameScene : UI_Scene
 
         Bind<GameObject>(UI.GameHUD.ToString());
         Bind<GameObject>(UI.NormalEnemyHPPanel.ToString());
+        Bind<BuffView>(UI.BuffView.ToString());
 
+        BindSkillButton();
+
+        _hpBarPool = new ObjectPool<HpBar>(10, Bind<GameObject>(UI.HpHUD.ToString()).transform, Resources.Load<GameObject>("UI/Object/HpSlider"));
+
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
+        EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
+    }
+
+    public void SetPlayer(Character player)
+    {
+        var playerBuffView = Get<BuffView>(UI.BuffView.ToString());
+        playerBuffView.Init();
+
+        playerBuffView.AttachCharacter(player);
+        SetSkillToButton(player.GetSkill(EInputAction.ATTACK));
+        SetSkillToButton(player.GetSkill(EInputAction.SKILL1));
+        SetSkillToButton(player.GetSkill(EInputAction.SKILL2));
+        SetSkillToButton(player.GetSkill(EInputAction.SKILL3));
+        SetSkillToButton(player.GetSkill(EInputAction.SKILL4));
+        SetSkillToButton(player.GetSkill(EInputAction.ULT_SKILL));
+    }
+
+    public void ShowFinishPopup(bool isSuccess, ItemProto[] prtRewards = null)
+    {
+
+        UI_InGameFinishPopup popup = APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
+        if (!isSuccess)
+        {
+            popup.ShowFailUI();
+            return;
+        }
+
+        popup.ShowRewardUI(prtRewards);
+    }
+
+    public void SetSkillToButton(SkillBase skill)
+    {
+        _skillButtonDict[skill.MatchedInputAction].SetSkill(skill);
+    }
+
+    public void SetCharacterToHpBar(Character character)
+    {
+        var hpBar = _hpBarPool.Dequeue();
+        
+        hpBar.component.Init();
+        hpBar.component.SetCharacter(character);
+    }
+
+    public void RemoveHpBar(int characterCreateNum)
+    {
+        var hpBarIndex = _hpBarPool.GetActiveList().FindIndex(x => x.component.CharacterCreateNum == characterCreateNum);
+        if(hpBarIndex < 0)
+        {
+            GameLogger.Error($"Can not Found HpBar. CreateNum({characterCreateNum})");
+            return;
+        }
+
+        _hpBarPool.Enqueue(_hpBarPool.GetActiveList()[hpBarIndex].gameObject);
+    }
+
+    public void Refresh()
+    {
+        Get<BuffView>(UI.BuffView.ToString()).Refresh();
+        Get<JoyStickPad>(UI.JoyStickPad.ToString()).Refresh();
+        RefreshSkillBtn();
+        RefreshHpBar();
+    }
+
+    private void BindSkillButton()
+    {
         var atkBtn = BindComponent<SkillButton>(UI.AttackButton.ToString());
         atkBtn.Init();
         _skillButtonDict.Add(EInputAction.ATTACK, atkBtn);
@@ -36,51 +106,6 @@ public class UI_InGameScene : UI_Scene
             skillBtnList[i].Init();
             _skillButtonDict.Add(EInputAction.SKILL1 + i, skillBtnList[i]);
         }
-
-        _hpBarPool = new ObjectPool<HpBar>(10, Bind<GameObject>(UI.HpHUD.ToString()).transform, Resources.Load<GameObject>("UI/Object/HpSlider"));
-
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.PLAYER_HP_CHANGE, UpdateHpBar);
-        EventQueue.AddEventListener<HPEvent>(EEventActionType.ENEMY_HP_CHANGE, UpdateHpBar);
-    }
-
-    public void ShowFinishPopup(CharacterDeadEvent characterDeadEvent)
-    {
-        APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
-    }
-
-    public void SetSkillToButton(SkillBase skill)
-    {
-        _skillButtonDict[skill.MatchedInputAction].SetSkill(skill);
-    }
-
-    public void SetCharacterToHpBar(CharacterBase character)
-    {
-        var hpBar = _hpBarPool.Dequeue();
-        
-        hpBar.component.Init();
-        hpBar.component.SetCharacter(character);
-
-        _activeHpBarList.Add(hpBar.component);
-    }
-
-    public void RemoveHpBar(int characterCreateNum)
-    {
-        var hpBar = _activeHpBarList.Find(x => x.CharacterCreateNum == characterCreateNum);
-        if(hpBar == null)
-        {
-            GameLogger.Error($"Can not Found HpBar. CreateNum({characterCreateNum})");
-            return;
-        }
-
-        _activeHpBarList.Remove(hpBar);
-        _hpBarPool.Enqueue(hpBar.gameObject);
-    }
-
-    public void Refresh()
-    {
-        Get<JoyStickPad>(UI.JoyStickPad.ToString()).Refresh();
-        RefreshSkillBtn();
-        RefreshHpBar();
     }
 
     private void RefreshSkillBtn()
@@ -93,36 +118,39 @@ public class UI_InGameScene : UI_Scene
 
     private void RefreshHpBar()
     {
-        for(int i=0; i<_activeHpBarList.Count; i++)
+        var activeHpBarList = _hpBarPool.GetActiveList();
+        for(int i=0; i< activeHpBarList.Count; i++)
         {
-            if (_activeHpBarList[i].gameObject.activeSelf && _activeHpBarList[i].IsFar())
+            if (activeHpBarList[i].gameObject.activeSelf && activeHpBarList[i].component.IsFar())
             {
-                _activeHpBarList[i].gameObject.SetActive(false);
+                activeHpBarList[i].gameObject.SetActive(false);
             }
-            else if(!_activeHpBarList[i].gameObject.activeSelf && !_activeHpBarList[i].IsFar())
+            else if(!activeHpBarList[i].gameObject.activeSelf && !activeHpBarList[i].component.IsFar())
             {
-                _activeHpBarList[i].gameObject.SetActive(true);
+                activeHpBarList[i].gameObject.SetActive(true);
             }
 
-            _activeHpBarList[i].Refresh();
+            activeHpBarList[i].component.Refresh();
         }
     }
 
     private void UpdateHpBar(HPEvent evt)
     {
-
-        float value = evt.CurHP / evt.FullHP;
-
         switch (evt.eventActionType)
         {
             case EEventActionType.PLAYER_HP_CHANGE:
-                Get<Slider>(UI.PlayerHPSlider.ToString()).value = value;
+                GameLogger.Info("플레이어 체력감소" + evt.DeltaHP);
+                var slider = Get<Slider>(UI.PlayerHPSlider.ToString());
+                slider.maxValue = evt.FullHP;
+                slider.value = evt.CurHP;
                 break;
             case EEventActionType.ENEMY_HP_CHANGE:
                 {
                     if (APP.InGame.GetBoss().Id == evt.CharacterId)
                     {
-                        Get<Slider>(UI.BossHPSlider.ToString()).value = value;
+                        var bossSlider = Get<Slider>(UI.BossHPSlider.ToString());
+                        bossSlider.maxValue = evt.FullHP;
+                        bossSlider.value = evt.CurHP;
                         return;
                     }
 
@@ -140,9 +168,12 @@ public class UI_InGameScene : UI_Scene
 
     protected override void OnDestroyed()
     {
-        _activeHpBarList.Clear();
         _skillButtonDict.Clear();
-        _hpBarPool.Destroy();
+
+        if(_hpBarPool != null)
+        {
+            _hpBarPool.Destroy();
+        }
 
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_HP_CHANGE);
         EventQueue.RemoveAllEventListener(EEventActionType.ENEMY_HP_CHANGE);
@@ -178,7 +209,8 @@ public class UI_InGameScene : UI_Scene
         //Pad
         JoyStickPad,
        
-
+        BuffView,
+        BuffContent,
 
     }
 

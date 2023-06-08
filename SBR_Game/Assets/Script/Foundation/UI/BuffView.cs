@@ -4,56 +4,88 @@ using UnityEngine;
 
 public class BuffView : UI_Base
 {
-    private RectTransform _curBuffImage;
-    private int _count;
-    private float _pos;
-    private float _movePos;
-    private bool _isScroll = false;
+
+    private Character _character;
+    private ObjectPool<BuffImage> _buffImagePool;
+
 
     protected override void InitImp()
     {
-        _curBuffImage = Bind<RectTransform>(UI.BuffList.ToString());
-        _pos = _curBuffImage.localPosition.x;
-        _movePos = _curBuffImage.rect.xMax - _curBuffImage.rect.xMax / _count;
+        _buffImagePool = new ObjectPool<BuffImage>(10, Bind<GameObject>(UI.BuffContent.ToString()).transform, Resources.Load<GameObject>("UI/Object/Buff"));
+        for(int i=0; i<_buffImagePool.PoolCount(); i++)
+        {
+            var buff = _buffImagePool.Dequeue();
+            buff.component.Init();
+            _buffImagePool.Enqueue(buff.gameObject);
+        }
+
+    }
+
+    protected override void OnDestroyed()
+    {
+
+        if (_character != null)
+        {
+            _character.OnAddBuff = null;
+        }
+        _character = null;
+       
+
+        _buffImagePool.Destroy();
+    }
+
+    public void AttachCharacter(Character character)
+    {
+        _character = character;
+        _character.OnAddBuff = AddBuff;
+
+        for (int i=0; i<_character.BuffList.Count; i++)
+        {
+            AddBuff(_character.BuffList[i]);
+        }
+    }
+
+    public void AddBuff(BuffBase buff)
+    {
+        var buffImage = _buffImagePool.Dequeue();
+
+        // TODO : buffImage.component.SetBuffImage(Resources.Load<Sprite>(buff.Proto.Name));
+
+        buffImage.component.SetBuffImage(Resources.Load<Sprite>("Sprite/Nemo"), buff.GetDuration(), buff.GetCurDuration());
+        GameLogger.Info("ADD BUFF" + buff.Proto.Name + buff.GetDuration(), buff.GetCurDuration());
+    }
+
+    public void RemoveBuff(BuffImage buffImage)
+    {
+        GameLogger.Info("Remove BuffImage");
+        _buffImagePool.Enqueue(buffImage.gameObject);
     }
 
     public void Refresh()
     {
-        if (!_isScroll)
+        if (_character == null || _character.IsDead())
         {
             return;
         }
 
-        _curBuffImage.localPosition = Vector2.Lerp(_curBuffImage.localPosition, new Vector2(_movePos, 0), Time.fixedDeltaTime * 5);
 
-        if(Vector2.Distance(_curBuffImage.localPosition, new Vector2(_movePos, 0)) < 0.1f)
+        for (int i = 0; i < _buffImagePool.ActiveCount(); i++)
         {
-            _isScroll = false;
+            var buffImage = _buffImagePool.GetActiveList()[i];
+            buffImage.component.CurDuration -= Time.fixedDeltaTime;
+            if (buffImage.component.CurDuration < 0)
+            {
+                RemoveBuff(buffImage.component);
+                return;
+            }
+
+            _buffImagePool.GetActiveList()[i].component.Refresh();
         }
         
     }
 
-    public void AddBuffImage()
-    {
-
-    }
-
-    void Left()
-    {
-        if(_curBuffImage.rect.xMax - _curBuffImage.rect.xMax / _count == _movePos)
-        {
-
-        }
-        else
-        {
-            _isScroll = true;
-            _movePos = _pos + _curBuffImage.rect.width / _count;
-            _pos = _movePos;
-        }
-    }
-
     enum UI
     {
-        BuffList,
+        BuffContent
     }
 }

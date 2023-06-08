@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
  
 
-abstract public class CharacterState<T> where T : CharacterBase
+abstract public class CharacterState<T> where T : Character
 {
     protected T _character;
     protected StateMachineBase _stateMachine;

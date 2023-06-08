@@ -9,9 +9,10 @@ using UnityEngine.UI;
 abstract public class UI_Base : MonoBehaviour
 {
 	protected string _exitButton = "ExitButton";
-	private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
+    protected bool _isInit = false;
+    private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
     private Dictionary<string, Object[]> _objectLists = new Dictionary<string, Object[]>();
-    private bool _isInit = false;
+    
 
     public void Init()
     {
@@ -152,6 +153,11 @@ abstract public class UI_Base : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (!_isInit)
+        {
+            return;
+        }
+
         _isInit = false;
         OnDestroyed();
 

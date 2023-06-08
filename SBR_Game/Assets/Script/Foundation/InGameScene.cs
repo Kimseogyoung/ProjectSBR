@@ -14,23 +14,15 @@ public class InGameScene : SceneBase
 
     protected override void Enter()
     {
-        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
-
+      
         SpawnMap(APP.CurrentStage);
 
         _inGameManager = new InGameManager();
-        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
-        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
-
         _inGameManager.Init();
 
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ATTACK));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL1));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL2));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL3));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.SKILL4));
-        _inGameSceneUI.SetSkillToButton(_inGameManager.GetPlayer().GetSkill(EInputAction.ULT_SKILL));
-
+        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
+        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
+        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
        
         _bulletManager = new BulletManager();
         _bulletManager.Init();
@@ -43,16 +35,25 @@ public class InGameScene : SceneBase
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
     }
 
+
     private void SuccessGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameSceneUI.ShowFinishPopup(deadEvent);
+
+        ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
+        if (prtRewards != null)
+        {
+            GameLogger.Error("Rewards is Null");
+            return;
+        }
+
+        _inGameSceneUI.ShowFinishPopup(true, prtRewards);
     }
 
     private void FailGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameSceneUI.ShowFinishPopup(deadEvent);
+        _inGameSceneUI.ShowFinishPopup(false);
     }
 
     private void SpawnMap(StageProto currentStage)
@@ -80,7 +81,12 @@ public class InGameScene : SceneBase
 
     protected override void Start()
     {
-        TimeHelper.AddTimeEvent(1, () => { _inGameManager.StartManager(); });
+        TimeHelper.AddTimeEvent("ingame-scene", 1, () => 
+        { 
+            _inGameManager.StartManager();
+
+            _inGameSceneUI.SetPlayer(_inGameManager.GetPlayer());
+        });
     }
 
     protected override void Update()

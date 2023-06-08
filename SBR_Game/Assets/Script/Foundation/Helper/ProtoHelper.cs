@@ -14,7 +14,33 @@ public class ProtoHelper
     {
         _reader = new ProtoReader();
     }
-    
+
+    static public IEnumerable GetEnumerable<TProto>() where TProto : ProtoItem, new()
+    {
+        if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
+        {
+            Bind<TProto>();
+            GameLogger.Info($"{typeof(TProto).Name} is not exist. so Bind");
+            dict = _protoDict[typeof(TProto)];
+            //return default(TProto);
+        }
+
+        return dict.Values;
+    }
+
+    static public int GetCount<TProto>() where TProto : ProtoItem, new()
+    {
+        if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
+        {
+            Bind<TProto>();
+            GameLogger.Info($"{typeof(TProto).Name} is not exist. so Bind");
+            dict = _protoDict[typeof(TProto)];
+            //return default(TProto);
+        }
+
+        return dict.Count();
+    }
+
     static public TProto Get<TProto, TKey>(TKey key) where TProto : ProtoItem, new()
     {
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class playerNormalState : CharacterState<CharacterBase>
+public class playerNormalState : CharacterState<Character>
 {
     protected override void OnEnter()
     {

@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class EnemyFollowState : CharacterState<CharacterBase>
+public class EnemyFollowState : CharacterState<Character>
 {
-    private CharacterBase _target;
+    private Character _target;
     private Dictionary<int, float> _attackerDamageDict = new Dictionary<int, float>();
     private Action<EventBase> _handlerInstance;
     protected override void OnEnter()
     {
-        List<CharacterBase> heroList = APP.InGame.GetLivedHeroList();
+        List<Character> heroList = APP.InGame.GetLivedHeroList();
         _target = heroList.OrderBy(h => (h.CurPos - _character.CurPos).magnitude).FirstOrDefault();
         _attackerDamageDict.Add(_target.Id, 0);
 

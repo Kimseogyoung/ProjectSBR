@@ -9,7 +9,7 @@ public class NormalProjectileSkill : SkillBase
 
     protected override void ApplySkill()
     {
-        CharacterBase target = null;
+        Character target = null;
 
         if (Prt.HitTargetType == EHitSKillType.NONTARGET)
         {
@@ -30,7 +30,7 @@ public class NormalProjectileSkill : SkillBase
         throw new NotImplementedException();
     }
 
-    private void OnFoundTarget(Vector3 pos, CharacterBase victim)
+    private void OnFoundTarget(Vector3 pos, Character victim)
     {
         GameLogger.Info("{0}이 맞음!", victim.Name);
         if (Prt.HitShapeType == EHitShapeType.NONE)
