@@ -35,16 +35,25 @@ public class InGameScene : SceneBase
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
     }
 
+
     private void SuccessGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameSceneUI.ShowFinishPopup(deadEvent);
+
+        ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
+        if (prtRewards != null)
+        {
+            GameLogger.Error("Rewards is Null");
+            return;
+        }
+
+        _inGameSceneUI.ShowFinishPopup(true, prtRewards);
     }
 
     private void FailGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameSceneUI.ShowFinishPopup(deadEvent);
+        _inGameSceneUI.ShowFinishPopup(false);
     }
 
     private void SpawnMap(StageProto currentStage)

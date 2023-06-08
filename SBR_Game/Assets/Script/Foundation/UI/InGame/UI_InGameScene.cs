@@ -48,9 +48,17 @@ public class UI_InGameScene : UI_Scene
         SetSkillToButton(player.GetSkill(EInputAction.ULT_SKILL));
     }
 
-    public void ShowFinishPopup(CharacterDeadEvent characterDeadEvent)
+    public void ShowFinishPopup(bool isSuccess, ItemProto[] prtRewards = null)
     {
-        APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
+
+        UI_InGameFinishPopup popup = APP.UI.ShowPopupUI<UI_InGameFinishPopup>();
+        if (!isSuccess)
+        {
+            popup.ShowFailUI();
+            return;
+        }
+
+        popup.ShowRewardUI(prtRewards);
     }
 
     public void SetSkillToButton(SkillBase skill)
