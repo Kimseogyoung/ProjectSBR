@@ -18,6 +18,11 @@ public partial class Item
         Prt = ProtoHelper.Get<ItemProto, int>(num);
     }
 
+    public void AddAmount(int amount = 1)
+    {
+        Amount += amount;
+    }
+
     public bool Equip()
     {
         if(Amount <= 0 || Prt.Type >= EItemType.NORMAL || IsEquiped )

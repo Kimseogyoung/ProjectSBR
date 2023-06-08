@@ -11,8 +11,9 @@ public class UI_LobbyScene : UI_Scene
     private List<GameObject> _stageButtonPoints;
     private List<TMP_Text> _stageButtonTexts;
     private List<UI_Star> _stageButtonStars;
+    private List<int> _stageButtonNumList;
     private List<Button> _stageButtons;
-    private List<Image> _stageButtonImages;
+
     private UI ui;
 
     private void Awake()
@@ -41,8 +42,7 @@ public class UI_LobbyScene : UI_Scene
         _stageButtonTexts = BindMany<TMP_Text>(UIs.StageButtonText.ToString());
         _stageButtonStars = BindMany<UI_Star>(UIs.StageStars.ToString());
         _stageButtons = BindMany<Button>(UIs.StageButton.ToString());
-        _stageButtonImages = BindMany<Image>(UIs.StageButtonImage.ToString());
-        RefreshStageButton();
+        InitStageButtons();
 
         //확인용 텍스트
         Get<TMP_Text>(UI.EnergyText.ToString()).text = "Energy";
@@ -57,17 +57,39 @@ public class UI_LobbyScene : UI_Scene
         Get<Button>(UI.ShopButton.ToString()).
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_ShopPopup>(); });
 
+        RefreshStageButton();
+
+    }
+
+    private void InitStageButtons()
+    {
+        _stageButtonNumList = new();
+        for (int i = 0; i < _stageButtons.Count; i++)
+        {
+            int stageNum = ProtoHelper.GetUsingIndex<StageProto>(i).Id;
+            _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
+            _stageButtonTexts[i].text = $"Stage {stageNum}";
+            _stageButtonNumList.Add(stageNum);
+        }
     }
 
     private void RefreshStageButton()
     {
+        int playerTopOpenStage = APP.GameManager.Player.TopOpenStageNum;
+        Dictionary<int, int> playerStageStarDict = APP.GameManager.Player.StageStarDict;
         for(int i=0; i< _stageButtons.Count; i++)
         {
-            int stageNum = ProtoHelper.GetUsingIndex<StageProto>(i).Id;
-            _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
-            _stageButtonStars[i].SetStarLevel(2);
-            _stageButtonTexts[i].text = $"Stage {stageNum}";
-            
+            int stageNum = _stageButtonNumList[i];
+            int stageStar = playerStageStarDict[stageNum];
+            if (playerTopOpenStage < stageNum)
+            {
+                _stageButtons[i].interactable = false;
+            }
+            else
+            {
+                _stageButtons[i].interactable = true;
+            }
+            _stageButtonStars[i].SetStarLevel(stageStar);       
         }
     }
 

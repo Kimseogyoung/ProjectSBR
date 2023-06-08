@@ -6,5 +6,6 @@ namespace Config
     public class Game : ConfigBase
     {
         public string StartScene = "LobbyScene";
+        public int MaxEnergy = 5;
     }
 }
