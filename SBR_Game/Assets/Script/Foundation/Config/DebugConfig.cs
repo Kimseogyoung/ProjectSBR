@@ -9,6 +9,8 @@ namespace Config
         public bool IsLogMode { get; set; } = true;
         public bool IsDebugMode = true;
         public string StartScene = "LobbyScene";
+
+        public List<int> StartItemNumList = new();
     }
 
 }

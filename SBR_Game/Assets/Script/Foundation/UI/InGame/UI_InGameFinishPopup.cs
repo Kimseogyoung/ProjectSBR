@@ -7,30 +7,34 @@ using UnityEngine.UI;
 
 public class UI_InGameFinishPopup : UI_Popup
 {
+    private UI_InGameSuccessPanel _successPanel;
+    private UI_InGameFailedPanel _failedPanel;
     private void Awake()
     {
-        Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
-        {
-            EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            APP.SceneManager.ChangeScene("LobbyScene");
-        });
-        Bind<TMP_Text>(UI.GameResultText.ToString());
+        _successPanel = BindComponent<UI_InGameSuccessPanel>(UI.SuccessPanel.ToString());
+        _failedPanel = BindComponent<UI_InGameFailedPanel>(UI.FailedPanel.ToString());
+
+        _successPanel.gameObject.SetActive(false);
+        _failedPanel.gameObject.SetActive(false);
     }
 
     public void ShowRewardUI(ItemProto[] prtRewards)
     {
-        GameLogger.Info($"Reward List ({JsonConvert.SerializeObject(prtRewards)}");
-        GameLogger.Info($"TODO :  Select Reward");
+        _failedPanel.gameObject.SetActive(false);
+        _successPanel.gameObject.SetActive(true);
+        _successPanel.ShowRewardUI(prtRewards); 
     }
 
     public void ShowFailUI()
     {
-        GameLogger.Info($"TODO :  Make Fail PopUp");
+        _failedPanel.gameObject.SetActive(true);
+        _successPanel.gameObject.SetActive(false);
+        _failedPanel.ShowFailUI();
     }
 
     enum UI
     {
-        GameResultText,
-        GoLobbyButton
+        FailedPanel,
+        SuccessPanel
     }
 }
