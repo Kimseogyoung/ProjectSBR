@@ -72,12 +72,12 @@ public class GameManager: MonoBehaviour
     void Start()
     {
         CreatePlayer();
-
+        APP.UI.StartManager();
         foreach (IManager manager in _managers)
         {
             manager.StartManager();
         }
-        APP.UI.StartManager();
+
     }
 
     void FixedUpdate()

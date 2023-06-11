@@ -70,12 +70,14 @@ public class UIManager : IManager, IManagerUpdatable
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        T sceneUI = null;
-        GameObject go = null;
+        T sceneUI;
+        GameObject go;
         if (!Util.GameObj.TryFind<T>(out sceneUI, name))
         {
+            GameLogger.Info($"Create {name} scene");
             go = Util.Resource.Instantiate($"UI/Scene/{name}");
             sceneUI = Util.GameObj.GetOrAddComponent<T>(go);
+
         }
         else
         {
@@ -83,7 +85,6 @@ public class UIManager : IManager, IManagerUpdatable
         }
 
         _sceneUI = sceneUI;
-
 
         go.transform.SetParent(Root.transform);
         _sceneUI.Init();

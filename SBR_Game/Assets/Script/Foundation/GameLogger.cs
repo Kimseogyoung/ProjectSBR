@@ -7,11 +7,11 @@ public class GameLogger
     
     static public void Info(string msg, params object[] args)
     {
-        Debug.Log(RichText.color.ToString("black", string.Format(msg,args)));
+        Debug.Log(RichText.color.ToString("white", string.Format(msg,args)));
     }
     static public void NotImp(string msg, params object[] args)
     {
-        Debug.Log(RichText.color.ToString("gray", string.Format(msg, args)));
+        Debug.Log(RichText.color.ToString("black", string.Format(msg, args)));
     }
     static public void Strong(string msg, params object[] args)
     {

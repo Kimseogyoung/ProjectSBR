@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +17,18 @@ public class UI_LobbyScene : UI_Scene
 
     private void Awake()
     {
-        
+        GameLogger.Info("Awake");
+    }
+
+    protected override void OnDestroyed()
+    {
+        GameLogger.Info("DestroyLobbyScene");
+    }
+
+    protected override void InitImp()
+    {
+        GameLogger.Info("Init");
+        base.InitImp();
         Bind<Button>(UI.TmpButton.ToString());
         Bind<Button>(UI.RecordButton.ToString());
         Bind<Button>(UI.SettingButton.ToString());
@@ -64,6 +74,7 @@ public class UI_LobbyScene : UI_Scene
     private void InitStageButtons()
     {
         _stageButtonNumList = new();
+        
         for (int i = 0; i < _stageButtons.Count; i++)
         {
             int stageNum = ProtoHelper.GetUsingIndex<StageProto>(i).Id;

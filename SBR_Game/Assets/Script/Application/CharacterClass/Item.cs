@@ -25,7 +25,7 @@ public partial class Item
 
     public bool Equip()
     {
-        if(Amount <= 0 || Prt.Type >= EItemType.NORMAL || IsEquiped )
+        if(Amount <= 0 || Prt.Type >= EItemType.ONCE || IsEquiped )
         {
             GameLogger.Error($"CanNot Equip. TNum({Prt.Id}) ype({Prt.Type}) Amount({Amount}) IsEquip({IsEquiped})");
             return false;
@@ -36,7 +36,7 @@ public partial class Item
 
     public bool Unequip()
     {
-        if (Amount <= 0 || Prt.Type >= EItemType.NORMAL || !IsEquiped)
+        if (Amount <= 0 || Prt.Type >= EItemType.ONCE || !IsEquiped)
         {
             GameLogger.Error($"CanNot UnEquip. Num({Prt.Id}) Type({Prt.Type }) Amount({Amount}) IsEquip({IsEquiped})");
             return false;

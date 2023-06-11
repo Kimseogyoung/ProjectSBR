@@ -12,7 +12,7 @@ abstract public class UI_Base : MonoBehaviour
     protected bool _isInit = false;
     private Dictionary<string, Object> _objects = new Dictionary<string, Object>();
     private Dictionary<string, Object[]> _objectLists = new Dictionary<string, Object[]>();
-    
+
 
     public void Init()
     {
@@ -159,6 +159,7 @@ abstract public class UI_Base : MonoBehaviour
         }
 
         _isInit = false;
+        GameLogger.Info($"Destroy {gameObject.name}");
         OnDestroyed();
 
         _objects.Clear();
@@ -168,5 +169,5 @@ abstract public class UI_Base : MonoBehaviour
 
     protected virtual void OnDestroyed() { }
     protected abstract void InitImp();
-   
+
 }

@@ -30,7 +30,17 @@ public class Player
         {
             StageStarDict.Add(prtStage.Id, 0);
         }
-     
+
+#if DEBUG
+
+        for(int i=0; i< APP.DebugConf.StartItemNumList.Count; i++)
+        {
+            Item item = new Item(APP.DebugConf.StartItemNumList[i]);
+            AddItem(item);
+        }
+#endif
+
+
     }
 
     public void Destroy()
@@ -60,10 +70,12 @@ public class Player
     {
         if (Inventory.ContainsKey(item.Prt.Id))
         {
+            GameLogger.Info($"Add Existed Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
             Inventory[item.Prt.Id].AddAmount(item.Amount);
             return;
         }
 
+        GameLogger.Info($"Add New Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
         Inventory.Add(item.Prt.Id, item);
 
         if (item.Prt.Type == EItemType.NORMAL)

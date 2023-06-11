@@ -19,7 +19,7 @@ namespace Util
         static public GameObject Instantiate(string path, Transform parent = null)
         {
             GameObject obj = GameObject.Instantiate(Resource.Load<GameObject>(path));
-            if(parent != null)
+            if (parent != null)
                 obj.transform.SetParent(parent);
             return obj;
         }
@@ -36,7 +36,7 @@ namespace Util
         static public T Load<T>(string path) where T : Object
         {
             T obj = Resources.Load<T>(path);
-            GameLogger.NotImp("{0} 타입 {1}경로에서 Load", typeof(T), path);
+            GameLogger.NotImp("{0} 타입 {1}경로에서 Load {2}", typeof(T), path, obj);
             return obj;
         }
 

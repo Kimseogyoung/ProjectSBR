@@ -17,15 +17,23 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void Init()
     {
-        string startScene = APP.GameConf.StartScene;
-        //Sync
-        UnitySceneManager.LoadScene(startScene);
-        InvokeNextScene(startScene);
+    
     }
 
     public void StartManager()
     {
+        string startScene = APP.GameConf.StartScene;
 
+#if DEBUG
+        startScene = APP.DebugConf.StartScene;
+#endif
+
+        //Sync
+        if (UnitySceneManager.GetActiveScene().name != startScene)
+        {
+            UnitySceneManager.LoadScene(startScene);
+        }
+        InvokeNextScene(startScene);
     }
 
     public void ChangeScene(string nextSceneName)
@@ -75,12 +83,14 @@ public class SceneManager : IManager, IManagerUpdatable
             }
 
         }
+        
         InvokeNextScene(nextSceneName);
        
     }
 
     private void InvokeNextScene(string nextSceneName)
     {
+        GameLogger.Info($"LoadDone {nextSceneName}");
         switch (nextSceneName)
         {
             case "IntroScene":

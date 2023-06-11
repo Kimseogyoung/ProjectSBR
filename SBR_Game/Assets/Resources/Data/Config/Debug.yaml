@@ -2,4 +2,4 @@ IsLogMode : true
 IsDebugMode : true
 StartScene: "LobbyScene"
 StartItemNumList:
-	- 199999
+ - 199999
