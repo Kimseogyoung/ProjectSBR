@@ -2,6 +2,7 @@ public class ItemProto : ProtoItem
 {
     public int Id { get; set; }// pk 
     public string Name { get; set; }
+    public string IconImg { get; set; }
     public EItemType Type { get; set; }
     public string Desc { get; set; }
     public string ElementSynergy { get; set; }

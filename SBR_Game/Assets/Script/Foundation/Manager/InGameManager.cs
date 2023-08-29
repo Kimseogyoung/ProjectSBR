@@ -96,6 +96,19 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         }
         _damageTextSystem.Update();
         Skill.UpdateSkill();
+        Test_Upadte();
+    }
+
+    public void Test_Upadte()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            GameLogger.Info("f1: 모든 적에게 100000데미지");
+            for(int i=0; i< _enemyList.Count; i++)
+            {
+                _enemyList[i].ApplyDamagePure(100000);
+            }
+        }
     }
 
     public void UpdatePausedManager()

@@ -20,9 +20,7 @@ namespace Util
 
         static public T GetOrAddComponent<T>(UnityGameObject gameObject)
         {
-            T result;
-
-            if(!gameObject.TryGetComponent<T>(out result))
+            if(!gameObject.TryGetComponent<T>(out T result))
             {
                 gameObject.AddComponent(typeof(T));
                 result = gameObject.GetComponent<T>();
@@ -30,6 +28,25 @@ namespace Util
 
             return result;
         }
+
+        static public T GetComponentInChildren<T>(UnityGameObject gameObject, string name = "")
+        {
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                for (int i = 0; i < gameObject.transform.childCount; i++)
+                {
+                    Transform obj = gameObject.transform.GetChild(i);
+                    if (obj.name == name)
+                    {
+                        return obj.GetComponent<T>();
+                    }
+                }
+            }
+
+            return gameObject.GetComponentInChildren<T>();
+        }
+
 
         static public T FindChild<T>(UnityGameObject gameObject, string name = null, bool recursive = false) where T : UnityEngine.Object
         {
@@ -87,7 +104,7 @@ namespace Util
             List<T> objects= new List<T>();
             foreach (T value in gameObject.GetComponentsInChildren<T>())
             {
-                if (value.name.StartsWith(name))
+                if (value.name == name || value.name.StartsWith(name) && value.name.EndsWith(')'))
                     objects.Add(value);
             }
             return objects.ToArray();
@@ -105,6 +122,8 @@ namespace Util
 
             return objects;
         }
+
+
 
         static public bool TryFind<T>(out T result, string name) where T : UnityEngine.Object
         {

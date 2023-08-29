@@ -22,12 +22,8 @@ public class RandomHelper
         while (cnt < 3)
         {
             int result = _random.Next(0, ProtoHelper.GetCount<ItemProto>());
-            
-            if(itemProtos[cnt] != null && itemProtos[cnt].Id == result)
-            {
-                continue;
-            }
-            itemProtos[cnt] = ProtoHelper.GetUsingIndex<ItemProto>(result);
+            ItemProto prt  = ProtoHelper.GetUsingIndex<ItemProto>(result);
+            itemProtos[cnt] = prt;
             cnt++;
         }
         return itemProtos;

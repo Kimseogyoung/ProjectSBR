@@ -71,6 +71,7 @@ public class GameManager: MonoBehaviour
 
     void Start()
     {
+        GameLogger.Info("StartManager");
         CreatePlayer();
         APP.UI.StartManager();
         foreach (IManager manager in _managers)

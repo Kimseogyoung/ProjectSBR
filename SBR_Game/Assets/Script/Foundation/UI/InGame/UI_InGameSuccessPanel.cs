@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 public class UI_InGameSuccessPanel : UI_Panel
 {
@@ -14,7 +15,7 @@ public class UI_InGameSuccessPanel : UI_Panel
     private List<Button> _rewardSlotButtonList = new();
     private int _currentSelectReward = -1;
     private Color _unselectedColor = new Color(0.8f,0.8f,0.8f);
-    private ItemProto[] rewardItemList = new ItemProto[3];
+    private ItemProto[] _rewardItemList = new ItemProto[3];
 
     private void Awake()
     {
@@ -38,8 +39,9 @@ public class UI_InGameSuccessPanel : UI_Panel
             var idx = i;
             var button = rewardSlot.GetComponentInChildren<Button>();
 
-            _rewardSlotImageList.Add(rewardSlot.GetComponentInChildren<Image>());
+            _rewardSlotImageList.Add(Util.GameObj.GetComponentInChildren<Image>(rewardSlot, "RewardSlotItem"));
             _rewardSlotButtonList.Add(button);
+
             button.onClick.AddListener(() =>
                 {
                     _currentSelectReward = idx;
@@ -51,7 +53,7 @@ public class UI_InGameSuccessPanel : UI_Panel
 
     public void ShowRewardUI(ItemProto[] prtRewards)
     {
-        rewardItemList = prtRewards;
+        _rewardItemList = prtRewards;
         _stageText.text = $"you cleared stage {APP.CurrentStage}\nchoose reword.";
         UpdateSelectedReward();
     }
@@ -63,6 +65,7 @@ public class UI_InGameSuccessPanel : UI_Panel
         {
             for (int i = 0; i < _rewardSlotImageList.Count; i++)
             {
+                _rewardSlotImageList[i].sprite = Util.Resource.Load<Sprite>($"Item/Sprite/{_rewardItemList[i].IconImg}");
                 _rewardSlotImageList[i].color = Color.white;
             }
             _rewardItemNameText.text = "";
@@ -82,8 +85,8 @@ public class UI_InGameSuccessPanel : UI_Panel
             }
         }
 
-        _rewardItemNameText.text = ProtoHelper.Get<ItemProto, int>(rewardItemList[_currentSelectReward].Id).Name;
-        _rewardItemDetailText.text = ProtoHelper.Get<ItemProto, int>(rewardItemList[_currentSelectReward].Id).Desc;
+        _rewardItemNameText.text = ProtoHelper.Get<ItemProto, int>(_rewardItemList[_currentSelectReward].Id).Name;
+        _rewardItemDetailText.text = ProtoHelper.Get<ItemProto, int>(_rewardItemList[_currentSelectReward].Id).Desc;
     }
 
     protected override void OnDestroyed()

@@ -1183,6 +1183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_InGameScene
       objectReference: {fileID: 0}
+    - target: {fileID: 1440702328579458526, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_Name
+      value: SkillButton (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 1810762472655890238, guid: f281bee342184d0489644ceee1273c25, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1190,6 +1194,10 @@ PrefabInstance:
     - target: {fileID: 1810762472655890238, guid: f281bee342184d0489644ceee1273c25, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467373093526632859, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_Name
+      value: SkillButton (4)
       objectReference: {fileID: 0}
     - target: {fileID: 4014542528101066352, guid: f281bee342184d0489644ceee1273c25, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1199,6 +1207,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4188879057688778946, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_Name
+      value: SkillButton (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 4260969288112205950, guid: f281bee342184d0489644ceee1273c25, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1206,6 +1218,14 @@ PrefabInstance:
     - target: {fileID: 4260969288112205950, guid: f281bee342184d0489644ceee1273c25, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6054987058184311116, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_Name
+      value: SkillButton (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255683425964810860, guid: f281bee342184d0489644ceee1273c25, type: 3}
+      propertyPath: m_Name
+      value: SkillButton (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f281bee342184d0489644ceee1273c25, type: 3}

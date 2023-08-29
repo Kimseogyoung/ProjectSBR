@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageTextSystem
@@ -37,7 +38,7 @@ public class DamageTextSystem
         EventQueue.RemoveAllEventListener(EEventActionType.SHOW_DAMAGE_TEXT);
 
         _damageObjectPool.Destroy();
-        GameObject.Destroy(_effectRoot);
+        GameObject.Destroy(_effectRoot.gameObject);
     }
 
     public void Update()

@@ -41,7 +41,7 @@ public class InGameScene : SceneBase
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
 
         ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
-        if (prtRewards != null)
+        if (prtRewards == null)
         {
             GameLogger.Error("Rewards is Null");
             return;

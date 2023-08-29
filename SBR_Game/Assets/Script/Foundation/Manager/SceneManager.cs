@@ -29,11 +29,8 @@ public class SceneManager : IManager, IManagerUpdatable
 #endif
 
         //Sync
-        if (UnitySceneManager.GetActiveScene().name != startScene)
-        {
-            UnitySceneManager.LoadScene(startScene);
-        }
-        InvokeNextScene(startScene);
+        GameLogger.Info($"StartScene {startScene}");
+        Util.CoroutineHelper.StartCoroutine(CoLoadScene(startScene));
     }
 
     public void ChangeScene(string nextSceneName)

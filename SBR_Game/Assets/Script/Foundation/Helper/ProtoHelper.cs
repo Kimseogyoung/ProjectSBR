@@ -71,7 +71,8 @@ public class ProtoHelper
 
         foreach(ProtoItem value in dict.Values)
         {
-            if (value.Idx == idx) return (TProto)value;
+            if (value.Idx == idx) 
+                return (TProto)value;
         }
 
         return default(TProto);
