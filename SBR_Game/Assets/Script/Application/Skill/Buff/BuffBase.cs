@@ -40,7 +40,7 @@ public class BuffBase
 
     public void Apply()
     {
-        GameLogger.Info($"{Proto.Name} 버프 적용.");
+        GameLogger.I($"{Proto.Name} 버프 적용.");
         _timeAction = TimeHelper.AddTimeEvent(_durationTimeEventName, _duration, () => { Cancel(); });
 
         _tickTime = 0;
@@ -54,7 +54,7 @@ public class BuffBase
         {
             _tickTime = Proto.TickInterval;
             _target.ApplyTickBuff(this);
-            GameLogger.Info($"{Proto.Name} 버프 틱 효과 적용.  다음 틱 적용시간 {_tickTime}");
+            GameLogger.I($"{Proto.Name} 버프 틱 효과 적용.  다음 틱 적용시간 {_tickTime}");
         }
     }
 
@@ -68,7 +68,7 @@ public class BuffBase
     {
         if(_timeAction == null)
         {
-            GameLogger.Error("TimeAction Null");
+            GameLogger.E("TimeAction Null");
             return 0;
         }
         return TimeHelper.GetTimeEventRemainingTime(_timeAction);

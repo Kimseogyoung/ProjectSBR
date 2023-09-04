@@ -51,7 +51,7 @@ public class ProtoMenu : MonoBehaviour
                 writer.Write(builder.ToString());
             }
 
-            GameLogger.Info($"Generate {fileName} from {filePaths[i]} done");
+            GameLogger.I($"Generate {fileName} from {filePaths[i]} done");
 
         }
        

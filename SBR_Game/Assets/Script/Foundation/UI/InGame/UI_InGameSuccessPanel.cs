@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Util;
+using SG;
 
 public class UI_InGameSuccessPanel : UI_Panel
 {
@@ -39,14 +39,14 @@ public class UI_InGameSuccessPanel : UI_Panel
             var idx = i;
             var button = rewardSlot.GetComponentInChildren<Button>();
 
-            _rewardSlotImageList.Add(Util.GameObj.GetComponentInChildren<Image>(rewardSlot, "RewardSlotItem"));
+            _rewardSlotImageList.Add(SG.UTIL.GetComponentInChildren<Image>(rewardSlot, "RewardSlotItem"));
             _rewardSlotButtonList.Add(button);
 
             button.onClick.AddListener(() =>
                 {
                     _currentSelectReward = idx;
                     UpdateSelectedReward();
-                    GameLogger.Info($"Select RewardItem ({_currentSelectReward})");
+                    GameLogger.I($"Select RewardItem ({_currentSelectReward})");
                 });
         } 
     }
@@ -65,7 +65,7 @@ public class UI_InGameSuccessPanel : UI_Panel
         {
             for (int i = 0; i < _rewardSlotImageList.Count; i++)
             {
-                _rewardSlotImageList[i].sprite = Util.Resource.Load<Sprite>($"Item/Sprite/{_rewardItemList[i].IconImg}");
+                _rewardSlotImageList[i].sprite = SG.UTIL.Load<Sprite>($"Item/Sprite/{_rewardItemList[i].IconImg}");
                 _rewardSlotImageList[i].color = Color.white;
             }
             _rewardItemNameText.text = "";

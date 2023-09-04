@@ -17,17 +17,17 @@ public class UI_LobbyScene : UI_Scene
 
     private void Awake()
     {
-        GameLogger.Info("Awake");
+        GameLogger.I("Awake");
     }
 
     protected override void OnDestroyed()
     {
-        GameLogger.Info("DestroyLobbyScene");
+        GameLogger.I("DestroyLobbyScene");
     }
 
     protected override void InitImp()
     {
-        GameLogger.Info("Init");
+        GameLogger.I("Init");
         base.InitImp();
         Bind<Button>(UI.TmpButton.ToString());
         Bind<Button>(UI.RecordButton.ToString());
@@ -45,7 +45,7 @@ public class UI_LobbyScene : UI_Scene
 
         foreach(GameObject point in _stageButtonPoints)
         {
-            GameObject stageButton = Util.Resource.Instantiate(AppPath.StageButton);
+            GameObject stageButton = SG.UTIL.Instantiate(AppPath.StageButton);
             stageButton.transform.SetParent(point.transform,false);
         }
 
@@ -108,7 +108,7 @@ public class UI_LobbyScene : UI_Scene
     {
         UI_StageConfirmPopup popup =  APP.UI.ShowPopupUI<UI_StageConfirmPopup>();
         popup.SetStageData(stageNum);
-        GameLogger.Info("Click Stage {0} Button.", stageNum);
+        GameLogger.I("Click Stage {0} Button.", stageNum);
     }
 
     enum UI

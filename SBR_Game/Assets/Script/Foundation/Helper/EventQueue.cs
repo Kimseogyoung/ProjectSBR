@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Util;
+using SG;
 
 public class EventQueue : MonoBehaviour
 {
@@ -67,7 +67,7 @@ public class EventQueue : MonoBehaviour
             {
                 return;
             }
-            GameLogger.Info("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
+            GameLogger.I("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
             action.Invoke(dequeueAction);
         }
 

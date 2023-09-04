@@ -20,7 +20,7 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
     public void InstantiateBullet(Action<Vector3, Character> onFoundAction, Character owner, string bulletPrefab, Vector3 dir, 
         float speed, float maximumDistance, ECharacterTeamType teamType, Character target = null)
     {
-        GameObject bulletObj = Util.Resource.Instantiate(bulletPrefab);
+        GameObject bulletObj = SG.UTIL.Instantiate(bulletPrefab);
         bulletObj.transform.SetParent(_parent);
         bulletObj.transform.position = owner.CurPos;
         

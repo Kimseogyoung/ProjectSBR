@@ -13,7 +13,7 @@ public class BuffSkill : SkillBase
         BuffProto prtBuff = ProtoHelper.Get<BuffProto, int>(Prt.BuffNum);
         if(Prt.TargetTeam == ECharacterTeamType.ENEMY)
         {
-            GameLogger.Info("Enemy 대상 버프 스킬 미구현");
+            GameLogger.I("Enemy 대상 버프 스킬 미구현");
         }
         else//HERO
         {

@@ -21,7 +21,7 @@ public class UI_InGameFailedPanel : UI_Panel
     public void ShowFailUI()
     {
         Get<TMP_Text>(UI.StageText.ToString()).text = $"you reached stage {APP.GameManager.Player.TopOpenStageNum}";
-        GameLogger.Info($"TODO :  Make Fail PopUp");
+        GameLogger.I($"TODO :  Make Fail PopUp");
     }
 
     enum UI

@@ -29,14 +29,14 @@ public class SceneManager : IManager, IManagerUpdatable
 #endif
 
         //Sync
-        GameLogger.Info($"StartScene {startScene}");
-        Util.CoroutineHelper.StartCoroutine(CoLoadScene(startScene));
+        GameLogger.I($"StartScene {startScene}");
+        SG.CoroutineHelper.StartCoroutine(CoLoadScene(startScene));
     }
 
     public void ChangeScene(string nextSceneName)
     {
         _currentScene.ExitBase();
-        Util.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
+        SG.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
     }
 
     public void UpdateManager()
@@ -61,7 +61,7 @@ public class SceneManager : IManager, IManagerUpdatable
 
         if(!(_currentScene is T))
         {
-            GameLogger.Error("{0} is Not {1}", _currentScene._sceneName, typeof(T));
+            GameLogger.E("{0} is Not {1}", _currentScene._sceneName, typeof(T));
             return null;
         }
         return (T)_currentScene;
@@ -87,7 +87,7 @@ public class SceneManager : IManager, IManagerUpdatable
 
     private void InvokeNextScene(string nextSceneName)
     {
-        GameLogger.Info($"LoadDone {nextSceneName}");
+        GameLogger.I($"LoadDone {nextSceneName}");
         switch (nextSceneName)
         {
             case "IntroScene":

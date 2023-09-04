@@ -14,7 +14,8 @@ public class ShowTextEvent : EventBase
     public ShowTextEvent(float damage, Vector3 pos, Vector3? dir = null)
     {
         Value = damage;
-        Pos = pos;        Dir = dir ?? Vector3.zero;
+        Pos = pos;
+        Dir = dir ?? Vector3.zero;
 
     }
 }

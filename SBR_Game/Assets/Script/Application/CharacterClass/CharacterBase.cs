@@ -102,7 +102,7 @@ public partial class Character : IBuffAppliable
     private void AddSkill(EInputAction action, int skillId)
     {
         var prtSkill = ProtoHelper.Get<SkillProto, int>(skillId);
-        GameLogger.Info($"{Name} 캐릭터에게 스킬 {prtSkill.Name} 등록. Action({action.ToString()})");
+        GameLogger.I($"{Name} 캐릭터에게 스킬 {prtSkill.Name} 등록. Action({action.ToString()})");
 
         var skillInstance = Activator.CreateInstance(Type.GetType(prtSkill.ClassType));
 
@@ -123,7 +123,7 @@ public partial class Character : IBuffAppliable
 
         if (!BuffList.Contains(buff))
         {
-            GameLogger.Error("buff 이미 종료됨.");
+            GameLogger.E("buff 이미 종료됨.");
             return;
         }
 

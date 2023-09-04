@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Util{
+namespace SG{
     public class CoroutineHelper : MonoBehaviour
     {
         private static MonoBehaviour monoInstance;

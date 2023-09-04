@@ -15,7 +15,7 @@ public class ChannelingState : CharacterState<Character>
     {
         if (_character.CharacterType == ECharacterType.PLAYER)
         {
-            GameLogger.Strong("플레이어 이동 이벤트 삭제");
+            GameLogger.W("플레이어 이동 이벤트 삭제");
             APP.InputManager.RemoveInputAction(EInputAction.RUN, _stateMachine.MoveCharacterPos);
             APP.InputManager.RemoveInputAction(EInputAction.ATTACK, _stateMachine.Attack);
             APP.InputManager.RemoveInputAction(EInputAction.SKILL1, _stateMachine.UseSkill1);

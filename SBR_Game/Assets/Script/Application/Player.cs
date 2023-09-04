@@ -70,12 +70,12 @@ public class Player
     {
         if (Inventory.ContainsKey(item.Prt.Id))
         {
-            GameLogger.Info($"Add Existed Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
+            GameLogger.I($"Add Existed Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
             Inventory[item.Prt.Id].AddAmount(item.Amount);
             return;
         }
 
-        GameLogger.Info($"Add New Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
+        GameLogger.I($"Add New Item Id({item.Prt.Id}) Name({item.Prt.Name}) Amount({item.Amount})");
         Inventory.Add(item.Prt.Id, item);
 
         if (item.Prt.Type == EItemType.NORMAL)
@@ -93,7 +93,7 @@ public class Player
     {
         if (!item.Equip())
         {
-            GameLogger.Error("EquipItem Failed");
+            GameLogger.E("EquipItem Failed");
             return;
         }
 

@@ -9,8 +9,8 @@ public class PlayerStateMachine : StateMachineBase
     private CinemachineVirtualCamera _playerCam;
     void Start()
     {
-        GameObject playerCamObj = Util.Resource.Instantiate("Prefab/PlayerCamera");
-        _playerCam = Util.GameObj.GetComponent<CinemachineVirtualCamera>(playerCamObj);
+        GameObject playerCamObj = SG.UTIL.Instantiate("Prefab/PlayerCamera");
+        _playerCam = SG.UTIL.GetComponent<CinemachineVirtualCamera>(playerCamObj);
         _playerCam.Follow = gameObject.transform;
     }
     protected override void Init()

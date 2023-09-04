@@ -9,13 +9,13 @@ abstract public class SceneBase
 
     public void EnterBase()
     {
-        GameLogger.Info($"{_sceneName} Enter!");
+        GameLogger.I($"{_sceneName} Enter!");
         Enter();
     }
 
     public void StartBase()
     {
-        GameLogger.Info($"{_sceneName} Start!");
+        GameLogger.I($"{_sceneName} Start!");
         Start();
     }
 
@@ -25,7 +25,7 @@ abstract public class SceneBase
     }
     public void ExitBase()
     {
-        GameLogger.Info($"{_sceneName} Exit!");
+        GameLogger.I($"{_sceneName} Exit!");
         Exit();
     }
 

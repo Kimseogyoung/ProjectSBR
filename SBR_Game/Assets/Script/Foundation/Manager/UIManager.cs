@@ -50,7 +50,7 @@ public class UIManager : IManager, IManagerUpdatable
 
     public void SetCanvas(GameObject go, bool sort = true)
     {
-        Canvas canvas = Util.GameObj.GetOrAddComponent<Canvas>(go);
+        Canvas canvas = SG.UTIL.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true; // 캔버스 안에 캔버스 중첩 경우 (부모 캔버스가 어떤 값을 가지던 나는 내 오더값을 가지려 할때)
 
@@ -72,11 +72,11 @@ public class UIManager : IManager, IManagerUpdatable
 
         T sceneUI;
         GameObject go;
-        if (!Util.GameObj.TryFind<T>(out sceneUI, name))
+        if (!SG.UTIL.TryFind<T>(out sceneUI, name))
         {
-            GameLogger.Info($"Create {name} scene");
-            go = Util.Resource.Instantiate($"UI/Scene/{name}");
-            sceneUI = Util.GameObj.GetOrAddComponent<T>(go);
+            GameLogger.I($"Create {name} scene");
+            go = SG.UTIL.Instantiate($"UI/Scene/{name}");
+            sceneUI = SG.UTIL.GetOrAddComponent<T>(go);
 
         }
         else
@@ -99,10 +99,10 @@ public class UIManager : IManager, IManagerUpdatable
 
         T popup = null;
         GameObject go = null;
-        if (!Util.GameObj.TryFind<T>(out popup, name))
+        if (!SG.UTIL.TryFind<T>(out popup, name))
         {
-            go = Util.Resource.Instantiate($"UI/Popup/{name}");
-            popup = Util.GameObj.GetOrAddComponent<T>(go);
+            go = SG.UTIL.Instantiate($"UI/Popup/{name}");
+            popup = SG.UTIL.GetOrAddComponent<T>(go);
         }
         else
             go = popup.gameObject;
@@ -135,7 +135,7 @@ public class UIManager : IManager, IManagerUpdatable
             return;
 
         UI_Popup popup = _popupStack.Pop();
-        Util.GameObj.Destroy(popup.gameObject);
+        SG.UTIL.Destroy(popup.gameObject);
         popup = null;
         _order--; // order 줄이기
     }

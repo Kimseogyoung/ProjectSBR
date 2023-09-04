@@ -43,7 +43,7 @@ public class InGameScene : SceneBase
         ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
         if (prtRewards == null)
         {
-            GameLogger.Error("Rewards is Null");
+            GameLogger.E("Rewards is Null");
             return;
         }
 
@@ -60,11 +60,11 @@ public class InGameScene : SceneBase
     {
         GameObject map = GameObject.FindObjectOfType<Terrain>()?.gameObject;
         if(map == null)
-            map = Util.Resource.Instantiate(currentStage.PrefabPath);
+            map = SG.UTIL.Instantiate(currentStage.PrefabPath);
 
         if (map == null)
         {
-            GameLogger.Error($"No GameObject {currentStage.PrefabPath}");
+            GameLogger.E($"No GameObject {currentStage.PrefabPath}");
             return;
         }
         map.transform.position = new Vector3(-currentStage.Width / 2, -1, -currentStage.Height / 2);

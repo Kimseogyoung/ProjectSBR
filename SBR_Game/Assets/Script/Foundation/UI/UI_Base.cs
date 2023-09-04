@@ -18,7 +18,7 @@ abstract public class UI_Base : MonoBehaviour
     {
         if (_isInit)
         {
-            GameLogger.Info("Already Init");
+            GameLogger.I("Already Init");
             return;
         }
         
@@ -29,7 +29,7 @@ abstract public class UI_Base : MonoBehaviour
 
     protected T BindComponent<T>(string name) where T : Component
     {
-        Object obj = Util.GameObj.FindChild(gameObject, name, true);
+        Object obj = SG.UTIL.FindChild(gameObject, name, true);
 
         if (obj == null)
         {
@@ -46,13 +46,13 @@ abstract public class UI_Base : MonoBehaviour
 	{
 		Object obj = null;
         if (typeof(T) == typeof(GameObject))
-            obj = Util.GameObj.FindChild(gameObject, name, true);
+            obj = SG.UTIL.FindChild(gameObject, name, true);
         else
-            obj = Util.GameObj.FindChild<T>(gameObject, name, true);
+            obj = SG.UTIL.FindChild<T>(gameObject, name, true);
 
 		if (obj == null)
 		{
-            GameLogger.Error($"Failed to bind({name}) to {nameof(gameObject.name)}");
+            GameLogger.E($"Failed to bind({name}) to {nameof(gameObject.name)}");
 			return null;
         }
 
@@ -63,11 +63,11 @@ abstract public class UI_Base : MonoBehaviour
 
     protected List<T> BindManyComponent<T>(string name) where T : Component
     {
-        Object[] objs= Util.GameObj.FindChildAll(gameObject, name);
+        Object[] objs= SG.UTIL.FindChildAll(gameObject, name);
 
         if (objs == null)
         {
-            GameLogger.Error($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            GameLogger.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
             return null;
         }
 
@@ -87,13 +87,13 @@ abstract public class UI_Base : MonoBehaviour
 	{
 		Object[] objs;
         if (typeof(T) == typeof(GameObject))
-            objs = Util.GameObj.FindChildAll(gameObject, name);
+            objs = SG.UTIL.FindChildAll(gameObject, name);
         else
-            objs = Util.GameObj.FindChildAll<T>(gameObject, name);
+            objs = SG.UTIL.FindChildAll<T>(gameObject, name);
 
         if (objs == null)
         {
-            GameLogger.Error($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            GameLogger.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
             return null;
         }
 
@@ -159,7 +159,7 @@ abstract public class UI_Base : MonoBehaviour
         }
 
         _isInit = false;
-        GameLogger.Info($"Destroy {gameObject.name}");
+        GameLogger.I($"Destroy {gameObject.name}");
         OnDestroyed();
 
         _objects.Clear();

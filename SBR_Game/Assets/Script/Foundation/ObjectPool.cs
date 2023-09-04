@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Util;
+using SG;
 
 public class ObjectPool<T> where T : Component
 {

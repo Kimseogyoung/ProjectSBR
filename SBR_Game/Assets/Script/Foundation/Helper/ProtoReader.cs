@@ -22,7 +22,7 @@ public class ProtoReader
 
         if (!LoadCsvField(out pkName, out List<string> names, out List<string> types, text))
         {
-            GameLogger.Error("Load Csv Error");
+            GameLogger.E("Load Csv Error");
             return null;
         }
         
@@ -57,7 +57,7 @@ public class ProtoReader
                 PropertyInfo property = typeof(T).GetProperty(propertyName);
                 if(property == null)
                 {
-                    GameLogger.Error($"property Null {propertyName}");
+                    GameLogger.E($"property Null {propertyName}");
                     return null;
                 }
                 
@@ -99,7 +99,7 @@ public class ProtoReader
         }
         catch(Exception e)
         {
-            GameLogger.Error(e.Message);
+            GameLogger.E(e.Message);
             return false;
         }
     }

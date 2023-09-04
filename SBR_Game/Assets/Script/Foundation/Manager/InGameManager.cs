@@ -103,7 +103,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            GameLogger.Info("f1: 모든 적에게 100000데미지");
+            GameLogger.I("f1: 모든 적에게 100000데미지");
             for(int i=0; i< _enemyList.Count; i++)
             {
                 _enemyList[i].ApplyDamagePure(100000);
@@ -140,23 +140,23 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         StateMachineBase stateMachine;
         CharacterProto characterProto = ProtoHelper.Get<CharacterProto, int>(id);
 
-        characterObj = Util.Resource.Instantiate(characterProto.Prefab);
+        characterObj = SG.UTIL.Instantiate(characterProto.Prefab);
 
         ECharacterType characterType = isPlayer ? ECharacterType.PLAYER : characterProto.Type;
         if (!CanSpawnCharacter(characterType))
         {
-            GameLogger.Info($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
+            GameLogger.I($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
             return null;
         }
 
         if (isPlayer)
         {
-            stateMachine = Util.GameObj.GetOrAddComponent<PlayerStateMachine>(characterObj);
+            stateMachine = SG.UTIL.GetOrAddComponent<PlayerStateMachine>(characterObj);
             character = new Character(id, ECharacterType.PLAYER, createNum++);
         }
         else
         {
-            stateMachine = Util.GameObj.GetOrAddComponent<CharacterStateMachine>(characterObj);
+            stateMachine = SG.UTIL.GetOrAddComponent<CharacterStateMachine>(characterObj);
             character = new Character(id, characterType, createNum++);
         }
 
@@ -265,7 +265,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
                 break;
             default:
-                GameLogger.Error("WRONG {0}", hitTargetSelectType);
+                GameLogger.E("WRONG {0}", hitTargetSelectType);
                 break;
         }
 

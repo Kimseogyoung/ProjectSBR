@@ -149,7 +149,7 @@ public partial class StateMachineBase : MonoBehaviour
         if (_cEventHandler._isPlayingSkill || !skill.CanUseSkill())
             return;
 
-        GameLogger.Info($"{inputAction} {skill.Prt.Name}");
+        GameLogger.I($"{inputAction} {skill.Prt.Name}");
 
         float skillCoolDownValue = (1f / _character.CDR.Value);
         if (inputAction == EInputAction.ATTACK)
@@ -178,7 +178,7 @@ public partial class StateMachineBase : MonoBehaviour
     {
         if(_currentPlaySkill == null)
         {
-            GameLogger.Info($"{_character.Name} 시전중인 스킬이 없음");
+            GameLogger.I($"{_character.Name} 시전중인 스킬이 없음");
             return;
         }
         _currentPlaySkill.UseSkill();
@@ -188,7 +188,7 @@ public partial class StateMachineBase : MonoBehaviour
     {
         if (_currentSkillTimeEvent == null)
         {
-            GameLogger.Info($"{_character.Name} 시전중인 스킬이 없는데 취소함.");
+            GameLogger.I($"{_character.Name} 시전중인 스킬이 없는데 취소함.");
             return;
         }
 
@@ -198,7 +198,7 @@ public partial class StateMachineBase : MonoBehaviour
         _cEventHandler.SetIdleState();
         TimeHelper.RemoveTimeEvent(_currentSkillTimeEvent);
         SetState(new playerNormalState());
-        GameLogger.Info($"시전중인 스킬 {_currentSkillTimeEvent.Name} 취소");
+        GameLogger.I($"시전중인 스킬 {_currentSkillTimeEvent.Name} 취소");
         
     }
 

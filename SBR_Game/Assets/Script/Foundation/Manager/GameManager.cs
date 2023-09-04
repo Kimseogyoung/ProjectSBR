@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager: MonoBehaviour
 {
-    public Player Player { get { if (_player == null) { GameLogger.Error("Player Is Null"); } return _player; } }
+    public Player Player { get { if (_player == null) { GameLogger.E("Player Is Null"); } return _player; } }
 
     private List<IManagerUpdatable> _managerUpdatables = new List<IManagerUpdatable>();
     private List<IManager> _managers = new List<IManager>();
@@ -40,7 +40,7 @@ public class GameManager: MonoBehaviour
 
         ProtoHelper.Start();
 
-        GameLogger.Info("GameManager Awake");
+        GameLogger.I("GameManager Awake");
 
         DontDestroyOnLoad(gameObject);
 
@@ -71,7 +71,7 @@ public class GameManager: MonoBehaviour
 
     void Start()
     {
-        GameLogger.Info("StartManager");
+        GameLogger.I("StartManager");
         CreatePlayer();
         APP.UI.StartManager();
         foreach (IManager manager in _managers)

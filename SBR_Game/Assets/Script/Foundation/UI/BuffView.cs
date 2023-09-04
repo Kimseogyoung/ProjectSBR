@@ -52,12 +52,12 @@ public class BuffView : UI_Base
         // TODO : buffImage.component.SetBuffImage(Resources.Load<Sprite>(buff.Proto.Name));
 
         buffImage.component.SetBuffImage(Resources.Load<Sprite>("Sprite/Nemo"), buff.GetDuration(), buff.GetCurDuration());
-        GameLogger.Info("ADD BUFF" + buff.Proto.Name + buff.GetDuration(), buff.GetCurDuration());
+        GameLogger.I("ADD BUFF" + buff.Proto.Name + buff.GetDuration(), buff.GetCurDuration());
     }
 
     public void RemoveBuff(BuffImage buffImage)
     {
-        GameLogger.Info("Remove BuffImage");
+        GameLogger.I("Remove BuffImage");
         _buffImagePool.Enqueue(buffImage.gameObject);
     }
 
