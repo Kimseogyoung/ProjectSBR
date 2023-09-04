@@ -39,7 +39,7 @@ public class UI_InGameSuccessPanel : UI_Panel
             var idx = i;
             var button = rewardSlot.GetComponentInChildren<Button>();
 
-            _rewardSlotImageList.Add(SG.UTIL.GetComponentInChildren<Image>(rewardSlot, "RewardSlotItem"));
+            _rewardSlotImageList.Add(UTIL.GetComponentInChildren<Image>(rewardSlot, "RewardSlotItem"));
             _rewardSlotButtonList.Add(button);
 
             button.onClick.AddListener(() =>
@@ -65,7 +65,7 @@ public class UI_InGameSuccessPanel : UI_Panel
         {
             for (int i = 0; i < _rewardSlotImageList.Count; i++)
             {
-                _rewardSlotImageList[i].sprite = SG.UTIL.Load<Sprite>($"Item/Sprite/{_rewardItemList[i].IconImg}");
+                _rewardSlotImageList[i].sprite = UTIL.LoadRes<Sprite>($"Item/Sprite/{_rewardItemList[i].IconImg}");
                 _rewardSlotImageList[i].color = Color.white;
             }
             _rewardItemNameText.text = "";

@@ -60,7 +60,7 @@ public class InGameScene : SceneBase
     {
         GameObject map = GameObject.FindObjectOfType<Terrain>()?.gameObject;
         if(map == null)
-            map = SG.UTIL.Instantiate(currentStage.PrefabPath);
+            map = UTIL.Instantiate(currentStage.PrefabPath);
 
         if (map == null)
         {

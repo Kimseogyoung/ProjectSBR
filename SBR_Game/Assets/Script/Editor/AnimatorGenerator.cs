@@ -76,7 +76,7 @@ namespace SBRAnimator{
 
             if (GUILayout.Button("Copy from Other Character"))
             {
-                var copyObj = SG.UTIL.Load<GameObject>(_characterProtos[_copyCharacterIdx].Prefab);
+                var copyObj = UTIL.LoadRes<GameObject>(_characterProtos[_copyCharacterIdx].Prefab);
                 if (copyObj == null)
                     return;
                 var copyHandler = copyObj.GetComponentInChildren<CharacterEventHandler>();
@@ -91,7 +91,7 @@ namespace SBRAnimator{
 
             if (GUILayout.Button("Copy to Other Character"))
             {
-                var copyObj = SG.UTIL.Load<GameObject>(_characterProtos[_copyCharacterIdx].Prefab);
+                var copyObj = UTIL.LoadRes<GameObject>(_characterProtos[_copyCharacterIdx].Prefab);
                 if (copyObj == null)
                     return;
                 

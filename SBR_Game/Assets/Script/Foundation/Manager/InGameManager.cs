@@ -140,7 +140,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         StateMachineBase stateMachine;
         CharacterProto characterProto = ProtoHelper.Get<CharacterProto, int>(id);
 
-        characterObj = SG.UTIL.Instantiate(characterProto.Prefab);
+        characterObj = UTIL.Instantiate(characterProto.Prefab);
 
         ECharacterType characterType = isPlayer ? ECharacterType.PLAYER : characterProto.Type;
         if (!CanSpawnCharacter(characterType))
@@ -151,12 +151,12 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
         if (isPlayer)
         {
-            stateMachine = SG.UTIL.GetOrAddComponent<PlayerStateMachine>(characterObj);
+            stateMachine = UTIL.AddGetComponent<PlayerStateMachine>(characterObj);
             character = new Character(id, ECharacterType.PLAYER, createNum++);
         }
         else
         {
-            stateMachine = SG.UTIL.GetOrAddComponent<CharacterStateMachine>(characterObj);
+            stateMachine = UTIL.AddGetComponent<CharacterStateMachine>(characterObj);
             character = new Character(id, characterType, createNum++);
         }
 

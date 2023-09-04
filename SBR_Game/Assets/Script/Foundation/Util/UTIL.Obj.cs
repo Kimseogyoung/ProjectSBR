@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 static public partial class UTIL 
 {
@@ -10,14 +11,27 @@ static public partial class UTIL
         GameObject.Destroy(gameObject.gameObject);
     }
 
+    static public bool TryGetComponet<T>(out T comp, GameObject gameObject)
+    {
+        comp = gameObject.GetComponent<T>();
+        return comp != null;
+    }
+
+    static public bool TryAddGetComponet<T>(out T comp, GameObject gameObject)
+    {
+        comp = AddGetComponent<T>(gameObject);
+
+        return comp != null;
+    }
+
     static public T GetComponent<T>(GameObject gameObject)
     {
         return gameObject.GetComponent<T>();
     }
 
-    static public T GetOrAddComponent<T>(GameObject gameObject)
+    static public T AddGetComponent<T>(GameObject gameObject)
     {
-        if(!gameObject.TryGetComponent<T>(out T result))
+        if(!TryGetComponet<T>(out T result, gameObject))
         {
             gameObject.AddComponent(typeof(T));
             result = gameObject.GetComponent<T>();

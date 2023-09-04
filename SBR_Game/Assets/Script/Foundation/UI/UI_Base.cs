@@ -29,7 +29,7 @@ abstract public class UI_Base : MonoBehaviour
 
     protected T BindComponent<T>(string name) where T : Component
     {
-        Object obj = SG.UTIL.FindChild(gameObject, name, true);
+        Object obj = UTIL.FindChild(gameObject, name, true);
 
         if (obj == null)
         {
@@ -46,9 +46,9 @@ abstract public class UI_Base : MonoBehaviour
 	{
 		Object obj = null;
         if (typeof(T) == typeof(GameObject))
-            obj = SG.UTIL.FindChild(gameObject, name, true);
+            obj = UTIL.FindChild(gameObject, name, true);
         else
-            obj = SG.UTIL.FindChild<T>(gameObject, name, true);
+            obj = UTIL.FindChild<T>(gameObject, name, true);
 
 		if (obj == null)
 		{
@@ -63,7 +63,7 @@ abstract public class UI_Base : MonoBehaviour
 
     protected List<T> BindManyComponent<T>(string name) where T : Component
     {
-        Object[] objs= SG.UTIL.FindChildAll(gameObject, name);
+        Object[] objs= UTIL.FindChildAll(gameObject, name);
 
         if (objs == null)
         {
@@ -87,9 +87,9 @@ abstract public class UI_Base : MonoBehaviour
 	{
 		Object[] objs;
         if (typeof(T) == typeof(GameObject))
-            objs = SG.UTIL.FindChildAll(gameObject, name);
+            objs = UTIL.FindChildAll(gameObject, name);
         else
-            objs = SG.UTIL.FindChildAll<T>(gameObject, name);
+            objs = UTIL.FindChildAll<T>(gameObject, name);
 
         if (objs == null)
         {
@@ -134,7 +134,7 @@ abstract public class UI_Base : MonoBehaviour
 	//BindEvent UI 오브젝트에 이벤트 등록하기
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
-		UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+		UI_EventHandler evt = Util.AddGetComponent<UI_EventHandler>(go);
 
 		switch (type)
 		{

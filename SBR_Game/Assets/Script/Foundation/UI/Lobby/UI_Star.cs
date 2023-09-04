@@ -12,8 +12,8 @@ public class UI_Star : UI_Panel
     {
         _currentLevel = 0;
 
-        _emptyStar = SG.UTIL.Load(AppPath.CasualUI, AppPath.EmptyStar);
-        _filledStar = SG.UTIL.Load(AppPath.CasualUI,AppPath.FilledStar);
+        _emptyStar = UTIL.LoadSprite(AppPath.CasualUI, AppPath.EmptyStar);
+        _filledStar = UTIL.LoadSprite(AppPath.CasualUI,AppPath.FilledStar);
 
         Bind<Image>(UI.StarImage1.ToString());
         Bind<Image>(UI.StarImage2.ToString());
