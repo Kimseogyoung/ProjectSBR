@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager: MonoBehaviour
+public class GAME: MonoBehaviour
 {
     public Player Player { get { if (_player == null) { GameLogger.E("Player Is Null"); } return _player; } }
 
@@ -30,7 +30,7 @@ public class GameManager: MonoBehaviour
     private void Awake()
     {
         
-        if (FindObjectsOfType(typeof(GameManager)).Length >= 2) 
+        if (FindObjectsOfType(typeof(GAME)).Length >= 2) 
         {
             Destroy(gameObject);
             return;

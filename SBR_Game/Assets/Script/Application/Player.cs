@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public class Player
+public partial class Player
 {
     public int Energy { get; set; }
     public float Gold { get; set; }

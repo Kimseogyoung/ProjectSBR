@@ -6,7 +6,7 @@ public class APP
     static public StageProto CurrentStage { get; set; }
 
     //Manager
-    static public GameManager GameManager { get; set; }
+    static public GAME GameManager { get; set; }
     static public ICharacters InGame { get; set; }
     static public IBullet Bullet { get; set; }
     static public InputManager InputManager { get; set; }
