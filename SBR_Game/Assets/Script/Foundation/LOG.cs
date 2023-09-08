@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SG;
-public class GameLogger
+public class LOG
 {
     static public void I(string msg, params object[] args)
     {

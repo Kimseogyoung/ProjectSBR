@@ -18,7 +18,7 @@ abstract public class UI_Base : MonoBehaviour
     {
         if (_isInit)
         {
-            GameLogger.I("Already Init");
+            LOG.I("Already Init");
             return;
         }
         
@@ -52,7 +52,7 @@ abstract public class UI_Base : MonoBehaviour
 
 		if (obj == null)
 		{
-            GameLogger.E($"Failed to bind({name}) to {nameof(gameObject.name)}");
+            LOG.E($"Failed to bind({name}) to {nameof(gameObject.name)}");
 			return null;
         }
 
@@ -67,7 +67,7 @@ abstract public class UI_Base : MonoBehaviour
 
         if (objs == null)
         {
-            GameLogger.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            LOG.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
             return null;
         }
 
@@ -93,7 +93,7 @@ abstract public class UI_Base : MonoBehaviour
 
         if (objs == null)
         {
-            GameLogger.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
+            LOG.E($"Failed to BindMany({name}) to {nameof(gameObject.name)}");
             return null;
         }
 
@@ -159,7 +159,7 @@ abstract public class UI_Base : MonoBehaviour
         }
 
         _isInit = false;
-        GameLogger.I($"Destroy {gameObject.name}");
+        LOG.I($"Destroy {gameObject.name}");
         OnDestroyed();
 
         _objects.Clear();

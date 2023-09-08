@@ -46,7 +46,7 @@ public class UI_InGameSuccessPanel : UI_Panel
                 {
                     _currentSelectReward = idx;
                     UpdateSelectedReward();
-                    GameLogger.I($"Select RewardItem ({_currentSelectReward})");
+                    LOG.I($"Select RewardItem ({_currentSelectReward})");
                 });
         } 
     }

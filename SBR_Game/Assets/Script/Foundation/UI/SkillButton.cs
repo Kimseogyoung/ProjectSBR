@@ -59,7 +59,7 @@ public class SkillButton : UI_Base
     {
         if (!_skill.CanUseSkill()) 
         {
-            GameLogger.I($"Can Not Use Skill {_skill.Prt.Name}");
+            LOG.I($"Can Not Use Skill {_skill.Prt.Name}");
             return;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 abstract public class SceneBase 
@@ -7,15 +8,18 @@ abstract public class SceneBase
     public string _sceneName { get; protected set; } = string.Empty;
     
 
-    public void EnterBase()
+    public bool EnterBase()
     {
-        GameLogger.I($"{_sceneName} Enter!");
-        Enter();
+        LOG.I($"{_sceneName} Enter!");
+        if (!Enter())
+            return false;
+
+        return true;
     }
 
     public void StartBase()
     {
-        GameLogger.I($"{_sceneName} Start!");
+        LOG.I($"{_sceneName} Start!");
         Start();
     }
 
@@ -25,11 +29,11 @@ abstract public class SceneBase
     }
     public void ExitBase()
     {
-        GameLogger.I($"{_sceneName} Exit!");
+        LOG.I($"{_sceneName} Exit!");
         Exit();
     }
 
-    abstract protected void Enter();
+    abstract protected bool Enter();
 
     abstract protected void Start();
 

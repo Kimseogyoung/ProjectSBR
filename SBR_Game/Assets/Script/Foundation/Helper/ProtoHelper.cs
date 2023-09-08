@@ -20,7 +20,7 @@ public class ProtoHelper
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
             Bind<TProto>();
-            GameLogger.I($"{typeof(TProto).Name} is not exist. so Bind");
+            LOG.I($"{typeof(TProto).Name} is not exist. so Bind");
             dict = _protoDict[typeof(TProto)];
             //return default(TProto);
         }
@@ -33,7 +33,7 @@ public class ProtoHelper
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
             Bind<TProto>();
-            GameLogger.I($"{typeof(TProto).Name} is not exist. so Bind");
+            LOG.I($"{typeof(TProto).Name} is not exist. so Bind");
             dict = _protoDict[typeof(TProto)];
             //return default(TProto);
         }
@@ -46,14 +46,14 @@ public class ProtoHelper
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
             Bind<TProto>();
-            GameLogger.I($"{typeof(TProto).Name} is not exist. so Bind");
+            LOG.I($"{typeof(TProto).Name} is not exist. so Bind");
             dict = _protoDict[typeof(TProto)];
             //return default(TProto);
         }
 
         if (!dict.TryGetValue(key, out object value))
         {
-            GameLogger.E($"{typeof(TProto).Name} proto key Not found : {key}");
+            LOG.E($"{typeof(TProto).Name} proto key Not found : {key}");
             return default(TProto);
         }
 
@@ -65,7 +65,7 @@ public class ProtoHelper
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
             Bind<TProto>();
-            GameLogger.I($"{typeof(TProto).Name} is not exist. so Bind");
+            LOG.I($"{typeof(TProto).Name} is not exist. so Bind");
             dict = _protoDict[typeof(TProto)];
         }
 
@@ -83,7 +83,7 @@ public class ProtoHelper
         if (!_protoDict.TryGetValue(typeof(TProto), out Dictionary<object, object> dict))
         {
             Bind<TProto>();
-            GameLogger.I($"{typeof(TProto).Name} is not exist. so Bind");
+            LOG.I($"{typeof(TProto).Name} is not exist. so Bind");
             dict = _protoDict[typeof(TProto)];
         }
         return dict.Values.Cast<TProto>().ToList();
@@ -96,7 +96,7 @@ public class ProtoHelper
 
         if (_protoDict.ContainsKey(typeof(TProto)))
         {
-            GameLogger.I($"{typeof(TProto).Name} is existed");
+            LOG.I($"{typeof(TProto).Name} is existed");
             return;
         }
 

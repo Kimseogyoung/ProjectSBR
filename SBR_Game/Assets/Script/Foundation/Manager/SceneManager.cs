@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,7 +8,9 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : IManager, IManagerUpdatable
 {
-
+    private string _firstScene;
+    private bool _loadSuccess = false;
+    private TaskCompletionSource<bool> _taskCompletion = new();
     private SceneBase _currentScene;
     public void FinishManager()
     {
@@ -22,26 +25,39 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void StartManager()
     {
-        string startScene = APP.GameConf.StartScene;
+        _firstScene = APP.GameConf.StartScene;
 
 #if DEBUG
-        startScene = APP.DebugConf.StartScene;
+        _firstScene = APP.DebugConf.StartScene;
 #endif
-
-        //Sync
-        GameLogger.I($"StartScene {startScene}");
-        SG.CoroutineHelper.StartCoroutine(CoLoadScene(startScene));
     }
 
-    public void ChangeScene(string nextSceneName)
+    public async Task<bool> StartFirstScene()
     {
-        _currentScene.ExitBase();
+        return await ChangeScene(_firstScene);
+    }
+
+    public async Task<bool> ChangeScene(string nextSceneName)
+    {
+        LOG.I($"ChangeScene {nextSceneName}");
+
+        _loadSuccess = false;
+        if (_currentScene != null)
+            _currentScene.ExitBase();
+
+        _taskCompletion = new();
         SG.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
+        await _taskCompletion.Task;
+
+        if (!_loadSuccess)
+            return false;
+        return true;
     }
 
     public void UpdateManager()
     {
-        if (_currentScene == null) return;
+        if (_currentScene == null) 
+            return;
         _currentScene.UpdateBase();
     }
 
@@ -61,7 +77,7 @@ public class SceneManager : IManager, IManagerUpdatable
 
         if(!(_currentScene is T))
         {
-            GameLogger.E("{0} is Not {1}", _currentScene._sceneName, typeof(T));
+            LOG.E("{0} is Not {1}", _currentScene._sceneName, typeof(T));
             return null;
         }
         return (T)_currentScene;
@@ -70,24 +86,33 @@ public class SceneManager : IManager, IManagerUpdatable
     private IEnumerator CoLoadScene(string nextSceneName)
     {
         AsyncOperation async;
+        float sec = 0;
+        const int maxLoadSec = 10;
         if (UnitySceneManager.GetActiveScene().name != nextSceneName)
         {
             async = UnitySceneManager.LoadSceneAsync(nextSceneName);
 
             while (!async.isDone)
             {
-                yield return null;
+                yield return new WaitForSeconds(0.1f);
+                sec += 0.1f;
+                if(sec > maxLoadSec)
+                {
+                    _taskCompletion.SetResult(true);
+                    yield break;
+                }
             }
-
         }
+
+        if (InvokeNextScene(nextSceneName))
+            _loadSuccess = true;
         
-        InvokeNextScene(nextSceneName);
-       
+        _taskCompletion.SetResult(true);
     }
 
-    private void InvokeNextScene(string nextSceneName)
+    private bool InvokeNextScene(string nextSceneName)
     {
-        GameLogger.I($"LoadDone {nextSceneName}");
+        LOG.I($"LoadDone {nextSceneName}");
         switch (nextSceneName)
         {
             case "IntroScene":
@@ -102,8 +127,11 @@ public class SceneManager : IManager, IManagerUpdatable
             default:
                 break;
         }
-        _currentScene.EnterBase();
+        if (!_currentScene.EnterBase())
+            return false;
+
         _currentScene.StartBase();
+        return true;
     }
 }
 

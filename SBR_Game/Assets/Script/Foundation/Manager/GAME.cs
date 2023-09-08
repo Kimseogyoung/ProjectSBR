@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class GAME: MonoBehaviour
 {
-    public Player Player { get { if (_player == null) { GameLogger.E("Player Is Null"); } return _player; } }
+    public enum EGameState
+    {
+        PREPARE,
+        PLAY,
+        STOP
+    }
+
+    public Player Player { get { if (_player == null) { LOG.E("Player Is Null"); } return _player; } }
 
     private List<IManagerUpdatable> _managerUpdatables = new List<IManagerUpdatable>();
     private List<IManager> _managers = new List<IManager>();
@@ -12,7 +19,7 @@ public class GAME: MonoBehaviour
     private SceneManager _sceneManager;
     private InputManager _inputManager;
 
-    private bool _isStopped = false;
+    private EGameState _state = EGameState.PREPARE;
     private Player _player;
 
     public T AddUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
@@ -29,7 +36,6 @@ public class GAME: MonoBehaviour
 
     private void Awake()
     {
-        
         if (FindObjectsOfType(typeof(GAME)).Length >= 2) 
         {
             Destroy(gameObject);
@@ -40,7 +46,7 @@ public class GAME: MonoBehaviour
 
         ProtoHelper.Start();
 
-        GameLogger.I("GameManager Awake");
+        LOG.I("GameManager Awake");
 
         DontDestroyOnLoad(gameObject);
 
@@ -71,19 +77,24 @@ public class GAME: MonoBehaviour
 
     void Start()
     {
-        GameLogger.I("StartManager");
-        CreatePlayer();
+        LOG.I("StartManager");
+        CreatePlayer(); // 이거 수정 필요
         APP.UI.StartManager();
         foreach (IManager manager in _managers)
         {
             manager.StartManager();
         }
 
+        Init();
     }
 
     void FixedUpdate()
     {
-        if (_isStopped)
+
+        if (_state == EGameState.PREPARE)
+            return;
+
+        if(_state == EGameState.STOP)
         {
             for (int i = 0; i < _managerUpdatables.Count; i++)
                 _managerUpdatables[i].UpdatePausedManager();
@@ -95,6 +106,19 @@ public class GAME: MonoBehaviour
 
     }
 
+    private async void Init()
+    {
+        bool result = await _sceneManager.StartFirstScene();
+
+        if (!result)
+        {
+            LOG.E("Failed Init. GAME.Init()");
+            return;
+        }
+
+        _state = EGameState.PLAY;
+    }
+
     private void CreatePlayer()
     {
         _player = new Player();
@@ -104,10 +128,12 @@ public class GAME: MonoBehaviour
     private void Pause(PauseEvent pause)
     {
 
-        if (pause.IsPause == _isStopped) return;
+        if ((pause.IsPause && _state == EGameState.STOP) || (!pause.IsPause && _state == EGameState.PLAY)) 
+            return;
+
 
         TimeHelper.Stop(pause.IsPause);
-        _isStopped = pause.IsPause;
+        _state = pause.IsPause? EGameState.STOP: EGameState.PLAY;
 
         for (int i = 0; i < _managerUpdatables.Count; i++)
             _managerUpdatables[i].Pause(pause.IsPause);

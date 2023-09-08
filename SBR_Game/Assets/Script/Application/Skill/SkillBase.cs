@@ -77,7 +77,7 @@ abstract public class SkillBase
     // 스킬 완전 실행
     public void UseSkill()
     {
-        GameLogger.I("{0}가 {1} 시전 성공", _character.Name, Prt.Name);
+        LOG.I("{0}가 {1} 시전 성공", _character.Name, Prt.Name);
 
         _currentSkillCnt++;
         ApplySkill();

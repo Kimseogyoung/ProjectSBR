@@ -49,7 +49,7 @@ public class MovingSkill : SkillBase
             _attackTargetCnt++;
             Character victim = hit.collider.GetComponent<StateMachineBase>().GetCharacter();
             victim.ApplySkillDamage(_character, Prt);
-            GameLogger.I($"{victim.Name}을 밀음");
+            LOG.I($"{victim.Name}을 밀음");
             _attackTargetCnt++;
         }
     }

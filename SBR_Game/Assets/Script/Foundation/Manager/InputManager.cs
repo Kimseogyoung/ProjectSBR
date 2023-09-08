@@ -104,7 +104,7 @@ public class InputManager :IManager, IManagerUpdatable
 
     public void InvokeKeyAction(EInputAction inputAction)
     {
-        GameLogger.I("Try Invoke Action" + inputAction.ToString());
+        LOG.I("Try Invoke Action" + inputAction.ToString());
         if (!CanInvokeAction(inputAction)) return;
 
         _actions[inputAction]?.Invoke();

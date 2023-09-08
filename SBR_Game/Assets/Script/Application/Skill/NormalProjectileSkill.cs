@@ -32,7 +32,7 @@ public class NormalProjectileSkill : SkillBase
 
     private void OnFoundTarget(Vector3 pos, Character victim)
     {
-        GameLogger.I("{0}이 맞음!", victim.Name);
+        LOG.I("{0}이 맞음!", victim.Name);
         if (Prt.HitShapeType == EHitShapeType.NONE)
         {
             victim.ApplySkillDamage(_character, Prt);

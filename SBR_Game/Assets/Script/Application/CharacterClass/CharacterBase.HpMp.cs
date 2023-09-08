@@ -51,7 +51,7 @@ public partial class Character
 
         if(attacker != null)
         {
-            GameLogger.W($"{attacker.Name}�� {Name}  ����");
+            LOG.W($"{attacker.Name}�� {Name}  ����");
         }
         EventQueue.PushEvent<ShowTextEvent>(EEventActionType.SHOW_DAMAGE_TEXT, new ShowTextEvent(damage, CurPos, (CurPos).normalized));
 
@@ -59,7 +59,7 @@ public partial class Character
         if (HP.Value <= 0)
         {
             //����
-            GameLogger.W("{0}�� �׾���.", Name);
+            LOG.W("{0}�� �׾���.", Name);
         }
 
         EventQueue.PushEvent<HPEvent>(

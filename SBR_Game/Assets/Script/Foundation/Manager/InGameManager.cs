@@ -103,7 +103,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            GameLogger.I("f1: 모든 적에게 100000데미지");
+            LOG.I("f1: 모든 적에게 100000데미지");
             for(int i=0; i< _enemyList.Count; i++)
             {
                 _enemyList[i].ApplyDamagePure(100000);
@@ -145,7 +145,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         ECharacterType characterType = isPlayer ? ECharacterType.PLAYER : characterProto.Type;
         if (!CanSpawnCharacter(characterType))
         {
-            GameLogger.I($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
+            LOG.I($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
             return null;
         }
 
@@ -265,7 +265,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
                 break;
             default:
-                GameLogger.E("WRONG {0}", hitTargetSelectType);
+                LOG.E("WRONG {0}", hitTargetSelectType);
                 break;
         }
 

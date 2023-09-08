@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class InGameScene : SceneBase
 {
+    private Rule_InGame _rule;
     private InGameManager _inGameManager;
     private BulletManager _bulletManager;
-    private UI_InGameScene _inGameSceneUI;
+    private UI_InGameScene _ui;
     public InGameScene(string sceneName)
     {
         _sceneName = sceneName;
     }
 
-    protected override void Enter()
+    protected override bool Enter()
     {
       
         SpawnMap(APP.CurrentStage);
@@ -20,9 +21,9 @@ public class InGameScene : SceneBase
         _inGameManager = new InGameManager();
         _inGameManager.Init();
 
-        _inGameSceneUI = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
-        _inGameManager.OnCreateCharacter = _inGameSceneUI.SetCharacterToHpBar;
-        _inGameManager.OnDieCharacter = _inGameSceneUI.RemoveHpBar;
+        _ui = APP.UI.ShowSceneUI<UI_InGameScene>("UI_InGameScene");
+        _inGameManager.OnCreateCharacter = _ui.SetCharacterToHpBar;
+        _inGameManager.OnDieCharacter = _ui.RemoveHpBar;
        
         _bulletManager = new BulletManager();
         _bulletManager.Init();
@@ -33,6 +34,8 @@ public class InGameScene : SceneBase
 
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
+
+        return true;
     }
 
 
@@ -43,17 +46,17 @@ public class InGameScene : SceneBase
         ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
         if (prtRewards == null)
         {
-            GameLogger.E("Rewards is Null");
+            LOG.E("Rewards is Null");
             return;
         }
 
-        _inGameSceneUI.ShowFinishPopup(true, prtRewards);
+        _ui.ShowFinishPopup(true, prtRewards);
     }
 
     private void FailGame(CharacterDeadEvent deadEvent)
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
-        _inGameSceneUI.ShowFinishPopup(false);
+        _ui.ShowFinishPopup(false);
     }
 
     private void SpawnMap(StageProto currentStage)
@@ -64,7 +67,7 @@ public class InGameScene : SceneBase
 
         if (map == null)
         {
-            GameLogger.E($"No GameObject {currentStage.PrefabPath}");
+            LOG.E($"No GameObject {currentStage.PrefabPath}");
             return;
         }
         map.transform.position = new Vector3(-currentStage.Width / 2, -1, -currentStage.Height / 2);
@@ -85,13 +88,13 @@ public class InGameScene : SceneBase
         { 
             _inGameManager.StartManager();
 
-            _inGameSceneUI.SetPlayer(_inGameManager.GetPlayer());
+            _ui.SetPlayer(_inGameManager.GetPlayer());
         });
     }
 
     protected override void Update()
     {
-        _inGameSceneUI.Refresh();
+        _ui.Refresh();
     }
 
     

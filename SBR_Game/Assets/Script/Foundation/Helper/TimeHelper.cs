@@ -43,7 +43,7 @@ public class TimeHelper : MonoBehaviour
 
         if(foundTimeAction == null)
         {
-            GameLogger.E($"Can not Found Time Action. Return 0. Name({action.Name})");
+            LOG.E($"Can not Found Time Action. Return 0. Name({action.Name})");
             return 0;
         }
         return foundTimeAction.Time - _currentTime;

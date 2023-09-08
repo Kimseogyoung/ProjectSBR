@@ -15,8 +15,9 @@ public class IntroScene : SceneBase
         _sceneName = sceneName;
     }
 
-    protected override void Enter()
+    protected override bool Enter()
     {
+        return true;
     }
 
     protected override void Exit()
@@ -35,7 +36,7 @@ public class IntroScene : SceneBase
         if(_currentTime > _introTime && _isLoadingNextScene == false)
         {
             _isLoadingNextScene = true;
-            APP.SceneManager.ChangeScene("LobbyScene");
+            _ = APP.SceneManager.ChangeScene("LobbyScene");
         }
     }
 

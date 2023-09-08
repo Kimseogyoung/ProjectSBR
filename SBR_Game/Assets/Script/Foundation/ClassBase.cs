@@ -4,20 +4,26 @@ using UnityEngine;
 
 abstract public class ClassBase
 {
-
-    public ClassBase()
+    public static void Destroy<T>(ref T classObj) where T : ClassBase
     {
-        Start();
+        classObj.OnDestroy();
+        classObj = null;
     }
 
-    abstract protected void Start();
-    virtual protected void Stop()
+    public static bool Create<T>(out T classBase) where T : ClassBase, new()
     {
+        classBase = new T();
 
-    }
-    virtual protected void Restart()
-    {
+        if (!classBase.OnCreate())
+        {
+            Destroy(ref classBase);
+            return false;
+        }
 
+        return true;
     }
-    abstract protected void Finished();
+
+    public abstract bool OnCreate();
+    public abstract void OnDestroy();
+
 }

@@ -17,17 +17,17 @@ public class UI_LobbyScene : UI_Scene
 
     private void Awake()
     {
-        GameLogger.I("Awake");
+        LOG.I("Awake");
     }
 
     protected override void OnDestroyed()
     {
-        GameLogger.I("DestroyLobbyScene");
+        LOG.I("DestroyLobbyScene");
     }
 
     protected override void InitImp()
     {
-        GameLogger.I("Init");
+        LOG.I("Init");
         base.InitImp();
         Bind<Button>(UI.TmpButton.ToString());
         Bind<Button>(UI.RecordButton.ToString());
@@ -108,7 +108,7 @@ public class UI_LobbyScene : UI_Scene
     {
         UI_StageConfirmPopup popup =  APP.UI.ShowPopupUI<UI_StageConfirmPopup>();
         popup.SetStageData(stageNum);
-        GameLogger.I("Click Stage {0} Button.", stageNum);
+        LOG.I("Click Stage {0} Button.", stageNum);
     }
 
     enum UI

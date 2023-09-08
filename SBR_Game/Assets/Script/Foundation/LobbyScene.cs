@@ -1,19 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class LobbyScene : SceneBase
 {
+
+    public Rule_Lobby _rule = null;
+    public UI_LobbyScene _ui = null;
 
     public LobbyScene(string sceneName)
     {
         _sceneName = sceneName;
     }
 
-    protected override void Enter()
+    protected override bool Enter()
     {
-        APP.UI.ShowSceneUI<UI_LobbyScene>("UI_LobbyScene");
-
+        _ui = APP.UI.ShowSceneUI<UI_LobbyScene>("UI_LobbyScene");
+        if (!Rule_Lobby.Create(out _rule))
+            return false;
+        return true;
     }
 
     protected override void Exit()
@@ -23,11 +25,11 @@ public class LobbyScene : SceneBase
 
     protected override void Start()
     {
-       
+        _rule.StartFirst();
     }
 
     protected override void Update()
     {
-        
+        _rule.Update();
     }
 }

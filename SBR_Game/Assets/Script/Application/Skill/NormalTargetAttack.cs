@@ -16,7 +16,7 @@ public class NormalTargetAttack : SkillBase
     {
         if ((_target.CurPos - _character.CurPos).magnitude > Prt.Range)
         {
-            GameLogger.I($"{_character.Name}의 스킬 : {Prt.Name} 실행 취소");
+            LOG.I($"{_character.Name}의 스킬 : {Prt.Name} 실행 취소");
             return;
         }
 

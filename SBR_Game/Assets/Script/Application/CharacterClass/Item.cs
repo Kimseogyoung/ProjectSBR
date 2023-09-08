@@ -27,7 +27,7 @@ public partial class Item
     {
         if(Amount <= 0 || Prt.Type >= EItemType.ONCE || IsEquiped )
         {
-            GameLogger.E($"CanNot Equip. TNum({Prt.Id}) ype({Prt.Type}) Amount({Amount}) IsEquip({IsEquiped})");
+            LOG.E($"CanNot Equip. TNum({Prt.Id}) ype({Prt.Type}) Amount({Amount}) IsEquip({IsEquiped})");
             return false;
         }
         IsEquiped = true;
@@ -38,7 +38,7 @@ public partial class Item
     {
         if (Amount <= 0 || Prt.Type >= EItemType.ONCE || !IsEquiped)
         {
-            GameLogger.E($"CanNot UnEquip. Num({Prt.Id}) Type({Prt.Type }) Amount({Amount}) IsEquip({IsEquiped})");
+            LOG.E($"CanNot UnEquip. Num({Prt.Id}) Type({Prt.Type }) Amount({Amount}) IsEquip({IsEquiped})");
             return false;
         }
         IsEquiped = false;
@@ -49,7 +49,7 @@ public partial class Item
     {
         if (Amount <= 0 || Prt.Type < EItemType.ONCE)
         {
-            GameLogger.E($"CanNot Use. Num({Prt.Id}) Type({Prt.Type }) Amount({Amount}) ");
+            LOG.E($"CanNot Use. Num({Prt.Id}) Type({Prt.Type }) Amount({Amount}) ");
             return false;
         }
         return true;

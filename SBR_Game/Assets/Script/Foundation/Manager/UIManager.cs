@@ -74,7 +74,7 @@ public class UIManager : IManager, IManagerUpdatable
         GameObject go;
         if (!UTIL.TryFind<T>(out sceneUI, name))
         {
-            GameLogger.I($"Create {name} scene");
+            LOG.I($"Create {name} scene");
             go = UTIL.Instantiate($"UI/Scene/{name}");
             sceneUI = UTIL.AddGetComponent<T>(go);
 

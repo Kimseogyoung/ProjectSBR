@@ -89,13 +89,13 @@ static public partial class UTIL
     static public T LoadRes<T>(string path) where T : Object
     {
         T obj = Resources.Load<T>(path);
-        GameLogger.D("{0} 타입 {1}경로에서 Load {2}", typeof(T), path, obj);
+        LOG.D("{0} 타입 {1}경로에서 Load {2}", typeof(T), path, obj);
         return obj;
     }
 
     static public bool TryLoadRes<T>(out T outRes, string path) where T : Object
     {
-        GameLogger.D("{0} 타입 {1}경로에서 Load ", typeof(T), path);
+        LOG.D("{0} 타입 {1}경로에서 Load ", typeof(T), path);
 
         outRes = LoadRes<T>(path);
         if (outRes == null)

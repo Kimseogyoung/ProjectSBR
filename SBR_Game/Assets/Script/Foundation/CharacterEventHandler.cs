@@ -95,7 +95,7 @@ public class CharacterEventHandler : MonoBehaviour
                 _isPlayingSkill = true;
                 break;
             default:
-                GameLogger.E($"NoAttackAnim EInputAction({inputAction})");
+                LOG.E($"NoAttackAnim EInputAction({inputAction})");
                 return false;
         }
 

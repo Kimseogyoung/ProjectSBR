@@ -79,7 +79,7 @@ public class UI_InGameScene : UI_Scene
         var hpBarIndex = _hpBarPool.GetActiveList().FindIndex(x => x.component.CharacterCreateNum == characterCreateNum);
         if(hpBarIndex < 0)
         {
-            GameLogger.E($"Can not Found HpBar. CreateNum({characterCreateNum})");
+            LOG.E($"Can not Found HpBar. CreateNum({characterCreateNum})");
             return;
         }
 
@@ -139,7 +139,7 @@ public class UI_InGameScene : UI_Scene
         switch (evt.eventActionType)
         {
             case EEventActionType.PLAYER_HP_CHANGE:
-                GameLogger.I("플레이어 체력감소" + evt.DeltaHP);
+                LOG.I("플레이어 체력감소" + evt.DeltaHP);
                 var slider = Get<Slider>(UI.PlayerHPSlider.ToString());
                 slider.maxValue = evt.FullHP;
                 slider.value = evt.CurHP;
@@ -160,7 +160,7 @@ public class UI_InGameScene : UI_Scene
                 break;
 
             default:
-                GameLogger.I("UpdateHpBar : {0}", evt.eventActionType);
+                LOG.I("UpdateHpBar : {0}", evt.eventActionType);
                 break;
         }
 
