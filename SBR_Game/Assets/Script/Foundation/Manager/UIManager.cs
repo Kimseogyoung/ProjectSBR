@@ -13,11 +13,6 @@ public class UIManager : IManager, IManagerUpdatable
     {
     }
 
-    public void FinishManager()
-    {
-     
-    }
-
     public void UpdateManager()
     {
         
@@ -146,4 +141,8 @@ public class UIManager : IManager, IManagerUpdatable
             ClosePopupUI();
     }
 
+    public void Destroy()
+    {
+
+    }
 }

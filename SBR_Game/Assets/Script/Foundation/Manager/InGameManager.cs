@@ -54,6 +54,19 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
     }
 
+    public void Destroy()
+    {
+        for (int i = 0; i < _stateMachines.Count; i++)
+        {
+            _stateMachines[i].SetState(new IdleState());
+        }
+        _stateMachines.Clear();
+        _heroList.Clear();
+        _enemyList.Clear();
+        _damageTextSystem.Destroy();
+
+    }
+
 
     public void StartManager()
     {
@@ -119,18 +132,6 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     public void Pause(bool IsPause)
     {
 
-    }
-
-    public void FinishManager()
-    {
-        for (int i = 0; i < _stateMachines.Count; i++)
-        {
-            _stateMachines[i].SetState(new IdleState());
-        }
-        _stateMachines.Clear();
-        _heroList.Clear();
-        _enemyList.Clear();
-        _damageTextSystem.Destroy();
     }
 
     public Character Spawn(int id, bool isPlayer = false)

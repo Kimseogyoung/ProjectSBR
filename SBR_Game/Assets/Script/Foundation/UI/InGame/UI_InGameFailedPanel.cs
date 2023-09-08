@@ -12,7 +12,7 @@ public class UI_InGameFailedPanel : UI_Panel
         Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
         {
             EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            APP.SceneManager.ChangeScene("LobbyScene");
+            _ = APP.SceneManager.ChangeScene("LobbyScene");
         });
         Bind<TMP_Text>(UI.GameResultText.ToString()).text = "Failed";
         Bind<TMP_Text>(UI.StageText.ToString());
@@ -20,7 +20,7 @@ public class UI_InGameFailedPanel : UI_Panel
 
     public void ShowFailUI()
     {
-        Get<TMP_Text>(UI.StageText.ToString()).text = $"you reached stage {APP.GameManager.Player.TopOpenStageNum}";
+        Get<TMP_Text>(UI.StageText.ToString()).text = $"you reached stage {APP.GAME.Player.TopOpenStageNum}";
         LOG.I($"TODO :  Make Fail PopUp");
     }
 

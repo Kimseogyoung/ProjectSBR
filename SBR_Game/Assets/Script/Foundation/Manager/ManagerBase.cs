@@ -6,7 +6,7 @@ public interface IManager
 {
     public void Init();
     public void StartManager();
-    public void FinishManager();
+    public void Destroy();
 }
 public interface IManagerUpdatable
 {

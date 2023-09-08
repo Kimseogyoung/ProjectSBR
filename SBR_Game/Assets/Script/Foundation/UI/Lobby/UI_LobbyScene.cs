@@ -15,19 +15,13 @@ public class UI_LobbyScene : UI_Scene
 
     private UI ui;
 
-    private void Awake()
-    {
-        LOG.I("Awake");
-    }
-
     protected override void OnDestroyed()
     {
-        LOG.I("DestroyLobbyScene");
+
     }
 
     protected override void InitImp()
     {
-        LOG.I("Init");
         base.InitImp();
         Bind<Button>(UI.TmpButton.ToString());
         Bind<Button>(UI.RecordButton.ToString());
@@ -86,8 +80,8 @@ public class UI_LobbyScene : UI_Scene
 
     private void RefreshStageButton()
     {
-        int playerTopOpenStage = APP.GameManager.Player.TopOpenStageNum;
-        Dictionary<int, int> playerStageStarDict = APP.GameManager.Player.StageStarDict;
+        int playerTopOpenStage = APP.GAME.Player.TopOpenStageNum;
+        Dictionary<int, int> playerStageStarDict = APP.GAME.Player.StageStarDict;
         for(int i=0; i< _stageButtons.Count; i++)
         {
             int stageNum = _stageButtonNumList[i];

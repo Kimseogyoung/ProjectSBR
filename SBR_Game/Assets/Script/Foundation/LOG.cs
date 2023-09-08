@@ -6,7 +6,10 @@ public class LOG
 {
     static public void I(string msg, params object[] args)
     {
-        Debug.Log(RICH_TEXT.color.ToString("white", string.Format(msg,args)));
+        if(args.Length > 0)
+            Debug.Log(RICH_TEXT.color.ToString("white", string.Format(msg,args)));
+        else
+            Debug.Log(RICH_TEXT.color.ToString("white", msg));
     }
     static public void D(string msg, params object[] args)
     {

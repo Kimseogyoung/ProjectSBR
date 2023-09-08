@@ -28,10 +28,6 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
         _bulletList.Add(new Bullet(onFoundAction, owner, target, bulletObj.transform, dir, speed, maximumDistance, teamType));
     }
 
-    public void FinishManager()
-    {
-    }
-
     public void Init()
     {
         APP.Bullet = this;
@@ -110,6 +106,12 @@ public class BulletManager : IManager, IManagerUpdatable, IBullet
     {
         _removedBulletQueue.Enqueue(bullet);
         bullet.OnFoundAction(bullet.BulletTransform.position, victim); 
+    }
+
+    public void Destroy()
+    {
+        _bulletList.Clear();
+        _removedBulletQueue.Clear();
     }
 
     public class Bullet

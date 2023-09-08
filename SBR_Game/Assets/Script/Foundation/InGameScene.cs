@@ -28,8 +28,8 @@ public class InGameScene : SceneBase
         _bulletManager = new BulletManager();
         _bulletManager.Init();
 
-        APP.GameManager.AddUpdatablePublicManager(_inGameManager);
-        APP.GameManager.AddUpdatablePublicManager(_bulletManager);
+        APP.GAME.AddUpdatablePublicManager(_inGameManager);
+        APP.GAME.AddUpdatablePublicManager(_bulletManager);
 
 
         EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
@@ -78,8 +78,8 @@ public class InGameScene : SceneBase
         EventQueue.RemoveAllEventListener(EEventActionType.BOSS_DEAD);
         EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_DEAD);
 
-        APP.GameManager.RemoveUpdatablePublicManager(_inGameManager);
-        _inGameManager.FinishManager();
+        APP.GAME.RemoveUpdatablePublicManager(_inGameManager);
+        _inGameManager.Destroy();
     }
 
     protected override void Start()

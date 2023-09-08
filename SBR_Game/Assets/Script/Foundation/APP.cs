@@ -1,12 +1,13 @@
 public class APP
 {
+    public static LocalPlayerPrefs LocalPlayerPrefs { get; set; }
     static public Config.Game GameConf { get; set; }
     static public Config.Debug DebugConf { get; set; }
 
     static public StageProto CurrentStage { get; set; }
 
     //Manager
-    static public GAME GameManager { get; set; }
+    static public GAME GAME { get; set; }
     static public ICharacters InGame { get; set; }
     static public IBullet Bullet { get; set; }
     static public InputManager InputManager { get; set; }

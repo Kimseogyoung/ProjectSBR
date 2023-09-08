@@ -1,8 +1,10 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class GAME: MonoBehaviour
+public class GAME: ScriptBase
 {
     public enum EGameState
     {
@@ -18,9 +20,11 @@ public class GAME: MonoBehaviour
     private DataManager _dataManager;
     private SceneManager _sceneManager;
     private InputManager _inputManager;
+    private UIManager _uiManager;
 
     private EGameState _state = EGameState.PREPARE;
     private Player _player;
+    private bool _mainInstance = true;
 
     public T AddUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
     {
@@ -34,15 +38,24 @@ public class GAME: MonoBehaviour
         _managerUpdatables.Remove(manager);
     }
 
-    private void Awake()
+    protected override bool OnCreateScript()
     {
-        if (FindObjectsOfType(typeof(GAME)).Length >= 2) 
+        if (FindObjectsOfType(typeof(GAME)).Length >= 2)
         {
+            _mainInstance = false;
             Destroy(gameObject);
-            return;
+            return false;
         }
-        
-        APP.GameManager = this;
+
+        if (!LocalPlayerPrefs.Create(out LocalPlayerPrefs localPlayerPrefs))
+        {
+            LOG.E("CanNot Create LocalPlayerPref");
+            return false;
+        }
+        APP.LocalPlayerPrefs = localPlayerPrefs;
+        localPlayerPrefs.LoadAll();
+
+        APP.GAME = this;
 
         ProtoHelper.Start();
 
@@ -59,8 +72,10 @@ public class GAME: MonoBehaviour
         _inputManager = new InputManager();
         AddManager(_inputManager, true);
 
-        APP.SceneManager = _sceneManager; 
-        APP.UI = new UIManager();
+        _uiManager = new UIManager();
+        APP.UI = _uiManager;
+
+        APP.SceneManager = _sceneManager;
         APP.InputManager = _inputManager;
 
         foreach (IManager manager in _managers)
@@ -73,12 +88,35 @@ public class GAME: MonoBehaviour
 
         EventQueue.AddEventListener<PauseEvent>(EEventActionType.PAUSE, Pause);
         EventQueue.AddEventListener<PauseEvent>(EEventActionType.PLAY, Pause);
+        return true;
     }
 
+    protected override void OnDestroyScript()
+    {
+        if (!_mainInstance)
+            return;
+        APP.LocalPlayerPrefs.SavePlayerJson(_player);
+        string json = JsonConvert.SerializeObject(_player);
+       
+        LOG.I(json);
+
+
+        foreach (IManager manager in _managers)
+        {
+            manager.Destroy();
+        }
+    }
+   
     void Start()
     {
         LOG.I("StartManager");
-        CreatePlayer(); // 이거 수정 필요
+
+        LOG.I($"Load Player: {APP.LocalPlayerPrefs.PlayerJson}");
+        if (string.IsNullOrEmpty(APP.LocalPlayerPrefs.PlayerJson))
+            Player.Create(out _player);
+        else
+            _player = JsonConvert.DeserializeObject<Player>(APP.LocalPlayerPrefs.PlayerJson);
+
         APP.UI.StartManager();
         foreach (IManager manager in _managers)
         {
@@ -119,12 +157,6 @@ public class GAME: MonoBehaviour
         _state = EGameState.PLAY;
     }
 
-    private void CreatePlayer()
-    {
-        _player = new Player();
-        _player.Create();
-    }
-
     private void Pause(PauseEvent pause)
     {
 
@@ -145,5 +177,4 @@ public class GAME: MonoBehaviour
         if (isUpdatable)
             _managerUpdatables.Add((IManagerUpdatable)manager);
     }
-
 }

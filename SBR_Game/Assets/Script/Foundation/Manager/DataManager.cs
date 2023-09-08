@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class DataManager :IManager
+public class DataManager : IManager
 {
     private YamlParser _yamlParser = new YamlParser();
     private FileReader _fileReader = new FileReader();
@@ -21,8 +21,9 @@ public class DataManager :IManager
 
     }
 
-    public void FinishManager()
+    public void Destroy()
     {
-
+        _yamlParser = null;
+        _fileReader = null;
     }
 }

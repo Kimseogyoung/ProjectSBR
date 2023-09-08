@@ -48,9 +48,9 @@ public class InputManager :IManager, IManagerUpdatable
 
     }
 
-    public void FinishManager()
+    public void Destroy()
     {
-
+       
     }
 
     public void StartManager()

@@ -43,7 +43,10 @@ public class SceneManager : IManager, IManagerUpdatable
 
         _loadSuccess = false;
         if (_currentScene != null)
+        {
             _currentScene.ExitBase();
+            _currentScene = null;
+        }
 
         _taskCompletion = new();
         SG.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
@@ -132,6 +135,16 @@ public class SceneManager : IManager, IManagerUpdatable
 
         _currentScene.StartBase();
         return true;
+    }
+
+    public void Destroy()
+    {
+        _taskCompletion = null;
+
+        if (_currentScene != null)
+            _currentScene.ExitBase();
+
+        _currentScene = null;
     }
 }
 

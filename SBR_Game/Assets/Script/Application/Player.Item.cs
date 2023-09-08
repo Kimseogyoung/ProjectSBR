@@ -27,7 +27,7 @@ public partial class Player
                 return;
             }
             _updateItemIdList.Add(item.Prt.Id);
-            Refresh();
+            RefreshStat();
         }
     }
 
@@ -49,9 +49,8 @@ public partial class Player
             EquipItemIdDict.Add(equipType, item.Prt.Id);
         }
         _updateItemIdList.Add(item.Prt.Id);
-        Refresh();
+        RefreshStat();
 
     }
-
 }
 

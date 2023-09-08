@@ -1,13 +1,15 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class ScriptBase : MonoBehaviour
 {
+    private bool _destroy = false;
     public static void DestroyInstance<T>(ref T script) where T : ScriptBase
     {
         if (script == null)
             return;
-        script.OnDestroy();
+        script._OnDestroy();
         GameObject.Destroy(script);
     }
 
@@ -38,11 +40,21 @@ public abstract class ScriptBase : MonoBehaviour
 
     public void OnDestroy()
     {
+        _OnDestroy();
+    }
+
+
+    private void _OnDestroy()
+    {
+        if (_destroy)
+            return;
+
+        _destroy = true;
         OnDestroyScript();
     }
 
     protected abstract bool OnCreateScript();
-    protected abstract bool OnDestroyScript();
+    protected abstract void OnDestroyScript();
 
 }
 

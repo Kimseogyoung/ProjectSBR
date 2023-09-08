@@ -23,7 +23,7 @@ abstract public class ClassBase
         return true;
     }
 
-    public abstract bool OnCreate();
-    public abstract void OnDestroy();
+    protected abstract bool OnCreate();
+    protected abstract void OnDestroy();
 
 }
