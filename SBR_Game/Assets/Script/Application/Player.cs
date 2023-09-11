@@ -7,17 +7,6 @@ using System.Threading.Tasks;
 
 public partial class Player : ClassBase
 {
-    public bool FirstCreate { get; private set; } = true;
-    public bool HasStageFinishResult { get; private set; } = false;
-    public int Energy { get; set; }
-    public float Gold { get; set; }
-    public float Cash { get; private set; }
-    public int TopOpenStageNum { get;private set; }
-    public Dictionary<int, int> StageStarDict { get; private set; } = new();
-    public Dictionary<int, Item> Inventory { get; private set; } = new();
-    public List<int> EquipOnceItemIdList { get; private set; } = new();
-    public Dictionary<EEquipType, int> EquipItemIdDict { get; private set; } = new();
-
     private List<int> _updateItemIdList = new();
 
     protected override bool OnCreate()
@@ -36,7 +25,8 @@ public partial class Player : ClassBase
 
         for (int i = 0; i < APP.DebugConf.StartItemNumList.Count; i++)
         {
-            Item item = new Item(APP.DebugConf.StartItemNumList[i]);
+            Item item = new Item();
+            item.Refresh(APP.DebugConf.StartItemNumList[i]);
             AddItem(item);
         }
 #endif

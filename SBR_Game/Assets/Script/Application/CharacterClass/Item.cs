@@ -1,20 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 
 public partial class Item
 {
+    [JsonIgnore]
     public ItemProto Prt { get; set; }
-    public bool IsEquiped { get; private set; }
 
-    public int Amount { get; private set; }
+    public int Num { get; set; } 
+    public bool IsEquiped { get; set; }
+    public int Amount { get; set; }
 
-    public Item(int num, int amount = 1)
+    public void Refresh(int num)
     {
-        Amount = amount;
+        Num = num;
+        Amount = 1;
         Prt = ProtoHelper.Get<ItemProto, int>(num);
     }
 

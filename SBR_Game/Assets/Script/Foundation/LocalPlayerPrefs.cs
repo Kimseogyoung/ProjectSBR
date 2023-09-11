@@ -1,10 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class LocalPlayerPrefs : ClassBase
@@ -23,22 +17,24 @@ public class LocalPlayerPrefs : ClassBase
 
     public void LoadAll()
     {
-        
-        FieldInfo[] fields = typeof(LocalPlayerPrefs).GetFields();
-
-        foreach (var field in fields)
+        foreach (var propertyInfo in this.GetType().GetProperties())
         {
-            string value = PlayerPrefs.GetString(field.Name);
+            string value = PlayerPrefs.GetString(propertyInfo.Name);
+
             if (string.IsNullOrEmpty(value))
                 continue;
 
-            field.SetValue(this, value);
-            LOG.I($"Load LocalPlayerPrefs Key({field.Name}) Value({field.GetValue(this)})");
+            propertyInfo.SetValue(this, value);
+            LOG.I($"Load LocalPlayerPrefs Key({propertyInfo.Name}) Value({propertyInfo.GetValue(this)})");
         } 
     }
 
     public void SavePlayerJson(Player player)
     {
+
+        if (player == null)
+            return;
+
         string json = JsonConvert.SerializeObject(player);
         PlayerPrefs.SetString(nameof(PlayerJson), json);
     }

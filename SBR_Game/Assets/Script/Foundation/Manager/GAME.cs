@@ -52,8 +52,8 @@ public class GAME: ScriptBase
             LOG.E("CanNot Create LocalPlayerPref");
             return false;
         }
+
         APP.LocalPlayerPrefs = localPlayerPrefs;
-        localPlayerPrefs.LoadAll();
 
         APP.GAME = this;
 
@@ -95,6 +95,7 @@ public class GAME: ScriptBase
     {
         if (!_mainInstance)
             return;
+
         APP.LocalPlayerPrefs.SavePlayerJson(_player);
         string json = JsonConvert.SerializeObject(_player);
        
@@ -111,17 +112,15 @@ public class GAME: ScriptBase
     {
         LOG.I("StartManager");
 
-        LOG.I($"Load Player: {APP.LocalPlayerPrefs.PlayerJson}");
         if (string.IsNullOrEmpty(APP.LocalPlayerPrefs.PlayerJson))
             Player.Create(out _player);
         else
             _player = JsonConvert.DeserializeObject<Player>(APP.LocalPlayerPrefs.PlayerJson);
 
         APP.UI.StartManager();
+        
         foreach (IManager manager in _managers)
-        {
             manager.StartManager();
-        }
 
         Init();
     }
