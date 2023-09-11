@@ -7,22 +7,12 @@ using System.Threading.Tasks;
 
 public partial class Player : ClassBase
 {
+    private List<int> _stageRewardItemIdList = new();
     private List<int> _updateItemIdList = new();
 
     protected override bool OnCreate()
     {
-        Energy = APP.GameConf.MaxEnergy;
-        Gold = 0;
-        Cash = 0;
-        TopOpenStageNum = ProtoHelper.GetUsingIndex<StageProto>(0).Id;
-
-        foreach (StageProto prtStage in ProtoHelper.GetEnumerable<StageProto>())
-        {
-            StageStarDict.Add(prtStage.Id, 0);
-        }
-
 #if DEBUG
-
         for (int i = 0; i < APP.DebugConf.StartItemNumList.Count; i++)
         {
             Item item = new Item();
@@ -30,7 +20,6 @@ public partial class Player : ClassBase
             AddItem(item);
         }
 #endif
-
         FirstCreate = true;
         return true;
     }
@@ -51,12 +40,18 @@ public partial class Player : ClassBase
 
     public void Init()
     {
+        Energy = APP.GameConf.MaxEnergy;
+        Gold = 0;
+        Cash = 0;
+        TopOpenStageNum = ProtoHelper.GetUsingIndex<StageProto>(0).Id;
+
         FirstCreate = false;
     }
 
-    public void RefreshAll()
+    public void RefreshAll() //TODO:  위치 확인 , UI보다 시점 빨라야 함.
     {
         RefreshStat();
+        RefreshStageStar();
     }
 
     public void RefreshStat()
@@ -66,6 +61,23 @@ public partial class Player : ClassBase
         {
 
         }
+    }
+    
+    public void RefreshStageStar()
+    {
+
+        foreach (StageProto prtStage in ProtoHelper.GetEnumerable<StageProto>())
+        {
+            StageStarDict.Add(prtStage.Id, 0);
+        }
+    }
+
+    public void SetStageStar(int stageId, int starCnt)
+    {
+        if (StageStarDict.ContainsKey(stageId))
+            StageStarDict[stageId] = starCnt;
+        else
+            StageStarDict.Add(stageId, starCnt);
     }
 }
 

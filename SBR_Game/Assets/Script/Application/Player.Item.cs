@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 public partial class Player
 {
+    public void AddRewardItem(int itemId)
+    {
+        _stageRewardItemIdList.Add(itemId);
+    }
 
     public void AddItem(Item item)
     {
