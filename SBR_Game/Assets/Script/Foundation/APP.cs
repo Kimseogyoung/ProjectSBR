@@ -4,8 +4,6 @@ public class APP
     static public Config.Game GameConf { get; set; }
     static public Config.Debug DebugConf { get; set; }
 
-    static public StageProto CurrentStage { get; set; }
-
     //Manager
     static public GAME GAME { get; set; }
     static public ICharacters InGame { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 public partial class Player : ClassBase
 {
+    private StageProto _curStagePrt = null; 
     private List<int> _stageRewardItemIdList = new();
     private List<int> _updateItemIdList = new();
 
@@ -68,7 +70,8 @@ public partial class Player : ClassBase
 
         foreach (StageProto prtStage in ProtoHelper.GetEnumerable<StageProto>())
         {
-            StageStarDict.Add(prtStage.Id, 0);
+            if (!StageStarDict.ContainsKey(prtStage.Id))
+                StageStarDict.Add(prtStage.Id, 0);
         }
     }
 
@@ -78,6 +81,22 @@ public partial class Player : ClassBase
             StageStarDict[stageId] = starCnt;
         else
             StageStarDict.Add(stageId, starCnt);
+    }
+
+    public void ChangeCurStage(int stageId)
+    {
+        _curStagePrt = ProtoHelper.Get<StageProto, int>(stageId);
+    }
+
+
+    public StageProto GetCurStagePrt()
+    {
+        if(_curStagePrt == null)
+        {
+            LOG.W("CurStagePrt Is Null");
+            return ProtoHelper.GetUsingIndex<StageProto>(0);
+        }
+        return _curStagePrt;
     }
 }
 

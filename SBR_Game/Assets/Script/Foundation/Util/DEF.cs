@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 public class DEF
 {
+    public const int INVALID_NUM = 0;
+    public const int INVALID_IDX = -1;
+
+
     public enum UIEvent
     {
         Click,

@@ -23,8 +23,6 @@ public interface ICharacters
 //Manager재 정비 필요.  현재 문제 - Init하기전  Update됨
 public class InGameManager : IManager, IManagerUpdatable, ICharacters
 {
-    public Action<Character> OnCreateCharacter { get; set; }
-    public Action<int> OnDieCharacter { private get; set; }
 
     public static SkillSystem Skill { get { Debug.Assert(_skillSystem != null); return _skillSystem; } }
     private static SkillSystem _skillSystem;
@@ -41,6 +39,8 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     private Vector2 _maximumMapPos;
     private int createNum = 1;
 
+    private bool isStart = false;
+
     public void Init()
     {
         createNum = 1;
@@ -48,10 +48,11 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         _skillSystem = new SkillSystem();
         _damageTextSystem = new DamageTextSystem();
 
-        APP.InGame = this;
+        APP.InGame = this; //TODO: 수정
+        StageProto stage = APP.GAME.InGame.StagePrt;
 
-        _minimumMapPos = new Vector2(-APP.CurrentStage.Width / 2, -APP.CurrentStage.Height / 2);
-        _maximumMapPos = new Vector2(APP.CurrentStage.Width / 2, APP.CurrentStage.Height / 2);
+        _minimumMapPos = new Vector2(-stage.Width / 2, -stage.Height / 2);
+        _maximumMapPos = new Vector2(stage.Width / 2, stage.Height / 2);
     }
 
     public void Destroy()
@@ -67,8 +68,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
     }
 
-
-    public void StartManager()
+    public void SpawnUnit()
     {
         _player = Spawn(1, true);
         _boss = Spawn(1010);
@@ -77,27 +77,30 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         for (int i = 0; i < _stateMachines.Count; i++)
         {
             _stateMachines[i].SetState(new IdleState());
-            _stateMachines[i].PlayStartAnim();          
+            _stateMachines[i].PlayStartAnim();
         }
+    }
 
-        // 3초 후 시작
-        TimeHelper.AddTimeEvent("ingame-wait-time", 3.0f, () =>
+    public void StartUnit()
+    {
+        _gameTime = 0;
+        for (int i = 0; i < _stateMachines.Count; i++)
         {
-            
-            _gameTime = 0;
-            for (int i = 0; i < _stateMachines.Count; i++)
+            _stateMachines[i].SetIdle();
+            if (_stateMachines[i] is PlayerStateMachine)
             {
-                _stateMachines[i].SetIdle();
-                if (_stateMachines[i] is PlayerStateMachine)
-                {
-                    _stateMachines[i].SetState(new playerNormalState());
-                }
-                else if (_stateMachines[i] is CharacterStateMachine)
-                {
-                    _stateMachines[i].SetState(new EnemyFollowState());
-                }
+                _stateMachines[i].SetState(new playerNormalState());
             }
-        });   
+            else if (_stateMachines[i] is CharacterStateMachine)
+            {
+                _stateMachines[i].SetState(new EnemyFollowState());
+            }
+        }
+    }
+
+    public void StartManager()
+    {
+  
     }
 
     public void UpdateManager()
@@ -109,10 +112,10 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         }
         _damageTextSystem.Update();
         Skill.UpdateSkill();
-        Test_Upadte();
+        Test_Update();
     }
 
-    public void Test_Upadte()
+    public void Test_Update()
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -177,11 +180,10 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         }
 
         // 생성 이벤트, 죽음 이벤트
-        OnCreateCharacter?.Invoke(character);
-        character.OnDieCharacter = (character) => { OnDieCharacter?.Invoke(character.CreateNum); };
-
+        APP.GAME.InGame.UI.SetCharacterToHpBar(character);
         return character;
     }
+
     public void FindTarget(Character attacker, HitBox hitBox, ECharacterTeamType targetTeamType, EHitSKillType hitType, EHitTargetSelectType hitTargetSelectType, int targetCnt)
     {
         throw new NotImplementedException();

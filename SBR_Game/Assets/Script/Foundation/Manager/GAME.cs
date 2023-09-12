@@ -1,8 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GAME: ScriptBase
 {
@@ -14,6 +12,32 @@ public class GAME: ScriptBase
     }
 
     public Player Player { get { if (_player == null) { LOG.E("Player Is Null"); } return _player; } }
+    public InGameScene InGame
+    {
+        get
+        {
+            InGameScene scene = _sceneManager.GetCurrentScene<InGameScene>();
+            if (scene == null)
+            {
+                LOG.E("InGameScene Is Null");
+
+            }
+            return scene;
+        }
+    }
+
+    public LobbyScene Lobby 
+    { 
+        get {
+            LobbyScene scene = _sceneManager.GetCurrentScene<LobbyScene>();
+            if (scene == null)
+            {
+                LOG.E("LobbyScene Is Null");
+
+            }
+            return scene;
+        } 
+    }
 
     private List<IManagerUpdatable> _managerUpdatables = new List<IManagerUpdatable>();
     private List<IManager> _managers = new List<IManager>();

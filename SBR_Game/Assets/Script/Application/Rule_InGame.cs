@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-
-public class Rule_InGame
+public class Rule_InGame : ClassBase
 {
     public enum ERuleState
     {
@@ -31,11 +31,46 @@ public class Rule_InGame
     private ERuleState _state;
     private List<int> _rewardItemIdList = new();
     private int _stageStarCnt = 1;
-    private int _stageId = 0;
 
-    public void StartFirst(int stageId)
+    private InGameManager _inGameManager;
+    private BulletManager _bulletManager;
+    private float _stateTime = 3.0f;
+
+    private const int c_startWaitTime = 3;
+
+    public StageProto StagePrt { get; private set; }
+    
+
+    protected override bool OnCreate()
     {
-        _stageId = stageId;
+        return true;
+    }
+
+    protected override void OnDestroy()
+    {
+        EventQueue.RemoveAllEventListener(EEventActionType.BOSS_DEAD);
+        EventQueue.RemoveAllEventListener(EEventActionType.PLAYER_DEAD);
+
+        APP.GAME.RemoveUpdatablePublicManager(_inGameManager);
+
+        _inGameManager.Destroy();
+    }
+
+    public void StartFirst()
+    {
+        StagePrt = APP.GAME.Player.GetCurStagePrt();
+
+        _inGameManager = new InGameManager();
+        _inGameManager.Init();
+
+        _bulletManager = new BulletManager();
+        _bulletManager.Init();
+
+
+        APP.GAME.AddUpdatablePublicManager(_inGameManager);
+        APP.GAME.AddUpdatablePublicManager(_bulletManager);
+
+
         EnterState(ERuleState.PREPARE);
     }
     
@@ -61,6 +96,7 @@ public class Rule_InGame
 
     private void EnterState(ERuleState ruleState)
     {
+        _stateTime = 0;
         _prevState = _state;
         switch (_prevState)
         {
@@ -103,6 +139,7 @@ public class Rule_InGame
                 Enter_Prepare();
                 break;
             case ERuleState.PREPARE_COMPLATE:
+                Enter_PrepareComplate();
                 break;
             case ERuleState.START:
                 Enter_Start();
@@ -128,15 +165,20 @@ public class Rule_InGame
 
     public void Update()
     {
+        _stateTime += Time.fixedDeltaTime;
         switch (_state)
         {
             case ERuleState.NONE:
                 break;
             case ERuleState.PREPARE:
+                if(_stateTime > c_startWaitTime)
+                    EnterState(ERuleState.PREPARE_COMPLATE);
                 break;
             case ERuleState.PREPARE_COMPLATE:
+                EnterState(ERuleState.START);
                 break;
             case ERuleState.START:
+                EnterState(ERuleState.PLAY);
                 break;
             case ERuleState.PLAY:
                 break;
@@ -160,13 +202,39 @@ public class Rule_InGame
 
     private void Enter_Prepare()
     {
-       // 맵 로드
+        // 맵 로드
+        SpawnMap();
+
+        // 유닛 로드
+        _inGameManager.SpawnUnit();
     }
 
+    private void SpawnMap()
+    {
+        GameObject map = GameObject.FindObjectOfType<Terrain>()?.gameObject;
+        if (map == null)
+            map = UTIL.Instantiate(StagePrt.PrefabPath);
+
+        if (map == null)
+        {
+            LOG.E($"No GameObject {StagePrt.PrefabPath}");
+            return;
+        }
+        map.transform.position = new Vector3(-StagePrt.Width / 2, -1, -StagePrt.Height / 2);
+    }
+
+    private void Enter_PrepareComplate()
+    {
+        APP.GAME.InGame.UI.SetPlayer(_inGameManager.GetPlayer());
+    }
 
     private void Enter_Start()
     {
-      // 움직이기 시작
+        // 움직이기 시작
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.BOSS_DEAD, SuccessGame);
+        EventQueue.AddEventListener<CharacterDeadEvent>(EEventActionType.PLAYER_DEAD, FailGame);
+
+        _inGameManager.StartUnit();
 
     }
 
@@ -184,7 +252,7 @@ public class Rule_InGame
     private async void Enter_Reward()
     {
 
-        APP.GAME.Player.SetStageStar(_stageId, _stageStarCnt);
+        APP.GAME.Player.SetStageStar(StagePrt.Id, _stageStarCnt);
 
         // 리워드 아이템 넣기
         for (int i = 0; i < _rewardItemIdList.Count; i++)
@@ -194,10 +262,30 @@ public class Rule_InGame
 
 
         // 일시 정지 해제
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
+        EventQueue.PushEvent(EEventActionType.PLAY, new PauseEvent(false));
         await APP.SceneManager.ChangeScene("LobbyScene");
 
         
+    }
+
+    private void SuccessGame(CharacterDeadEvent deadEvent)
+    {
+        EventQueue.PushEvent(EEventActionType.PAUSE, new PauseEvent(true));
+
+        ItemProto[] prtRewards = RandomHelper.GetRandomThreeItem();
+        if (prtRewards == null)
+        {
+            LOG.E("Rewards is Null");
+            return;
+        }
+
+        APP.GAME.InGame.UI.ShowFinishPopup(true, prtRewards);
+    }
+
+    private void FailGame(CharacterDeadEvent deadEvent)
+    {
+        EventQueue.PushEvent(EEventActionType.PAUSE, new PauseEvent(true));
+        APP.GAME.InGame.UI.ShowFinishPopup(false);
     }
 
 

@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : IManager, IManagerUpdatable
 {
     private string _firstScene;
     private bool _loadSuccess = false;
-    private TaskCompletionSource<bool> _taskCompletion = new();
+    private TaskCompletionSource<bool> _taskCompletion = null;
     private SceneBase _currentScene;
+
     public void FinishManager()
     {
 
@@ -51,6 +50,7 @@ public class SceneManager : IManager, IManagerUpdatable
         _taskCompletion = new();
         SG.CoroutineHelper.StartCoroutine(CoLoadScene(nextSceneName));
         await _taskCompletion.Task;
+        _taskCompletion = null;
 
         if (!_loadSuccess)
             return false;
@@ -59,6 +59,9 @@ public class SceneManager : IManager, IManagerUpdatable
 
     public void UpdateManager()
     {
+        if (_taskCompletion != null)
+            return;
+
         if (_currentScene == null) 
             return;
         _currentScene.UpdateBase();
@@ -115,7 +118,7 @@ public class SceneManager : IManager, IManagerUpdatable
 
     private bool InvokeNextScene(string nextSceneName)
     {
-        LOG.I($"LoadDone {nextSceneName}");
+        LOG.I($"Load Scene Done {nextSceneName}");
         switch (nextSceneName)
         {
             case "IntroScene":
@@ -128,12 +131,17 @@ public class SceneManager : IManager, IManagerUpdatable
                 _currentScene = new InGameScene(nextSceneName);
                 break;
             default:
+                LOG.E($"NotFound Scene ({nextSceneName})");
                 break;
         }
         if (!_currentScene.EnterBase())
+        {
+            LOG.E($"Faile Enter {nextSceneName}");
             return false;
+        }
 
         _currentScene.StartBase();
+
         return true;
     }
 

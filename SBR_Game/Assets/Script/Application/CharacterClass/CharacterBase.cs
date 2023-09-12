@@ -11,7 +11,6 @@ using UnityEngine.UIElements;
 [Serializable]
 public partial class Character : IBuffAppliable
 {
-    public Action<Character> OnDieCharacter { get; set; }
     public Action<BuffBase> OnAddBuff { get; set; }
 
 

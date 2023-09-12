@@ -20,9 +20,9 @@ public class UI_StageConfirmPopup : UI_Popup
 
     private void OnClickStageStartButton()
     {
-        APP.CurrentStage = ProtoHelper.Get<StageProto, int>(_stageNum);
-        APP.SceneManager.ChangeScene("InGameScene");
+        APP.GAME.Lobby.Rule.LoadInGame(_stageNum);
     }
+
     enum UI
     {
         StageText,

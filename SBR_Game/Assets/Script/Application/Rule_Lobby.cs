@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 
 public class Rule_Lobby : ClassBase
 {
@@ -36,7 +36,6 @@ public class Rule_Lobby : ClassBase
 
     protected override void OnDestroy()
     {
-
     }
 
     public void StartFirst()
@@ -47,6 +46,12 @@ public class Rule_Lobby : ClassBase
     public void NotifyPrepareInGameResult()
     {
         EnterState(ERuleState.INGAME_RESULT_PREPARE);
+    }
+
+    public void LoadInGame(int stageNum)
+    {
+        APP.GAME.Player.ChangeCurStage(stageNum);
+        _ = APP.SceneManager.ChangeScene("InGameScene");
     }
 
     private void EnterState(ERuleState ruleState)

@@ -22,7 +22,7 @@ public class UI_InGameSuccessPanel : UI_Panel
         Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
         {
             EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            APP.SceneManager.ChangeScene("LobbyScene");
+            _ = APP.SceneManager.ChangeScene("LobbyScene");
         });
         Bind<TMP_Text>(UI.GameResultText.ToString()).text = "Cleared!";
 
@@ -54,7 +54,7 @@ public class UI_InGameSuccessPanel : UI_Panel
     public void ShowRewardUI(ItemProto[] prtRewards)
     {
         _rewardItemList = prtRewards;
-        _stageText.text = $"you cleared stage {APP.CurrentStage}\nchoose reword.";
+        _stageText.text = $"you cleared stage {APP.GAME.InGame.StagePrt.Id}\nchoose reword.";
         UpdateSelectedReward();
     }
 

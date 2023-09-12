@@ -27,6 +27,7 @@ abstract public class SceneBase
     {
         Update();
     }
+
     public void ExitBase()
     {
         LOG.I($"{_sceneName} Exit!");

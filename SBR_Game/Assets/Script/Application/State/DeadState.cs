@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class DeadState : CharacterState<Character>
 {
     protected override void OnEnter()
     {
         _stateMachine.PlayDieAnim();
-        _character.OnDieCharacter(_character);
+        APP.GAME.InGame.UI.RemoveHpBar(_character.CreateNum);
 
         //Dead¿Ã∫•∆Æ Push
         EventQueue.PushEvent(_character.CharacterType == ECharacterType.PLAYER?
