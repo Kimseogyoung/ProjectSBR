@@ -19,6 +19,7 @@ public class Rule_InGame : ClassBase
 
         RESTART,
         
+        GIVE_UP,
         FINISH_SUCCESS,
         FINISH_FAILURE,
 
@@ -73,7 +74,7 @@ public class Rule_InGame : ClassBase
 
         EnterState(ERuleState.PREPARE);
     }
-    
+
     public void Notify_GameSuccess()
     {
         EnterState(ERuleState.FINISH_SUCCESS);
@@ -82,6 +83,11 @@ public class Rule_InGame : ClassBase
     public void Notify_GameFailure()
     {
         EnterState(ERuleState.FINISH_FAILURE);
+    }
+
+    public void Notify_GiveUp() // 현재 스테이지 포기하기, 패널티 있음.
+    {
+        EnterState(ERuleState.GIVE_UP);
     }
 
     public void Notify_Reward(List<int> rewardItemList = null)
@@ -113,6 +119,8 @@ public class Rule_InGame : ClassBase
             case ERuleState.STOP:
                 break;
             case ERuleState.RESTART:
+                break;
+            case ERuleState.GIVE_UP:
                 break;
             case ERuleState.FINISH_SUCCESS:
                 break;
@@ -151,9 +159,14 @@ public class Rule_InGame : ClassBase
             case ERuleState.RESTART:
                 Enter_Restart();
                 break;
+            case ERuleState.GIVE_UP:
+
+                break;
             case ERuleState.FINISH_SUCCESS:
+                Enter_Finish(true);
                 break;
             case ERuleState.FINISH_FAILURE:
+                Enter_Finish(false);
                 break;
             case ERuleState.REWARD:
                 break;
@@ -185,6 +198,9 @@ public class Rule_InGame : ClassBase
             case ERuleState.STOP:
                 break;
             case ERuleState.RESTART:
+                break;
+            case ERuleState.GIVE_UP:
+                Enter_GiveUp();
                 break;
             case ERuleState.FINISH_SUCCESS:
                 Enter_Finish(true);
@@ -248,6 +264,13 @@ public class Rule_InGame : ClassBase
         // 끝난 시간 확인해서 별 계산.
         _stageStarCnt = 3;
     }
+
+    private void Enter_GiveUp()
+    {
+        _rewardItemIdList.Clear();
+        _ = APP.SceneManager.ChangeScene("LobbyScene");
+    }
+
 
     private async void Enter_Reward()
     {
