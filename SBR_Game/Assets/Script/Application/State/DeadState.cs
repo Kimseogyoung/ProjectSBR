@@ -11,9 +11,11 @@ public class DeadState : CharacterState<Character>
         APP.GAME.InGame.UI.RemoveHpBar(_character.CreateNum);
 
         //Dead¿Ã∫•∆Æ Push
-        EventQueue.PushEvent(_character.CharacterType == ECharacterType.PLAYER?
-            EEventActionType.PLAYER_DEAD: _character.CharacterType == ECharacterType.BOSS? EEventActionType.BOSS_DEAD : EEventActionType.ZZOL_DEAD, 
-            new CharacterDeadEvent(_character.Id));
+
+        if(_character.CharacterType == ECharacterType.PLAYER)
+            APP.GAME.InGame.Rule.Notify_GameFailure();
+        else if (_character.CharacterType == ECharacterType.BOSS)
+            APP.GAME.InGame.Rule.Notify_GameSuccess();
 
         if(_character.CharacterType == ECharacterType.PLAYER)
         {

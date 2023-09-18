@@ -7,4 +7,6 @@ public class StageProto : ProtoItem
     public int Height { get; set; }
     public string PrefabPath { get; set; }
     public int LimitTime { get; set; }
+    public int StarTimeA { get; set; }
+    public int StarTimeB { get; set; }
 }

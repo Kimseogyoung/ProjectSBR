@@ -9,11 +9,7 @@ public class UI_InGameFailedPanel : UI_Panel
 {
     private void Awake()
     {
-        Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
-        {
-            EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            _ = APP.SceneManager.ChangeScene("LobbyScene");
-        });
+        Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() => APP.GAME.InGame.Rule.Notify_Reward( ));
         Bind<TMP_Text>(UI.GameResultText.ToString()).text = "Failed";
         Bind<TMP_Text>(UI.StageText.ToString());
     }

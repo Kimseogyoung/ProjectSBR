@@ -19,11 +19,7 @@ public class UI_InGameSuccessPanel : UI_Panel
 
     private void Awake()
     {
-        Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() =>
-        {
-            EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            _ = APP.SceneManager.ChangeScene("LobbyScene");
-        });
+        Bind<Button>(UI.GoLobbyButton.ToString()).onClick.AddListener(() => APP.GAME.InGame.Rule.Notify_Reward(new List<int>() { _rewardItemList[_currentSelectReward].Id}));
         Bind<TMP_Text>(UI.GameResultText.ToString()).text = "Cleared!";
 
         _stageText = Bind<TMP_Text>(UI.StageText.ToString());

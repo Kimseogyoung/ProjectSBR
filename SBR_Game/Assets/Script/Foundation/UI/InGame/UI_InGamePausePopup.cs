@@ -7,18 +7,9 @@ public class UI_InGamePausePopup : UI_Popup
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
 
-        Bind<Button>(UI.PlayButton.ToString()).onClick.AddListener(() => { 
-            EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-            ClosePopupUI();
-        });
-        Bind<Button>(UI.GiveUpButton.ToString()).onClick.AddListener(() => { GiveUp(); });
+        Bind<Button>(UI.PlayButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_Play(); });
+        Bind<Button>(UI.GiveUpButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_GiveUp(); });
         Bind<TMP_Text>(UI.GiveUpText.ToString()).text= "포기하시옹";
-    }
-
-    private void GiveUp()
-    {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-        APP.SceneManager.ChangeScene("LobbyScene");
     }
 
     enum UI{

@@ -62,15 +62,6 @@ public class NotiEvent : EventBase
     }
 }
 
-public class CharacterDeadEvent : EventBase
-{
-    public int CharacterId;
-
-    public CharacterDeadEvent(int characterId)
-    {
-        CharacterId = characterId;
-    }
-}
 public class PauseEvent : EventBase
 {
     public bool IsPause;
