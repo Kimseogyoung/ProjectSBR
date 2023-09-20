@@ -30,7 +30,7 @@ public partial class Character : IBuffAppliable
     public Character(int characterId, ECharacterType type, int createNum)
     {
         Id = characterId;
-        Proto = ProtoHelper.Get<CharacterProto, int>(characterId);
+        Proto = ProtoHelper.Get<CharacterProto>(characterId);
         CharacterType = type;
         InitCharacterSetting();
         CreateNum = createNum;
@@ -75,7 +75,7 @@ public partial class Character : IBuffAppliable
 
     private void InitCharacterSetting()
     {
-        CharacterProto charProto = ProtoHelper.Get<CharacterProto, int>(Id);
+        CharacterProto charProto = ProtoHelper.Get<CharacterProto>(Id);
         Name = charProto.Name;
         HP = new Stat(EStat.HP, charProto.HP);
         MP = new Stat(EStat.MP, charProto.MP);
@@ -100,7 +100,7 @@ public partial class Character : IBuffAppliable
     
     private void AddSkill(EInputAction action, int skillId)
     {
-        var prtSkill = ProtoHelper.Get<SkillProto, int>(skillId);
+        var prtSkill = ProtoHelper.Get<SkillProto>(skillId);
         LOG.I($"{Name} 캐릭터에게 스킬 {prtSkill.Name} 등록. Action({action.ToString()})");
 
         var skillInstance = Activator.CreateInstance(Type.GetType(prtSkill.ClassType));

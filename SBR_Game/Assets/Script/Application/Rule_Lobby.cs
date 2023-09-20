@@ -43,10 +43,6 @@ public class Rule_Lobby : ClassBase
         EnterState(ERuleState.PREPARE);
     }
 
-    public void NotifyPrepareInGameResult()
-    {
-        EnterState(ERuleState.INGAME_RESULT_PREPARE);
-    }
 
     public void LoadInGame(int stageNum)
     {
@@ -119,6 +115,7 @@ public class Rule_Lobby : ClassBase
                 EnterState(ERuleState.PREPARE_COMPLATE);
                 break;
             case ERuleState.INGAME_RESULT_PREPARE:
+
                 break;
             case ERuleState.PREPARE_COMPLATE:
                 EnterState(ERuleState.LOBBY_PLAY);
@@ -133,6 +130,12 @@ public class Rule_Lobby : ClassBase
     private void Enter_Prepare()
     {
         //Player 있으면 FISRT_PREPARE
+        if (APP.GAME.HasStageClearInfo())
+        {
+            EnterState(ERuleState.INGAME_RESULT_PREPARE);
+            return;
+        }
+
         if (!APP.GAME.Player.FirstCreate)
         {
             //기존 LocalPlayerPref읽음. 데이터 가공 및 리프레시 필요
@@ -147,7 +150,17 @@ public class Rule_Lobby : ClassBase
     private void Enter_InGameResultPrepare()
     {
         LOG.I("Lobby.Enter_InGameResultPrepare : 스테이지 변경사항 적용 ");
+
         // 보상이랑 변경점 가져와서 표시
+        StageClearInfo stageClearInfo = APP.GAME.GetStageClearInfo();
+        StageProto nextStagePrt = ProtoHelper.GetNext(stageClearInfo.ClearedStagePrt);
+        APP.GAME.Lobby.UI.ShowStageClearResult(stageClearInfo.ClearedStagePrt, nextStagePrt, stageClearInfo.StarCnt);
+
+        // 아이템 보상 지급
+        stageClearInfo.StageRewardList.ForEach(x => APP.GAME.Player.AddItem(x));
+
+
+        LOG.W("TODO: 팝업 클릭하면 넘어가기 PREPARE_COMPLATE State로  ");
     }
 
     private void Enter_FirstPrepare()

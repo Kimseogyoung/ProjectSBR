@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 public partial class Player : ClassBase
 {
     private StageProto _curStagePrt = null; 
-    private List<int> _stageRewardItemIdList = new();
     private List<int> _updateItemIdList = new();
 
     protected override bool OnCreate()
@@ -17,9 +16,11 @@ public partial class Player : ClassBase
 #if DEBUG
         for (int i = 0; i < APP.DebugConf.StartItemNumList.Count; i++)
         {
-            Item item = new Item();
-            item.Refresh(APP.DebugConf.StartItemNumList[i]);
-            AddItem(item);
+            if (ProtoHelper.TryGet<ItemProto>(APP.DebugConf.StartItemNumList[i], out var itemPrt)) 
+            {
+                var item = Item.MakeItem(itemPrt);
+                AddItem(item);
+            }
         }
 #endif
         FirstCreate = true;
@@ -45,7 +46,7 @@ public partial class Player : ClassBase
         Energy = APP.GameConf.MaxEnergy;
         Gold = 0;
         Cash = 0;
-        TopOpenStageNum = ProtoHelper.GetUsingIndex<StageProto>(0).Id;
+        TopOpenStageNum = ProtoHelper.GetByIndex<StageProto>(0).Id;
 
         FirstCreate = false;
     }
@@ -59,6 +60,7 @@ public partial class Player : ClassBase
     public void RefreshStat()
     {
         // TODO : 변경된 아이템 스탯 적용
+        LOG.W("TODO : 변경된 아이템 스탯 적용");
         for (int i = 0; i < _updateItemIdList.Count; i++)
         {
 
@@ -85,7 +87,7 @@ public partial class Player : ClassBase
 
     public void ChangeCurStage(int stageId)
     {
-        _curStagePrt = ProtoHelper.Get<StageProto, int>(stageId);
+        _curStagePrt = ProtoHelper.Get<StageProto>(stageId);
     }
 
 
@@ -94,7 +96,7 @@ public partial class Player : ClassBase
         if(_curStagePrt == null)
         {
             LOG.W("CurStagePrt Is Null");
-            return ProtoHelper.GetUsingIndex<StageProto>(0);
+            return ProtoHelper.GetByIndex<StageProto>(0);
         }
         return _curStagePrt;
     }

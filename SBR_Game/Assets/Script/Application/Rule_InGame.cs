@@ -17,7 +17,7 @@ public class Rule_InGame : ClassBase
         PLAY, //이 안에 공격 패턴 State
         STOP,
 
-        RESTART,
+        RESTART, // 처음부터 시작
         
         GIVE_UP,
         FINISH_SUCCESS,
@@ -41,7 +41,6 @@ public class Rule_InGame : ClassBase
 
     private UI_Popup _curPopup = null;
     private const int c_startWaitTime = 3;
-
     
     public StageProto StagePrt { get; private set; }
     
@@ -70,10 +69,6 @@ public class Rule_InGame : ClassBase
 
         _bulletManager = new BulletManager();
         _bulletManager.Init();
-
-
-        APP.GAME.AddUpdatablePublicManager(_inGameManager);
-        APP.GAME.AddUpdatablePublicManager(_bulletManager);
 
 
         EnterState(ERuleState.PREPARE);
@@ -105,16 +100,19 @@ public class Rule_InGame : ClassBase
         EnterState(ERuleState.REWARD);
     }
 
-    public void Notify_Play()
+    public void Notify_Play(bool closePopup)
     {
-        CloseCurPopup();
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
+        if (closePopup)
+            CloseCurPopup();
+        EnterState(ERuleState.PLAY);
     }
 
-    public void Notify_Stop()
+    public void Notify_Stop(bool showPopup)
     {
         _stagePlaySec += _stateSec;
-        _curPopup = APP.UI.ShowPopupUI<UI_InGamePausePopup>();
+        if(showPopup)
+            _curPopup = APP.UI.ShowPopupUI<UI_InGamePausePopup>();
+        EnterState(ERuleState.STOP);
     }
 
     private void CloseCurPopup()
@@ -220,6 +218,8 @@ public class Rule_InGame : ClassBase
                 EnterState(ERuleState.PLAY);
                 break;
             case ERuleState.PLAY:
+                _bulletManager.UpdateManager();
+                _inGameManager.UpdateManager();
                 break;
             case ERuleState.STOP:
                 break;
@@ -326,17 +326,14 @@ public class Rule_InGame : ClassBase
     private async void Enter_Reward()
     {
 
-        APP.GAME.Player.SetStageStar(StagePrt.Id, _stageStarCnt);
-
-        // 리워드 아이템 넣기
-        for (int i = 0; i < _rewardItemIdList.Count; i++)
-            APP.GAME.Player.AddRewardItem(_rewardItemIdList[i]);
-
-        // 진행 상황 저장
+        // 스테이지 클리어 정보 넣기
+        APP.GAME.SetStageClearInfo(StagePrt, _stageStarCnt, _rewardItemIdList);
 
 
-        // 일시 정지 해제
-        EventQueue.PushEvent(EEventActionType.PLAY, new PauseEvent(false));
+        // TODO: 진행 상황 저장
+        
+
+        // 씬 이동
         await APP.SceneManager.ChangeScene("LobbyScene");
     }
 

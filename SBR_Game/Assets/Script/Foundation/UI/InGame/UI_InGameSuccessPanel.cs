@@ -81,8 +81,8 @@ public class UI_InGameSuccessPanel : UI_Panel
             }
         }
 
-        _rewardItemNameText.text = ProtoHelper.Get<ItemProto, int>(_rewardItemList[_currentSelectReward].Id).Name;
-        _rewardItemDetailText.text = ProtoHelper.Get<ItemProto, int>(_rewardItemList[_currentSelectReward].Id).Desc;
+        _rewardItemNameText.text = ProtoHelper.Get<ItemProto>(_rewardItemList[_currentSelectReward].Id).Name;
+        _rewardItemDetailText.text = ProtoHelper.Get<ItemProto>(_rewardItemList[_currentSelectReward].Id).Desc;
     }
 
     protected override void OnDestroyed()

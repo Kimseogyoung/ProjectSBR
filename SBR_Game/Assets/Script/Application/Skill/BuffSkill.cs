@@ -10,7 +10,7 @@ public class BuffSkill : SkillBase
 
     protected override void ApplySkill()
     {
-        BuffProto prtBuff = ProtoHelper.Get<BuffProto, int>(Prt.BuffNum);
+        BuffProto prtBuff = ProtoHelper.Get<BuffProto>(Prt.BuffNum);
         if(Prt.TargetTeam == ECharacterTeamType.ENEMY)
         {
             LOG.I("Enemy 대상 버프 스킬 미구현");

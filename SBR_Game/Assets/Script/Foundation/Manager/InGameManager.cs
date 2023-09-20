@@ -39,8 +39,6 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
     private Vector2 _maximumMapPos;
     private int createNum = 1;
 
-    private bool isStart = false;
-
     public void Init()
     {
         createNum = 1;
@@ -142,7 +140,7 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
         Character character;
         GameObject characterObj;
         StateMachineBase stateMachine;
-        CharacterProto characterProto = ProtoHelper.Get<CharacterProto, int>(id);
+        CharacterProto characterProto = ProtoHelper.Get<CharacterProto>(id);
 
         characterObj = UTIL.Instantiate(characterProto.Prefab);
 

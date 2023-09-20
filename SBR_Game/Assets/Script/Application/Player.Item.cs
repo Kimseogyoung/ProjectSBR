@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 public partial class Player
 {
-    public void AddRewardItem(int itemId)
+    public void AddItem(int itemNum)
     {
-        _stageRewardItemIdList.Add(itemId);
+        if(!ProtoHelper.TryGet<ItemProto>(itemNum, out var itemPrt))
+        {
+            LOG.E($"Failed Add Item Num({itemNum})");
+            return;
+        }
+
+        AddItem(Item.MakeItem(itemPrt));
     }
 
     public void AddItem(Item item)

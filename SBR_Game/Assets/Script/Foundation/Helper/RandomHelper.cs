@@ -12,7 +12,7 @@ public class RandomHelper
     public static ItemProto GetRandomItem()
     {
         int result =_random.Next(0,ProtoHelper.GetCount<ItemProto>());
-        return ProtoHelper.GetUsingIndex<ItemProto>(result);
+        return ProtoHelper.GetByIndex<ItemProto>(result);
     }
 
     public static ItemProto[] GetRandomThreeItem()
@@ -22,7 +22,7 @@ public class RandomHelper
         while (cnt < 3)
         {
             int result = _random.Next(0, ProtoHelper.GetCount<ItemProto>());
-            ItemProto prt  = ProtoHelper.GetUsingIndex<ItemProto>(result);
+            ItemProto prt  = ProtoHelper.GetByIndex<ItemProto>(result);
             itemProtos[cnt] = prt;
             cnt++;
         }

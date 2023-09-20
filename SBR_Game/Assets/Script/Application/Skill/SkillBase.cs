@@ -30,7 +30,7 @@ abstract public class SkillBase
     {
         _character = characterBase;
         
-        Prt = ProtoHelper.Get<SkillProto, int>(skillNum);
+        Prt = ProtoHelper.Get<SkillProto>(skillNum);
         MatchedInputAction = inputAction;
 
         if (Prt.IsNormalAttack)

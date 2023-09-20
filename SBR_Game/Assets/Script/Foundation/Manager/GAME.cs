@@ -12,6 +12,9 @@ public class GAME: ScriptBase
     }
 
     public Player Player { get { if (_player == null) { LOG.E("Player Is Null"); } return _player; } }
+
+    public StageClearInfo StageClearInfo { get; private set; }
+
     public InGameScene InGame
     {
         get
@@ -49,6 +52,23 @@ public class GAME: ScriptBase
     private EGameState _state = EGameState.PREPARE;
     private Player _player;
     private bool _mainInstance = true;
+
+    public void SetStageClearInfo(StageProto stagePrt,int starCnt, List<int> rewardItemList)
+    {
+        StageClearInfo = new StageClearInfo(stagePrt, starCnt, rewardItemList);
+    }
+
+    public StageClearInfo GetStageClearInfo()
+    {
+        StageClearInfo returnInfo = StageClearInfo;
+        StageClearInfo = null;
+        return returnInfo;
+    }
+
+    public bool HasStageClearInfo()
+    {
+        return StageClearInfo != null;
+    }
 
     public T AddUpdatablePublicManager<T>(T manager) where T : IManagerUpdatable
     {

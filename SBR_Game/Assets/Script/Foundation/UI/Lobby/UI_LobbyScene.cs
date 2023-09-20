@@ -65,13 +65,21 @@ public class UI_LobbyScene : UI_Scene
 
     }
 
+    public void ShowStageClearResult(StageProto clearedStagePrt, StageProto nextStagePrt, int starCnt)
+    {
+        LOG.W($"별 {starCnt}개 {clearedStagePrt.Id}스테이지 획득 연출 추가");
+
+        LOG.W($"{nextStagePrt.Id}스테이지 오픈 연출 추가");
+
+    }
+
     private void InitStageButtons()
     {
         _stageButtonNumList = new();
         
         for (int i = 0; i < _stageButtons.Count; i++)
         {
-            int stageNum = ProtoHelper.GetUsingIndex<StageProto>(i).Id;
+            int stageNum = ProtoHelper.GetByIndex<StageProto>(i).Id;
             _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
             _stageButtonTexts[i].text = $"Stage {stageNum}";
             _stageButtonNumList.Add(stageNum);

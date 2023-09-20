@@ -9,6 +9,13 @@ using Unity.VisualScripting;
 
 public partial class Item
 {
+    public static Item MakeItem(ItemProto prt)
+    {
+        Item item = new Item();
+        item.Refresh(prt.Id);
+        return item;
+    }
+
     [JsonIgnore]
     public ItemProto Prt { get; set; }
 
@@ -20,7 +27,7 @@ public partial class Item
     {
         Num = num;
         Amount = 1;
-        Prt = ProtoHelper.Get<ItemProto, int>(num);
+        Prt = ProtoHelper.Get<ItemProto>(num);
     }
 
     public void AddAmount(int amount = 1)

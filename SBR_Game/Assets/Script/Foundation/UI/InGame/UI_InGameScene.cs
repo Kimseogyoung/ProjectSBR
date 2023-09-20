@@ -11,7 +11,7 @@ public class UI_InGameScene : UI_Scene
 
     protected override void InitImp()
     {
-        Bind<Button>(UI.PauseButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_Stop(); });
+        Bind<Button>(UI.PauseButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_Stop(true); });
         Bind<Image>(UI.PlayerIconImage.ToString());
         Bind<Image>(UI.StageIconImage.ToString());
         Bind<TMP_Text>(UI.StageNumText.ToString());

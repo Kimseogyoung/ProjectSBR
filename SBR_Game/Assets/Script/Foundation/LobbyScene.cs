@@ -6,7 +6,7 @@ public class LobbyScene : SceneBase
     public UI_LobbyScene UI { get { if (_ui == null) { LOG.E("UI Is Null"); } return _ui; } }
 
     private Rule_Lobby _rule = null;
-    public UI_LobbyScene _ui = null;
+    private UI_LobbyScene _ui = null;
 
     public LobbyScene(string sceneName)
     {

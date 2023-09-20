@@ -7,7 +7,7 @@ public class UI_InGamePausePopup : UI_Popup
     {
         EventQueue.PushEvent<PauseEvent>(EEventActionType.PAUSE, new PauseEvent(true));
 
-        Bind<Button>(UI.PlayButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_Play(); });
+        Bind<Button>(UI.PlayButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_Play(true); });
         Bind<Button>(UI.GiveUpButton.ToString()).onClick.AddListener(() => { APP.GAME.InGame.Rule.Notify_GiveUp(); });
         Bind<TMP_Text>(UI.GiveUpText.ToString()).text= "포기하시옹";
     }
