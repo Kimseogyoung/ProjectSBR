@@ -34,6 +34,7 @@ public class TimeHelper : MonoBehaviour
         if (action == null)
             return;
 
+        action.RemoveAction();
         _timeActionList.Remove(action);
     }
 
@@ -60,7 +61,7 @@ public class TimeHelper : MonoBehaviour
         {
             if (_timeActionList[i].Time < _currentTime) 
             {
-                _timeActionList[i].Action.Invoke();
+                _timeActionList[i].InvokeAction();
                 _timeActionList[i] = null;
                 _timeActionList.RemoveAt(i);
                 i--;
@@ -73,11 +74,23 @@ public class TimeHelper : MonoBehaviour
         public float Time { get; private set; }
         public Action Action { get; private set; }
         public string Name { get; private set; }
+        public bool isPlaying { get { return Action != null; } }
         public TimeAction(float time, Action action, string name = "")
         {
             Time = time;
             Action = action;
             Name = name;
+        }
+
+        public void InvokeAction()
+        {
+            Action.Invoke();
+            Action = null;
+        }
+
+        public void RemoveAction()
+        {
+            Action = null;
         }
     }
 

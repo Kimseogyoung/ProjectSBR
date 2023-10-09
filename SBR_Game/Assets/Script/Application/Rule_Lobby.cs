@@ -154,13 +154,15 @@ public class Rule_Lobby : ClassBase
         // 보상이랑 변경점 가져와서 표시
         StageClearInfo stageClearInfo = APP.GAME.GetStageClearInfo();
         StageProto nextStagePrt = ProtoHelper.GetNext(stageClearInfo.ClearedStagePrt);
-        APP.GAME.Lobby.UI.ShowStageClearResult(stageClearInfo.ClearedStagePrt, nextStagePrt, stageClearInfo.StarCnt);
+        APP.GAME.Lobby.UI.ShowStageClearResult(stageClearInfo.ClearedStagePrt, nextStagePrt, stageClearInfo.StarCnt,
+            () => EnterState(ERuleState.PREPARE_COMPLATE));
 
         // 아이템 보상 지급
         stageClearInfo.StageRewardList.ForEach(x => APP.GAME.Player.AddItem(x));
 
+        LOG.W("TODO: 스탯 변경 애니메이션");
 
-        LOG.W("TODO: 팝업 클릭하면 넘어가기 PREPARE_COMPLATE State로  ");
+        //LOG.W("TODO: 팝업 클릭하면 넘어가기 PREPARE_COMPLATE State로  ");
     }
 
     private void Enter_FirstPrepare()

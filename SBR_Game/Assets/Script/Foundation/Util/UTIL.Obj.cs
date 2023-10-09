@@ -1,9 +1,7 @@
-
-
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+
 static public partial class UTIL 
 {
     static public void Destroy(GameObject gameObject)
@@ -11,11 +9,28 @@ static public partial class UTIL
         GameObject.Destroy(gameObject.gameObject);
     }
 
-    static public bool TryGetComponet<T>(out T comp, GameObject gameObject)
+    static public bool TryGetComponent<T>(out T comp, GameObject gameObject)
     {
         comp = gameObject.GetComponent<T>();
         return comp != null;
     }
+
+    static public bool TryGetComponent<T>(out T comp, GameObject gameObject, string name)
+    {
+        comp = default;
+
+        // 게임 오브젝트에서 특정 이름의 자식 오브젝트를 찾기
+        Transform childTransform = gameObject.transform.Find(name);
+
+        if (childTransform == null)
+            return false;
+
+       comp = childTransform.GetComponent<T>();
+
+        return comp != null;
+    }
+
+
 
     static public bool TryAddGetComponet<T>(out T comp, GameObject gameObject)
     {
@@ -31,7 +46,7 @@ static public partial class UTIL
 
     static public T AddGetComponent<T>(GameObject gameObject)
     {
-        if(!TryGetComponet<T>(out T result, gameObject))
+        if(!TryGetComponent<T>(out T result, gameObject))
         {
             gameObject.AddComponent(typeof(T));
             result = gameObject.GetComponent<T>();

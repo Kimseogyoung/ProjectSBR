@@ -32,7 +32,7 @@ static public partial class UTIL
         outGO =  obj.AddGetComponent<T>();
 
         outGO.name = name;
-
+        obj.transform.position = parent.transform.position;
         return true;
     }
 

@@ -206,7 +206,6 @@ public class GAME: ScriptBase
         if ((pause.IsPause && _state == EGameState.STOP) || (!pause.IsPause && _state == EGameState.PLAY)) 
             return;
 
-
         TimeHelper.Stop(pause.IsPause);
         _state = pause.IsPause? EGameState.STOP: EGameState.PLAY;
 

@@ -13,6 +13,11 @@ public class UI_LobbyScene : UI_Scene
     private List<int> _stageButtonNumList;
     private List<Button> _stageButtons;
 
+
+    private GameObject _effRootGO;
+    private AnimBase _starChangeAnimEff;
+    private TMP_Text _starStageClearText;
+    private TMP_Text _starStageOpenText;
     private UI ui;
 
     protected override void OnDestroyed()
@@ -53,23 +58,45 @@ public class UI_LobbyScene : UI_Scene
         Get<TMP_Text>(UI.CashText.ToString()).text = "Cash";
         Get<TMP_Text>(UI.GoldText.ToString()).text = "Gold";
 
+        _effRootGO = Bind<GameObject>(UI.EffRoot.ToString());
+        GameObject starChangeRes = UTIL.LoadRes<GameObject>("Effect/Lobby/StarChangeEff");
+        if (!AnimBase.CreateInstance(out _starChangeAnimEff, starChangeRes, _effRootGO, "StarChangeEff"))
+        {
+            LOG.E("Failed Create StageChangeEff");
+        }
+        if (!UTIL.TryGetComponent(out _starStageClearText, _starChangeAnimEff.gameObject, "StageClearText"))
+        {
+            LOG.E("Failed Get StarChangeText");
+        }
+
+        if (!UTIL.TryGetComponent(out _starStageOpenText, _starChangeAnimEff.gameObject, "StageOpenText"))
+        {
+            LOG.E("Failed Get StarChangeText");
+        }
+
         //팝업 오픈
         Get<Button>(UI.SettingButton.ToString()).
-            onClick.AddListener(()=>{APP.UI.ShowPopupUI<UI_SettingPopup>();});
+            onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_SettingPopup>(); });
         Get<Button>(UI.InvenButton.ToString()).
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_InvenPopup>(); });
         Get<Button>(UI.ShopButton.ToString()).
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_ShopPopup>(); });
 
         RefreshStageButton();
-
     }
 
-    public void ShowStageClearResult(StageProto clearedStagePrt, StageProto nextStagePrt, int starCnt)
+    public void ShowStageClearResult(StageProto clearedStagePrt, StageProto nextStagePrt, int starCnt, Action finishAction)
     {
-        LOG.W($"별 {starCnt}개 {clearedStagePrt.Id}스테이지 획득 연출 추가");
+        _starStageClearText.text = clearedStagePrt.Name + "스테이지 완료";
+        _starChangeAnimEff.PlayAnim($"StarChange{starCnt}", ()=>
+        {
+            _starChangeAnimEff.PlayAnim("StageChange", finishAction);
+            _starStageOpenText.text = nextStagePrt.Name + "스테이지 해금";
+            LOG.I("다음 스테이지 해금 연출 시작");
+        });
+        LOG.W($"TODO: 별 {starCnt}개 {clearedStagePrt.Id}스테이지 획득 연출 추가");
 
-        LOG.W($"{nextStagePrt.Id}스테이지 오픈 연출 추가");
+        LOG.W($"TODO: {nextStagePrt.Id}스테이지 오픈 연출 추가");
 
     }
 
@@ -115,6 +142,8 @@ public class UI_LobbyScene : UI_Scene
 
     enum UI
     {
+        EffRoot,
+
         TmpButton,
         RecordButton,
         SettingButton,

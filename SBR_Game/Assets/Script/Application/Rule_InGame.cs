@@ -331,9 +331,10 @@ public class Rule_InGame : ClassBase
 
 
         // TODO: 진행 상황 저장
-        
+
 
         // 씬 이동
+        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
         await APP.SceneManager.ChangeScene("LobbyScene");
     }
 

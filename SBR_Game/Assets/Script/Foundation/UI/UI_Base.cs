@@ -106,8 +106,11 @@ abstract public class UI_Base : MonoBehaviour
 	protected T Get<T>(string name) where T : UnityEngine.Object
 	{
 		UnityEngine.Object obj = null;
-		if (_objects.TryGetValue(name, out obj) == false)
-			return null;
+        if (_objects.TryGetValue(name, out obj) == false)
+        {
+            LOG.E($"Failed to Get UI Object Name({name})");
+            return null;
+        }
 
 		return obj as T;
 	}
