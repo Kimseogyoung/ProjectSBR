@@ -162,7 +162,7 @@ abstract public class UI_Base : MonoBehaviour
         }
 
         _isInit = false;
-        LOG.I($"Destroy {gameObject.name}");
+        //LOG.I($"Destroy {gameObject.name}");
         OnDestroyed();
 
         _objects.Clear();

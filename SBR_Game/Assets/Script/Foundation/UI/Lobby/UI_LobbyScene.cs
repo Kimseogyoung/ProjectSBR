@@ -15,7 +15,7 @@ public class UI_LobbyScene : UI_Scene
 
 
     private GameObject _effRootGO;
-    private AnimBase _starChangeAnimEff;
+    private AnimPlayer _starChangeAnimEff;
     private TMP_Text _starStageClearText;
     private TMP_Text _starStageOpenText;
     private UI ui;
@@ -60,7 +60,7 @@ public class UI_LobbyScene : UI_Scene
 
         _effRootGO = Bind<GameObject>(UI.EffRoot.ToString());
         GameObject starChangeRes = UTIL.LoadRes<GameObject>("Effect/Lobby/StarChangeEff");
-        if (!AnimBase.CreateInstance(out _starChangeAnimEff, starChangeRes, _effRootGO, "StarChangeEff"))
+        if (!AnimPlayer.CreateInstance(out _starChangeAnimEff, starChangeRes, _effRootGO, "StarChangeEff"))
         {
             LOG.E("Failed Create StageChangeEff");
         }

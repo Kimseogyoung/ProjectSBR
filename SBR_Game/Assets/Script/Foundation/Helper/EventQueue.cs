@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using SG;
+using Unity.VisualScripting;
 
 public class EventQueue : MonoBehaviour
 {
@@ -57,6 +58,11 @@ public class EventQueue : MonoBehaviour
         _actions[eventActionType] = null;
     }
 
+    static public void RemoveAllEvent()
+    {
+        LOG.I("Remove All Event");
+        _immediateEventQueue.Clear();
+    }
 
     private void Update()
     {
@@ -68,7 +74,15 @@ public class EventQueue : MonoBehaviour
                 return;
             }
             LOG.I("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
-            action.Invoke(dequeueAction);
+
+            if(action == null)
+            {
+                LOG.E("ImmeEventQueue Dequeue : {0} 이벤트 호출 실패", dequeueAction.eventActionType);
+            }
+            else
+            {
+                action.Invoke(dequeueAction);
+            }
         }
 
         if (!_isPlayingWaitedEvent)

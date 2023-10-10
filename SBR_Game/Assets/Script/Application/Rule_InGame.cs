@@ -316,14 +316,12 @@ public class Rule_InGame : ClassBase
 
     private void Enter_GiveUp()
     {
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
-
         _rewardItemIdList.Clear();
-        _ = APP.SceneManager.ChangeScene("LobbyScene");
+        LoadLobby();
     }
 
 
-    private async void Enter_Reward()
+    private void Enter_Reward()
     {
 
         // 스테이지 클리어 정보 넣기
@@ -331,10 +329,13 @@ public class Rule_InGame : ClassBase
 
 
         // TODO: 진행 상황 저장
+        LoadLobby();
+    }
 
-
-        // 씬 이동
-        EventQueue.PushEvent<PauseEvent>(EEventActionType.PLAY, new PauseEvent(false));
+    private async void LoadLobby()
+    {
+        EventQueue.RemoveAllEvent();
+        EventQueue.PushEvent(EEventActionType.PLAY, new PauseEvent(false));
         await APP.SceneManager.ChangeScene("LobbyScene");
     }
 
