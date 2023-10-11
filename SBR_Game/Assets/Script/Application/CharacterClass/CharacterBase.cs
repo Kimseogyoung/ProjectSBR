@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -9,10 +10,9 @@ using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 [Serializable]
-public partial class Character : IBuffAppliable
+public partial class Character : ClassBase, IBuffAppliable
 {
     public Action<BuffBase> OnAddBuff { get; set; }
-
 
     public ECharacterType CharacterType { get; private set; }
     public int Id { get; private set; }
@@ -24,16 +24,52 @@ public partial class Character : IBuffAppliable
     public Vector3 CurPos { get; private set; } = Vector3.zero;
 
     public CharacterProto Proto { get; private set; }
+
+    private List<ItemProto> _itemPrtList = new List<ItemProto>(); // TODO: 테스트용. 작동 확인 필요 (+포션류 분리?)
     private Dictionary<EInputAction, SkillBase> _skillList = new Dictionary<EInputAction,SkillBase>();
 
-
-    public Character(int characterId, ECharacterType type, int createNum)
+    private bool _initialize = false;
+    public static bool Create(out Character character, int characterId, ECharacterType type, int createNum, List<int> itemNumList)
     {
-        Id = characterId;
-        Proto = ProtoHelper.Get<CharacterProto>(characterId);
-        CharacterType = type;
+        character = new Character();
+        character.Id = characterId;
+        character.CharacterType = type;
+        character.CreateNum = createNum;
+
+        for(int i=0; i< itemNumList.Count; i++)
+        {
+            if(!ProtoHelper.TryGet<ItemProto>(itemNumList[i], out var prt))
+            {
+                LOG.E($"Not Found Item Proto Num({itemNumList[i]})");
+                return false;
+            }
+            character._itemPrtList.Add(prt);
+        }
+
+        if (!character.OnCreate())
+        {
+            Destroy(ref character);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected override bool OnCreate()
+    {
+        if (_initialize)
+            return false;
+
+        Proto = ProtoHelper.Get<CharacterProto>(Id);
         InitCharacterSetting();
-        CreateNum = createNum;
+        RefreshGetItemStat();
+        _initialize = true;
+        return true;
+    }
+
+    protected override void OnDestroy()
+    {
+       
     }
 
     public void TranslatePos(Vector3 pos)
@@ -75,27 +111,27 @@ public partial class Character : IBuffAppliable
 
     private void InitCharacterSetting()
     {
-        CharacterProto charProto = ProtoHelper.Get<CharacterProto>(Id);
-        Name = charProto.Name;
-        HP = new Stat(EStat.HP, charProto.HP);
-        MP = new Stat(EStat.MP, charProto.MP);
-        SPD = new Stat(EStat.SPD, charProto.SPD);
-        ATKSPD = new Stat(EStat.ATKSPD, charProto.ATKSPD);
-        ATK = new Stat(EStat.ATK, charProto.ATK);
-        MATK = new Stat(EStat.MATK, charProto.MATK);
-        DEF = new Stat(EStat.DEF, charProto.DEF);
-        CRT = new Stat(EStat.CRT, charProto.CRT);
-        CDR = new Stat(EStat.CDR, charProto.CDR);
-        DRAIN = new Stat(EStat.DRAIN, charProto.DRAIN);
-        RANGE = new Stat(EStat.RANGE, charProto.CDR);
-        HPGEN = new Stat(EStat.HPGEN, charProto.HPGEN);
+        Name = this.Proto.Name;
+        _statDict.Add(EStat.HP, new Stat(EStat.HP, Proto.HP));
+        _statDict.Add(EStat.MP, new Stat(EStat.MP, Proto.MP));
+        _statDict.Add(EStat.SPD, new Stat(EStat.SPD, Proto.SPD));
+        _statDict.Add(EStat.ATKSPD, new Stat(EStat.ATKSPD, Proto.ATKSPD));
+        _statDict.Add(EStat.ATK, new Stat(EStat.ATK, Proto.ATK));
+        _statDict.Add(EStat.MATK, new Stat(EStat.MATK, Proto.MATK));
+        _statDict.Add(EStat.DEF, new Stat(EStat.DEF, Proto.DEF));
+        _statDict.Add(EStat.CRT, new Stat(EStat.CRT, Proto.CRT));
+        _statDict.Add(EStat.CDR, new Stat(EStat.CDR, Proto.CDR));
+        _statDict.Add(EStat.DRAIN, new Stat(EStat.DRAIN, Proto.DRAIN));
+        _statDict.Add(EStat.RANGE, new Stat(EStat.RANGE, Proto.RANGE));
+        _statDict.Add(EStat.HPGEN, new Stat(EStat.HPGEN, Proto.HPGEN));
 
-        AddSkill(EInputAction.ATTACK, charProto.AttackSkill);
-        AddSkill(EInputAction.SKILL1, charProto.Skill1);
-        AddSkill(EInputAction.SKILL2, charProto.Skill2);
-        AddSkill(EInputAction.SKILL3, charProto.Skill3);
-        AddSkill(EInputAction.SKILL4, charProto.Skill4);
-        AddSkill(EInputAction.ULT_SKILL, charProto.UltSkill);
+
+        AddSkill(EInputAction.ATTACK, Proto.AttackSkill);
+        AddSkill(EInputAction.SKILL1, Proto.Skill1);
+        AddSkill(EInputAction.SKILL2, Proto.Skill2);
+        AddSkill(EInputAction.SKILL3, Proto.Skill3);
+        AddSkill(EInputAction.SKILL4, Proto.Skill4);
+        AddSkill(EInputAction.ULT_SKILL, Proto.UltSkill);
     }
     
     private void AddSkill(EInputAction action, int skillId)
@@ -177,6 +213,39 @@ public partial class Character : IBuffAppliable
         CRT.ChangePercentStat(prtBuff.CRTPer * mul);
         RANGE.ChangePercentStat(prtBuff.RANGEPer * mul);
         DRAIN.ChangePercentStat(prtBuff.DRAINPer * mul);
+    }
+
+    // 두번호출 X
+    private List<Stat> RefreshGetItemStat()
+    {
+        foreach(var prt in _itemPrtList)
+        {
+            HP.ChangePlusStat(prt.HP);
+            MP.ChangePlusStat(prt.MP);
+            SPD.ChangePlusStat(prt.SPD);
+            ATKSPD.ChangePlusStat(prt.ATK);
+            ATK.ChangePlusStat(prt.ATK);
+            DEF.ChangePlusStat(prt.DEF);
+            CDR.ChangePlusStat(prt.CDR);
+            HPGEN.ChangePlusStat(prt.HPGEN);
+            CRT.ChangePlusStat(prt.CRT);
+            RANGE.ChangePlusStat(prt.RANGE);
+            DRAIN.ChangePlusStat(prt.DRAIN);
+
+            HP.ChangePercentStat(prt.HPPer);
+            MP.ChangePercentStat(prt.MPPer);
+            SPD.ChangePercentStat(prt.SPDPer);
+            ATKSPD.ChangePercentStat(prt.ATKSPDPer);
+            ATK.ChangePercentStat(prt.ATKPer);
+            DEF.ChangePercentStat(prt.DEFPer);
+            CDR.ChangePercentStat(prt.CDRPer);
+            HPGEN.ChangePercentStat(prt.HPGENPer);
+            CRT.ChangePercentStat(prt.CRTPer);
+            RANGE.ChangePercentStat(prt.RANGEPer);
+            DRAIN.ChangePercentStat(prt.DRAINPer);
+        }
+
+        return _statDict.Values.ToList();
     }
 
     public List<BuffBase> GetBuffList()

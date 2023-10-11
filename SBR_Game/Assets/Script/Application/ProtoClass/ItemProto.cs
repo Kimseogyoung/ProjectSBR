@@ -16,17 +16,21 @@ public class ItemProto : ProtoItem
     public int DEF { get; set; }
     public int CDR { get; set; }
     public int HPGEN { get; set; }
-    public int CRI { get; set; }
-    public float HPPercent { get; set; }
-    public float MPPercent { get; set; }
-    public float SPDPercent { get; set; }
-    public float ATKSPDPercent { get; set; }
-    public float ATKPercent { get; set; }
-    public float MATKPercent { get; set; }
-    public float DEFPercent { get; set; }
-    public float CDRPercent { get; set; }
-    public float HPGENPercent { get; set; }
-    public float CRIPercent { get; set; }
+    public int CRT { get; set; }
+    public int RANGE { get; set; }
+    public int DRAIN { get; set; }
+    public float HPPer { get; set; }
+    public float MPPer { get; set; }
+    public float SPDPer { get; set; }
+    public float ATKSPDPer { get; set; }
+    public float ATKPer { get; set; }
+    public float MATKPer { get; set; }
+    public float DEFPer { get; set; }
+    public float CDRPer { get; set; }
+    public float HPGENPer { get; set; }
+    public float CRTPer { get; set; }
+    public float RANGEPer { get; set; }
+    public float DRAINPer { get; set; }
     public int IncreasedElementProperty { get; set; }
     public float IncreasedElementPropertyMultiply { get; set; }
     public int IncreasedAttackProperty { get; set; }

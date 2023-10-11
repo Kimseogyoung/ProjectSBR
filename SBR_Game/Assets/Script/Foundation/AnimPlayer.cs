@@ -12,7 +12,6 @@ public class AnimPlayer : ScriptBase
     [SerializeField] private PlayableAsset _introClip = null;
     [SerializeField] private PlayableAsset _outroAnim = null;
 
-    private Animator _animator;
     private PlayableDirector _playableDirector;
 
     //private PlayableGraph _playableGraph;
@@ -138,12 +137,6 @@ public class AnimPlayer : ScriptBase
         //_playableGraph.Stop();
         //_playableGraph.Destroy();
 
-        _animator = null;
-    }
-
-    private void Update()
-    {
-       
     }
 }
 

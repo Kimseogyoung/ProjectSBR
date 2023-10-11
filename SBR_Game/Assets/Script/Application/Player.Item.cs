@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 public partial class Player
 {
+    public List<int> GetItemNumList()
+    {
+        return Inventory.Values.Select(x => x.Prt.Id).ToList();
+    }
+
     public void AddItem(int itemNum)
     {
         if(!ProtoHelper.TryGet<ItemProto>(itemNum, out var itemPrt))
@@ -15,7 +20,12 @@ public partial class Player
             return;
         }
 
-        AddItem(Item.MakeItem(itemPrt));
+        if(!Item.Create(out Item item, itemPrt))
+        {
+            LOG.E($"Failed Add Item Num({itemNum})");
+            return;
+        }
+        AddItem(item);
     }
 
     public void AddItem(Item item)

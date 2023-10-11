@@ -18,7 +18,11 @@ public partial class Player : ClassBase
         {
             if (ProtoHelper.TryGet<ItemProto>(APP.DebugConf.StartItemNumList[i], out var itemPrt)) 
             {
-                var item = Item.MakeItem(itemPrt);
+                if (!Item.Create(out Item item, itemPrt))
+                {
+                    LOG.E($"Failed to Create Item Num({itemPrt.Id})");
+                    return false;
+                }
                 AddItem(item);
             }
         }
@@ -53,8 +57,17 @@ public partial class Player : ClassBase
 
     public void RefreshAll() //TODO:  위치 확인 , UI보다 시점 빨라야 함.
     {
+        RefreshItemList();
         RefreshStat();
         RefreshStageStar();
+    }
+
+    public void RefreshItemList()
+    {
+        foreach (Item item in Inventory.Values)
+        {
+            item.Refresh();
+        }
     }
 
     public void RefreshStat()
@@ -80,13 +93,20 @@ public partial class Player : ClassBase
     public void SetStageStar(int stageId, int starCnt)
     {
         if (StageStarDict.ContainsKey(stageId))
-            StageStarDict[stageId] = starCnt;
+        {
+            if (StageStarDict[stageId] < starCnt)
+                StageStarDict[stageId] = starCnt;
+        }
         else
+        {
             StageStarDict.Add(stageId, starCnt);
+        }
     }
 
     public void OpenNewStage(int stageId)
     {
+        if (stageId < TopOpenStageNum)
+            return;
         TopOpenStageNum = stageId;
     }
 

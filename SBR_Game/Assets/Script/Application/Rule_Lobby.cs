@@ -97,8 +97,7 @@ public class Rule_Lobby : ClassBase
                 Enter_InGameResultPrepare();
                 break;
             case ERuleState.PREPARE_COMPLATE:
-                APP.GAME.Lobby.UI.SetShowHidePanel(false);
-                APP.GAME.Lobby.UI.RefreshStageList();
+                Enter_PrepareComplate();
                 break;
             case ERuleState.LOBBY_PLAY:
                 break;
@@ -151,6 +150,13 @@ public class Rule_Lobby : ClassBase
         EnterState(ERuleState.FIRST_CREATE_PREPARE);
     }
 
+    private void Enter_PrepareComplate()
+    {
+        APP.GAME.Player.RefreshAll();
+        APP.GAME.Lobby.UI.SetShowHidePanel(false);
+        APP.GAME.Lobby.UI.RefreshStageList();
+    }
+
     private void Enter_InGameResultPrepare()
     {
         LOG.I("Lobby.Enter_InGameResultPrepare : 스테이지 변경사항 적용 ");
@@ -158,11 +164,12 @@ public class Rule_Lobby : ClassBase
         // 보상이랑 변경점 가져와서 표시
         StageClearInfo stageClearInfo = APP.GAME.GetStageClearInfo();
 
-        // 다음 스테이지 연출 재생
+        // 다음 스테이지 설정
         StageProto nextStagePrt = ProtoHelper.GetNext(stageClearInfo.ClearedStagePrt);
         APP.GAME.Player.SetStageStar(stageClearInfo.ClearedStagePrt.Id, stageClearInfo.StarCnt);
         APP.GAME.Player.OpenNewStage(nextStagePrt.Id);
 
+        // 스테이지 이동 연출
         APP.GAME.Lobby.UI.ShowStageClearResult(stageClearInfo.ClearedStagePrt, nextStagePrt, stageClearInfo.StarCnt,
             () => EnterState(ERuleState.PREPARE_COMPLATE));
 
@@ -178,7 +185,6 @@ public class Rule_Lobby : ClassBase
     {
         LOG.I("Lobby.Enter_FirstPrepare : 기존 캐릭터 사용하여 게임 첫 접속");
         //기존 LocalPlayerPref읽음. 데이터 가공 및 리프레시 필요
-        APP.GAME.Player.RefreshAll();
     }
 
     private void Enter_CreatePrepare()
@@ -186,7 +192,6 @@ public class Rule_Lobby : ClassBase
         LOG.I("Lobby.Enter_CreatePrepare : 게임 첫 접속. 캐릭터 생성 ");
         //리프레시 필요
         APP.GAME.Player.Init();
-        APP.GAME.Player.RefreshAll();
     }
 }
 

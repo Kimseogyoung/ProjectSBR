@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 
 
-public partial class Item
+public partial class Item : ClassBase
 {
-    public static Item MakeItem(ItemProto prt)
+    public static bool Create(out Item item, ItemProto prt)
     {
-        Item item = new Item();
-        item.Refresh(prt.Id);
-        return item;
+        item = new Item();
+        item.Num = prt.Id;
+        if (!item.OnCreate())
+        {
+            Destroy(ref item);
+            return false;
+        }
+        return true;
     }
 
     [JsonIgnore]
@@ -23,11 +28,21 @@ public partial class Item
     public bool IsEquiped { get; set; }
     public int Amount { get; set; }
 
-    public void Refresh(int num)
+
+    protected override bool OnCreate()
     {
-        Num = num;
         Amount = 1;
-        Prt = ProtoHelper.Get<ItemProto>(num);
+        Refresh();
+        return true;
+    }
+
+    protected override void OnDestroy()
+    {
+    }
+
+    public void Refresh()
+    {
+        Prt = ProtoHelper.Get<ItemProto>(Num);
     }
 
     public void AddAmount(int amount = 1)

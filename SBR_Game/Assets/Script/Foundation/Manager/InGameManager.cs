@@ -137,35 +137,43 @@ public class InGameManager : IManager, IManagerUpdatable, ICharacters
 
     public Character Spawn(int id, bool isPlayer = false)
     {
+        CharacterProto characterPrt = ProtoHelper.Get<CharacterProto>(id);
+
         Character character;
         GameObject characterObj;
         StateMachineBase stateMachine;
-        CharacterProto characterProto = ProtoHelper.Get<CharacterProto>(id);
 
-        characterObj = UTIL.Instantiate(characterProto.Prefab);
+        characterObj = UTIL.Instantiate(characterPrt.Prefab);
 
-        ECharacterType characterType = isPlayer ? ECharacterType.PLAYER : characterProto.Type;
+        ECharacterType characterType;
+        List<int> itemNumList = new();
+        if (isPlayer) 
+        {
+            characterType = ECharacterType.PLAYER;
+            stateMachine = UTIL.AddGetComponent<PlayerStateMachine>(characterObj);
+            itemNumList = APP.GAME.Player.GetItemNumList();
+        } 
+        else 
+        {
+            characterType = characterPrt.Type;
+            stateMachine = UTIL.AddGetComponent<CharacterStateMachine>(characterObj);
+        }
+
         if (!CanSpawnCharacter(characterType))
         {
             LOG.I($"{characterType} 과 동일한 타입의 캐릭터가 이미 존재하여 Spawn 실패");
             return null;
         }
 
-        if (isPlayer)
+        if (!Character.Create(out character, id, characterType, createNum++, itemNumList))
         {
-            stateMachine = UTIL.AddGetComponent<PlayerStateMachine>(characterObj);
-            character = new Character(id, ECharacterType.PLAYER, createNum++);
-        }
-        else
-        {
-            stateMachine = UTIL.AddGetComponent<CharacterStateMachine>(characterObj);
-            character = new Character(id, characterType, createNum++);
+            return null;
         }
 
         stateMachine.Initialize(character, characterType, _minimumMapPos, _maximumMapPos);
         _stateMachines.Add(stateMachine);
 
-        if (characterProto.TeamType == ECharacterTeamType.HERO)
+        if (characterPrt.TeamType == ECharacterTeamType.HERO)
         {
             characterObj.layer = LayerMask.NameToLayer("Hero");
             _heroList.Add(character);
