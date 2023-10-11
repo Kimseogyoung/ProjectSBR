@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Rule_Lobby : ClassBase
@@ -40,6 +41,7 @@ public class Rule_Lobby : ClassBase
 
     public void StartFirst()
     {
+        APP.GAME.Lobby.UI.SetShowHidePanel(true);
         EnterState(ERuleState.PREPARE);
     }
 
@@ -95,6 +97,8 @@ public class Rule_Lobby : ClassBase
                 Enter_InGameResultPrepare();
                 break;
             case ERuleState.PREPARE_COMPLATE:
+                APP.GAME.Lobby.UI.SetShowHidePanel(false);
+                APP.GAME.Lobby.UI.RefreshStageList();
                 break;
             case ERuleState.LOBBY_PLAY:
                 break;
@@ -153,7 +157,12 @@ public class Rule_Lobby : ClassBase
 
         // 보상이랑 변경점 가져와서 표시
         StageClearInfo stageClearInfo = APP.GAME.GetStageClearInfo();
+
+        // 다음 스테이지 연출 재생
         StageProto nextStagePrt = ProtoHelper.GetNext(stageClearInfo.ClearedStagePrt);
+        APP.GAME.Player.SetStageStar(stageClearInfo.ClearedStagePrt.Id, stageClearInfo.StarCnt);
+        APP.GAME.Player.OpenNewStage(nextStagePrt.Id);
+
         APP.GAME.Lobby.UI.ShowStageClearResult(stageClearInfo.ClearedStagePrt, nextStagePrt, stageClearInfo.StarCnt,
             () => EnterState(ERuleState.PREPARE_COMPLATE));
 

@@ -85,6 +85,11 @@ public partial class Player : ClassBase
             StageStarDict.Add(stageId, starCnt);
     }
 
+    public void OpenNewStage(int stageId)
+    {
+        TopOpenStageNum = stageId;
+    }
+
     public void ChangeCurStage(int stageId)
     {
         _curStagePrt = ProtoHelper.Get<StageProto>(stageId);

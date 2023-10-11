@@ -15,6 +15,7 @@ public class UI_LobbyScene : UI_Scene
 
 
     private GameObject _effRootGO;
+    private Image _effHideImage;
     private AnimPlayer _starChangeAnimEff;
     private TMP_Text _starStageClearText;
     private TMP_Text _starStageOpenText;
@@ -59,6 +60,11 @@ public class UI_LobbyScene : UI_Scene
         Get<TMP_Text>(UI.GoldText.ToString()).text = "Gold";
 
         _effRootGO = Bind<GameObject>(UI.EffRoot.ToString());
+        if (!UTIL.TryGetComponent(out _effHideImage, _effRootGO))
+        {
+            LOG.E("Failed Get _effHideImage");
+        }
+
         GameObject starChangeRes = UTIL.LoadRes<GameObject>("Effect/Lobby/StarChangeEff");
         if (!AnimPlayer.CreateInstance(out _starChangeAnimEff, starChangeRes, _effRootGO, "StarChangeEff"))
         {
@@ -81,8 +87,6 @@ public class UI_LobbyScene : UI_Scene
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_InvenPopup>(); });
         Get<Button>(UI.ShopButton.ToString()).
             onClick.AddListener(() => { APP.UI.ShowPopupUI<UI_ShopPopup>(); });
-
-        RefreshStageButton();
     }
 
     public void ShowStageClearResult(StageProto clearedStagePrt, StageProto nextStagePrt, int starCnt, Action finishAction)
@@ -92,12 +96,36 @@ public class UI_LobbyScene : UI_Scene
         {
             _starChangeAnimEff.PlayAnim("StageChange", finishAction);
             _starStageOpenText.text = nextStagePrt.Name + "스테이지 해금";
-            LOG.I("다음 스테이지 해금 연출 시작");
         });
-        LOG.W($"TODO: 별 {starCnt}개 {clearedStagePrt.Id}스테이지 획득 연출 추가");
+    }
 
-        LOG.W($"TODO: {nextStagePrt.Id}스테이지 오픈 연출 추가");
+    public void RefreshStageList()
+    {
+        int playerTopOpenStage = APP.GAME.Player.TopOpenStageNum;
 
+        Dictionary<int, int> playerStageStarDict = APP.GAME.Player.StageStarDict;
+        for (int i = 0; i < _stageButtons.Count; i++)
+        {
+            int stageNum = _stageButtonNumList[i];
+            int stageStar = playerStageStarDict[stageNum];
+            if (playerTopOpenStage < stageNum)
+            {
+                _stageButtons[i].interactable = false;
+            }
+            else
+            {
+                _stageButtons[i].interactable = true;
+            }
+            _stageButtonStars[i].SetStarLevel(stageStar);
+        }
+    }
+
+    public void SetShowHidePanel(bool isShow)
+    {
+        if (isShow)
+            _effHideImage.enabled = true;
+        else
+            _effHideImage.enabled = false;
     }
 
     private void InitStageButtons()
@@ -110,26 +138,6 @@ public class UI_LobbyScene : UI_Scene
             _stageButtons[i].onClick.AddListener(() => { OnClickStageButton(stageNum); });
             _stageButtonTexts[i].text = $"Stage {stageNum}";
             _stageButtonNumList.Add(stageNum);
-        }
-    }
-
-    private void RefreshStageButton()
-    {
-        int playerTopOpenStage = APP.GAME.Player.TopOpenStageNum;
-        Dictionary<int, int> playerStageStarDict = APP.GAME.Player.StageStarDict;
-        for(int i=0; i< _stageButtons.Count; i++)
-        {
-            int stageNum = _stageButtonNumList[i];
-            int stageStar = playerStageStarDict[stageNum];
-            if (playerTopOpenStage < stageNum)
-            {
-                _stageButtons[i].interactable = false;
-            }
-            else
-            {
-                _stageButtons[i].interactable = true;
-            }
-            _stageButtonStars[i].SetStarLevel(stageStar);       
         }
     }
 

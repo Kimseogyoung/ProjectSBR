@@ -110,7 +110,6 @@ public class AnimPlayer : ScriptBase
         _timeAction = null;
         _curClipName = "";
         _endAction?.Invoke();
-        _endAction = null;
     }
 
     private PlayableAsset GetAnim(string name)

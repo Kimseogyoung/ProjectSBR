@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
-public class DEF
+public static class DEF
 {
     public const int INVALID_NUM = 0;
     public const int INVALID_IDX = -1;
 
+    public static Color C_BLOCK = Color.black;
+    public static Color C_WHITE = Color.white;
+    public static Color C_RED = Color.red;
+    public static Color C_CLEAR_BLOCK = new(0, 0, 0, 0.4f);
+    public static Color C_CLEAR_WHITE = new(1, 1, 1, 0.4f);
+    public static Color C_CLEAR = new(0, 0, 0, 0);
 
     public enum UIEvent
     {
