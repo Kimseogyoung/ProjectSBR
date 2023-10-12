@@ -25,4 +25,12 @@ public partial class Character
     public Stat RANGE { get { return _statDict[EStat.RANGE]; } }// 사거리
     public Stat DRAIN { get { return _statDict[EStat.DRAIN]; } }// 피흡
 
+    public void SetStatFull()
+    {
+        foreach(var stat in _statDict)
+        {
+            stat.Value.SetFull();
+        }
+    }
+
 }

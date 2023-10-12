@@ -73,14 +73,14 @@ public class EventQueue : MonoBehaviour
             {
                 return;
             }
-            LOG.I("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
-
+            
             if(action == null)
             {
                 LOG.E("ImmeEventQueue Dequeue : {0} 이벤트 호출 실패", dequeueAction.eventActionType);
             }
             else
             {
+                LOG.I("ImmeEventQueue Dequeue : {0} 이벤트 호출", dequeueAction.eventActionType);
                 action.Invoke(dequeueAction);
             }
         }

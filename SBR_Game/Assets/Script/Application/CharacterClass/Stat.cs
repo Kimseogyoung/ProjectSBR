@@ -34,6 +34,14 @@ public class Stat
         ApplyCurrentValue();
     }
 
+    public void SetFull() => SetValue(1f);
+
+    public void SetValue(float percent)
+    {
+        var value = FullValue * percent;
+        Value = value;
+    }
+
     public float FullValue
     {
         get { return (BaseStat + PlusStat) + ((BaseStat + PlusStat) * PercentStat); }

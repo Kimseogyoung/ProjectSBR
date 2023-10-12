@@ -63,6 +63,7 @@ public partial class Character : ClassBase, IBuffAppliable
         Proto = ProtoHelper.Get<CharacterProto>(Id);
         InitCharacterSetting();
         RefreshGetItemStat();
+        SetStatFull();
         _initialize = true;
         return true;
     }
