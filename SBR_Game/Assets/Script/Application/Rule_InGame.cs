@@ -335,7 +335,7 @@ public class Rule_InGame : ClassBase
     private async void LoadLobby()
     {
         EventQueue.RemoveAllEvent();
-        EventQueue.PushEvent(EEventActionType.PLAY, new PauseEvent(false));
+        EventQueue.PushEvent(EEventActionType.PLAY, new PauseEvent(false));// CHECKME: Play와 Lobby Load 사이에 이벤트가 호출되는 경우가 있는듯
         await APP.SceneManager.ChangeScene("LobbyScene");
     }
 
